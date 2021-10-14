@@ -11,7 +11,7 @@ Desarrollo de  algoritmos para navegación de autos autónomos usando el simulad
 ## INSTALACIÓN 
 
 * $ cd
-* $ git clone
+* $ git clone https://github.com/Davidtrejo590/Webots-ROS.git
 * $ cd Webots-ROS
 * $ cd catkin_ws
 * $ catkin_make
