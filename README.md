@@ -18,6 +18,7 @@ Desarrollo de  algoritmos para navegación de autos autónomos usando el simulad
 
 ## PARA PROBAR 
 
+* $ export WEBOTS_HOME=/usr/local/webots
 * $ cd
 * $ source Webots-ROS/catkin_ws/devel/setup.bash
 * $ roslaunch bring_up_web my_launch.launch
