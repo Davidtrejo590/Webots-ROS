@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <launch>
-  <!-- start Webots from bring_up_web package -->
+  <env name="WEBOTS_HOME" value="/usr/local/webots"/>
+
   <arg name="no_gui" default="false," doc="Start Webots with minimal GUI"/>
-  <!-- Find webots_ros package and webots.launch -->
   <include file="$(find webots_ros)/launch/webots.launch">
     <arg name="mode" value="pause"/>
     <arg name="no_gui" value="$(arg no_gui)"/>
-    <!-- Find a world inside bring_up_web package -->
     <arg name="world" value="$(find bring_up_web)/worlds/basic_highway.wbt"/>
   </include>
-  <!-- Start rviz -->
-  <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen"/>
+  
+  
+  <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find bring_up_web)/rviz/basic_car.rviz"/>
 </launch>
