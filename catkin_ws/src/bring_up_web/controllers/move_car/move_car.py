@@ -8,7 +8,7 @@ from vehicle import Driver, Car
 from controller import Camera, Keyboard
 import os
 import rospy
-from std_msgs.msg import Float64
+from std_msgs.msg import String
 
 # CONSTANTS
 TIME_STEP = 64
@@ -29,9 +29,9 @@ keyboard.enable(TIME_STEP)
 
 
 # INIT ROS
-print('INIT ROS' + os.environ['ROS_MASTER_URI'])
-print('CREATING NODE')
-rospy.init_node('listener', anonymous=True)
+pub = rospy.Publisher('chatter', String, queue_size=10)
+rospy.init_node('talker', anonymous=True)
+rate = rospy.Rate(10) #10Hz
 
 # ANGULO DE DIRECCION
 right_angle = 0.0
@@ -52,7 +52,7 @@ def change_speed():
     speed+= 0.5
     driver.setCruisingSpeed(speed)
 
-  print('CURRENT SPEED - km/h', round(driver.getCurrentSpeed(), 2))
+  #print('CURRENT SPEED - km/h', round(driver.getCurrentSpeed(), 2))
 
 # CHECK KEYBORARD
 def check_keyboard():
@@ -67,8 +67,12 @@ def check_keyboard():
     driver.setSteeringAngle(right_angle)
 
 # MAIN LOOP
-while driver.step() != -1:
+while driver.step() != -1 and not rospy.is_shutdown():
   change_speed()
   check_keyboard()
+  speed_str = "Current Speed %s" % round(driver.getCurrentSpeed(),2)
+  rospy.loginfo(speed_str)
+  pub.publish(speed_str)
+  rate.sleep()
   pass
  
