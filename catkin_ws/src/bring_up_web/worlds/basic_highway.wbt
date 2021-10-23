@@ -360,7 +360,7 @@ RoadIntersection {
 }
 BmwX5 {
   translation -45.88 0.4 45
-  controller "move_car"
+  controller "ros_car_controller"
   sensorsSlotFront [
     SickLms291 {
       translation 0 -2.4286129e-17 -0.06

@@ -205,10 +205,3 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-
-catkin_install_python(PROGRAMS controllers/move_car/move_car.py
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
-catkin_install_python(PROGRAMS controllers/move_car/move_car.py scripts/speed_listener.py
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)

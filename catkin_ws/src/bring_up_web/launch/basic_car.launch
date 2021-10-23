@@ -9,6 +9,7 @@
     <arg name="world" value="$(find bring_up_web)/worlds/basic_highway.wbt"/>
   </include>
   
-  
+  <node name="cruise_speed" pkg="bring_up_web" type="cruise_speed.py" output="screen"/>
+
   <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find bring_up_web)/rviz/basic_car.rviz"/>
 </launch>
