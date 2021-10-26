@@ -11,5 +11,8 @@
   
   <node name="cruise_speed" pkg="bring_up_web" type="cruise_speed.py" output="screen"/>
 
+  <node pkg="tf" type="static_transform_publisher" name="lidar_broadcast" args="0 0 0 0 0 0 1 map lidar_cloud_point 10" />
+  <node pkg="tf" type="static_transform_publisher" name="gyro_broadcast" args="0 0 0 0 0 0 1 map frame_gyro 10" />
+
   <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find bring_up_web)/rviz/basic_car.rviz"/>
 </launch>

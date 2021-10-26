@@ -74,8 +74,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.9632244328952054 0.2653556794679095 -0.042249914175465086 0.09917866124375238
-  position -46.493579357163306 2.171559375176689 63.49415981907766
+  orientation 0.001518850256260104 -0.9897374939780298 -0.14288941916037234 3.1245635303920603
+  position -45.107806420968416 11.63492704569557 6.889097480618488
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -112,8 +112,44 @@ DEF GROUND Solid {
   boundingObject USE GROUND_PLANE
   locked TRUE
 }
+StraightRoadSegment {
+  translation -45 0.02 64.5
+  name "road(10)"
+  width 21.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+    }
+    RoadLine {
+      color 0.85 0.75 0.3
+      type "double"
+    }
+  ]
+  rightBorder FALSE
+  leftBorder FALSE
+  rightBarrier TRUE
+  leftBarrier TRUE
+  length 100
+}
+StraightRoadSegment {
+  translation 105 0.02 64.5
+  name "road(12)"
+  width 21.5
+  numberOfLanes 4
+  lines [
+    RoadLine {
+    }
+    RoadLine {
+      color 0.85 0.75 0.3
+      type "double"
+    }
+  ]
+  rightBarrier TRUE
+  leftBarrier TRUE
+  length 100
+}
 CurvedRoadSegment {
-  translation -4.5 0.02 64.5
+  translation -4.5 0.02 164.5
   rotation 0 1 0 4.71239
   id "0"
   startJunction "25"
@@ -136,7 +172,7 @@ CurvedRoadSegment {
   curvatureRadius 40.5
 }
 StraightRoadSegment {
-  translation -4.5 0.02 105
+  translation -4.5 0.02 -45
   rotation 0 1 0 1.5708
   name "road(1)"
   id "1"
@@ -159,8 +195,32 @@ StraightRoadSegment {
   leftBarrier TRUE
   length 69
 }
+StraightRoadSegment {
+  translation -4.5 0.02 205
+  rotation 0 1 0 1.5708
+  name "road(11)"
+  id "1"
+  startJunction "25"
+  endJunction "24"
+  width 21.5
+  numberOfLanes 4
+  numberOfForwardLanes 2
+  lines [
+    RoadLine {
+    }
+    RoadLine {
+      color 0.85 0.75 0.3
+      type "double"
+    }
+  ]
+  rightBorder FALSE
+  leftBorder FALSE
+  rightBarrier TRUE
+  leftBarrier TRUE
+  length 69
+}
 CurvedRoadSegment {
-  translation 64.5 0.02 64.5
+  translation 64.5 0.02 164.5
   name "road(2)"
   id "2"
   startJunction "23"
@@ -229,54 +289,6 @@ CurvedRoadSegment {
   rightBarrier TRUE
   leftBarrier TRUE
   curvatureRadius 40.5
-}
-StraightRoadSegment {
-  translation -4.5 0.02 -45
-  rotation 0 1 0 1.5708
-  name "road(5)"
-  id "5"
-  startJunction "28"
-  endJunction "16"
-  width 21.5
-  numberOfLanes 4
-  numberOfForwardLanes 2
-  lines [
-    RoadLine {
-    }
-    RoadLine {
-      color 0.85 0.75 0.3
-      type "double"
-    }
-  ]
-  rightBorder FALSE
-  leftBorder FALSE
-  rightBarrier TRUE
-  leftBarrier TRUE
-  length 30
-}
-StraightRoadSegment {
-  translation 34.5 0.02 -45
-  rotation 0 1 0 1.5708
-  name "road(8)"
-  id "5"
-  startJunction "28"
-  endJunction "16"
-  width 21.5
-  numberOfLanes 4
-  numberOfForwardLanes 2
-  lines [
-    RoadLine {
-    }
-    RoadLine {
-      color 0.85 0.75 0.3
-      type "double"
-    }
-  ]
-  rightBorder FALSE
-  leftBorder FALSE
-  rightBarrier TRUE
-  leftBarrier TRUE
-  length 30
 }
 CurvedRoadSegment {
   translation -4.5 0.02 -4.5
@@ -359,7 +371,7 @@ RoadIntersection {
   startRoadBorder FALSE
 }
 BmwX5 {
-  translation -45.88 0.4 45
+  translation -45 0.4 51.67
   controller "ros_car_controller"
   sensorsSlotFront [
     SickLms291 {
@@ -402,4 +414,41 @@ BmwX5 {
       height 150
     }
   ]
+}
+TrafficCone {
+  translation -46.55 0 74.65
+  name "traffic cone(1)"
+  physics Physics {
+  }
+}
+OilBarrel {
+  translation -47.13 1.06 68.94
+  height 2
+  radius 0.5
+  physics Physics {
+  }
+}
+OilBarrel {
+  translation -47.13 1.06 61.51
+  name "oil barrel(3)"
+  height 2
+  radius 0.5
+  physics Physics {
+  }
+}
+OilBarrel {
+  translation -43.35 1.06 63.32
+  name "oil barrel(2)"
+  height 2
+  radius 0.5
+  physics Physics {
+  }
+}
+OilBarrel {
+  translation -43.36 1.06 68.97
+  name "oil barrel(1)"
+  height 2
+  radius 0.5
+  physics Physics {
+  }
 }

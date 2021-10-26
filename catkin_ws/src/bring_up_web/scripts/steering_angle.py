@@ -40,7 +40,7 @@ def main():
     rate = rospy.Rate(10)
 
     # CREATE PUBLISHER
-    pub_angle = rospy.Publisher('pub_angle', Float64, queue_size=10)
+    pub_angle = rospy.Publisher('pub_steering_angle', Float64, queue_size=10)
 
     while not rospy.is_shutdown():
         check_keyboard()

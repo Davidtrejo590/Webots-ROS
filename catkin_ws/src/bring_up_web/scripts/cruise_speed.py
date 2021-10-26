@@ -5,17 +5,17 @@ import rospy
 from std_msgs.msg import Float64
 
 # CONSTANTS
-MAX_SPEED = 20.0
-cruise_speed = 0.0
+MAX_SPEED = 30.0
+cruise_speed = 10.0
 
 def main():
     global cruise_speed
     # INIT NODE
     print('INITIALIZING SPEED NODE ...')
-    rospy.init_node('speed_node')
+    rospy.init_node('cruise_speed')
     rate = rospy.Rate(10)  # 10Hz
     # CREATE PUBLISHER
-    pub_speed = rospy.Publisher('/pub_speed', Float64, queue_size=10)
+    pub_speed = rospy.Publisher('/pub_cruise_speed', Float64, queue_size=10)
 
     # MAIN LOOP
     while not rospy.is_shutdown():
