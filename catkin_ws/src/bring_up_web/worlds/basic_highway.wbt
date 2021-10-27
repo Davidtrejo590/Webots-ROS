@@ -8,7 +8,7 @@ WorldInfo {
   ]
   title "City"
   ERP 0.6
-  basicTimeStep 10
+  basicTimeStep 64
   coordinateSystem "NUE"
   lineScale 1
   contactProperties [
@@ -401,7 +401,8 @@ BmwX5 {
         }
       ]
       fieldOfView 1
-      width 128
+      width 640
+      height 480
     }
   ]
   sensorsSlotCenter [

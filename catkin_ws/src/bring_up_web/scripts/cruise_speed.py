@@ -5,8 +5,8 @@ import rospy
 from std_msgs.msg import Float64
 
 # CONSTANTS
-MAX_SPEED = 30.0
-cruise_speed = 10.0
+MAX_SPEED = 10.0
+cruise_speed = 0.0
 
 def main():
     global cruise_speed

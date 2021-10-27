@@ -52,14 +52,25 @@ keyboard.enable(TIME_STEP)
 def check_keyboard():
   key = keyboard.getKey()
   # CALCULATE LEFT STEERING ANGLE
-  if(key == Keyboard.LEFT):
-    left_angle = math.atan(1 / (1/math.tan(driver.getSteeringAngle())) + TRACK_FRONT / (2 * WHEEL_BASE) )
+  if(key == keyboard.LEFT):
+    left_angle = math.atan(1 / (1/math.tan(driver.getSteeringAngle())) - TRACK_FRONT / (2 * WHEEL_BASE) )
     driver.setSteeringAngle(left_angle)
   # CALCULATE RIGHT STEERING ANGLE
-  elif (key == Keyboard.RIGHT):
-    right_angle = math.atan(1 / (1/math.tan(driver.getSteeringAngle())) - TRACK_FRONT / (2 * WHEEL_BASE) )
+  elif (key == keyboard.RIGHT):
+    right_angle = math.atan(1 / (1/math.tan(driver.getSteeringAngle())) + TRACK_FRONT / (2 * WHEEL_BASE) )
     driver.setSteeringAngle(right_angle)
+  elif (key == keyboard.UP):
+    # SUBSCRIPTIONS
+    rospy.Subscriber('/pub_cruise_speed', Float64, callback_cruise_speed )
+  elif (key == keyboard.DOWN):
+    # SUBSCRIPTIONS
+    driver.setCruisingSpeed(0.0)
 
+# HELP
+def help():
+  print('TO MOVE CAR SELECT THE 3D WINDOW AND USE THE KEYS TO: \n')
+  print('[LEFT]/[RIGHT] - STEERING ANGLE')
+  print('[UP]/[DOWN] - SET CONSTANT SPEED / SLOW DOWN')
 
 # CRUISE SPEED CALLBACK
 def callback_cruise_speed( msg ):
@@ -71,11 +82,12 @@ def callback_cruise_speed( msg ):
 def main():
 
   # INIT ROS
-  print('INITIALIZING ROS CAR CONTROLLER NODE ...')
+  print('RUNNING ROS CAR CONTROLLER NODE ...')
   rospy.init_node('ros_car_controller')
-  # SUBSCRIPTIONS
-  rospy.Subscriber('/pub_cruise_speed', Float64, callback_cruise_speed )
   rate = rospy.Rate(10)
+
+  # PRINT HELP FOR USER
+  help()                        
 
   # IMAGE MESSAGE
   msg_image = Image()
@@ -133,6 +145,7 @@ def main():
     msg_gyro.angular_velocity.x = gyro.getValues()[0]                                   # GET X COMPONENT FROM GYRO
     msg_gyro.angular_velocity.y = gyro.getValues()[1]                                   # GET Y COMPONENT FROM GYRO
     msg_gyro.angular_velocity.z = gyro.getValues()[2]                                   # GET Z COMPONENT FROM GYRO
+  
 
     pub_camera_data.publish(msg_image)                                                  # PUBLISHING IMAGE MESSAGE
     pub_point_cloud.publish(msg_point_cloud)                                            # PUBLISHING POINTCLOUD2 MESSAGE
