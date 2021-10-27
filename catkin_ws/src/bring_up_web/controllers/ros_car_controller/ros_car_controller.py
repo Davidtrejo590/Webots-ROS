@@ -4,10 +4,8 @@
 
 # LIBRARIES
 import math
-from sensor_msgs import msg
-from vehicle import Driver, Car
+from vehicle import Driver
 from controller import Camera, Keyboard, Lidar, Gyro, GPS
-import os
 import rospy
 from std_msgs.msg import Float64
 from sensor_msgs.msg import Image, PointCloud2, PointField, NavSatFix, NavSatStatus, Imu
@@ -20,7 +18,6 @@ WHEEL_BASE = 4.0
 # GLOBAL VARIABLES
 right_angle = 0.0
 left_angle = 0.0
-
 
 # INIT DRIVER
 driver = Driver()
@@ -61,7 +58,7 @@ def check_keyboard():
     driver.setSteeringAngle(right_angle)
   elif (key == keyboard.UP):
     # SUBSCRIPTIONS
-    rospy.Subscriber('/pub_cruise_speed', Float64, callback_cruise_speed )
+    driver.setCruisingSpeed(10.0)
   elif (key == keyboard.DOWN):
     # SUBSCRIPTIONS
     driver.setCruisingSpeed(0.0)
@@ -74,9 +71,11 @@ def help():
 
 # CRUISE SPEED CALLBACK
 def callback_cruise_speed( msg ):
-  speed = msg.data
-  driver.setCruisingSpeed(speed)
-  # print('Current Speed: ', speed_ros)  
+  driver.setCruisingSpeed(msg.data)
+
+# STEERING ANGLE CALLBACK
+def callback_steering_angle(msg):
+  driver.setSteeringAngle(msg.data)
 
 # MAIN FUNCTION
 def main():
@@ -100,7 +99,7 @@ def main():
   # POINT CLOUD2 MESSAGE 
   msg_point_cloud = PointCloud2()
   msg_point_cloud.header.stamp = rospy.Time.now()
-  msg_point_cloud.header.frame_id = 'lidar_cloud_point'  
+  msg_point_cloud.header.frame_id = 'lidar_link'  
   msg_point_cloud.height = 1
   msg_point_cloud.width = lidar.getNumberOfPoints()
   msg_point_cloud.point_step = 20
@@ -114,27 +113,28 @@ def main():
   msg_point_cloud.is_bigendian = False
 
   # GPS MESSAGE
-  # msg_gps = NavSatFix()
-  # msg_gps.header.stamp = rospy.Time.now()
-  # msg_gps.header.frame_id = 'frame_gps'
+  msg_gps = NavSatFix()
+  msg_gps.header.stamp = rospy.Time.now()
+  msg_gps.header.frame_id = 'gps_link'
   # msg_gps.position_covariance = NavSatFix.COVARIANCE_TYPE_KNOWN
   # msg_gps.status.service = NavSatStatus.SERVICE_GPS
-  # msg_gps.latitude = gps.getValues()[0]
-  # msg_gps.longitude = gps.getValues()[1]
-  # msg_gps.altitude = gps.getValues()[2]
   
 
   # GYRO MESSAGE
   msg_gyro = Imu()
   msg_gyro.header.stamp = rospy.Time.now()
-  msg_gyro.header.frame_id = 'frame_gyro'
+  msg_gyro.header.frame_id = 'gyro_link'
   
 
   # PUBLISHERS
-  pub_camera_data = rospy.Publisher('pub_camera_data', Image, queue_size=10)
-  pub_point_cloud = rospy.Publisher('pub_point_cloud', PointCloud2, queue_size=10)
-  # pub_gps_data = rospy.Publisher('pub_gps_data', NavSatFix, queue_size=10)
-  pub_imu_gyro = rospy.Publisher('pub_imu_gyro', Imu, queue_size=10)
+  pub_camera_data  = rospy.Publisher('/camera/rgb/raw', Image, queue_size=10)
+  pub_point_cloud  = rospy.Publisher('/point_cloud'   , PointCloud2, queue_size=10)
+  pub_nav_gps   = rospy.Publisher('/gps', NavSatFix, queue_size=10)
+  pub_imu_gyro     = rospy.Publisher('/gyro', Imu, queue_size=10)
+
+  # SUBSCRIBERS
+  rospy.Subscriber('/goal_cruise_speed'  , Float64, callback_cruise_speed  )
+  rospy.Subscriber('/goal_steering_angle', Float64, callback_steering_angle)
 
   # MAIN LOOP
   while driver.step() != -1 and not rospy.is_shutdown():
@@ -145,12 +145,15 @@ def main():
     msg_gyro.angular_velocity.x = gyro.getValues()[0]                                   # GET X COMPONENT FROM GYRO
     msg_gyro.angular_velocity.y = gyro.getValues()[1]                                   # GET Y COMPONENT FROM GYRO
     msg_gyro.angular_velocity.z = gyro.getValues()[2]                                   # GET Z COMPONENT FROM GYRO
-  
+    msg_gps.latitude = gps.getValues()[0]                                               # GET X COMPONENT FROM GPS  
+    msg_gps.longitude = gps.getValues()[1]                                              # GET Y COMPONENT FROM GPS  
+    msg_gps.altitude = gps.getValues()[2]                                               # GET Z COMPONENT FROM GPS  
+
 
     pub_camera_data.publish(msg_image)                                                  # PUBLISHING IMAGE MESSAGE
     pub_point_cloud.publish(msg_point_cloud)                                            # PUBLISHING POINTCLOUD2 MESSAGE
     pub_imu_gyro.publish(msg_gyro)                                                      # PUBLISHING IMU MESSAGE
-    # pub_gps_data.publish(msg_gps)
+    pub_nav_gps.publish(msg_gps)                                                        # PUBLISHING NAVSATFIX MESSAGE
     
     rate.sleep()
     pass
