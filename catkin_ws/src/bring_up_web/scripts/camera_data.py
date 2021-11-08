@@ -30,6 +30,7 @@ def hough_lines(coppred_img):
     lines = cv2.HoughLinesP(coppred_img, rho=1.0, theta= math.pi/180, threshold=60, lines=None, minLineLength=175, maxLineGap=150)
     return lines
 
+
 # DISPLAY LINES IN BGR IMAGE
 def display_lines(bgr_img, avg_lines):
     # DRAWING LINES

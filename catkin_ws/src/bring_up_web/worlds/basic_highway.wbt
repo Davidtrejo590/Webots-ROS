@@ -74,8 +74,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.0031177629269214606 0.9999229180516112 0.012018215736230575 3.0759075466536063
-  position -48.11450897308593 3.7317379190224367 -60.185355585656865
+  orientation 0.003314797739235519 -0.9989732985412146 -0.045181422262177695 3.1677608875214127
+  position -49.29355798835254 3.8901751066993264 -53.2451159511803
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -113,9 +113,9 @@ DEF GROUND Solid {
   locked TRUE
 }
 StraightRoadSegment {
-  translation -45 0.02 -35.5
+  translation -45 0.02 -32
   name "road(10)"
-  width 21.5
+  width 25
   numberOfLanes 8
   lines [
     RoadLine {
@@ -124,6 +124,7 @@ StraightRoadSegment {
       type "continuous"
     }
     RoadLine {
+      color 0.988235 0.913725 0.309804
       type "continuous"
     }
     RoadLine {
@@ -142,9 +143,9 @@ StraightRoadSegment {
   length 100
 }
 StraightRoadSegment {
-  translation -45 0.02 64.5
+  translation -45 0.02 68
   name "road(5)"
-  width 21.5
+  width 25
   numberOfLanes 8
   lines [
     RoadLine {
@@ -170,9 +171,9 @@ StraightRoadSegment {
   length 100
 }
 StraightRoadSegment {
-  translation 105 0.02 64.5
+  translation 105 0.02 68
   name "road(12)"
-  width 21.5
+  width 25
   numberOfLanes 4
   lines [
     RoadLine {
@@ -187,12 +188,12 @@ StraightRoadSegment {
   length 100
 }
 CurvedRoadSegment {
-  translation -4.5 0.02 164.5
+  translation -4.5 0.02 168
   rotation 0 1 0 4.71239
   id "0"
   startJunction "25"
   endJunction "17"
-  width 21.5
+  width 25
   numberOfLanes 4
   numberOfForwardLanes 2
   lines [
@@ -216,7 +217,7 @@ StraightRoadSegment {
   id "1"
   startJunction "25"
   endJunction "24"
-  width 21.5
+  width 25
   numberOfLanes 4
   numberOfForwardLanes 2
   lines [
@@ -234,13 +235,13 @@ StraightRoadSegment {
   length 69
 }
 StraightRoadSegment {
-  translation -4.5 0.02 205
+  translation -4.5 0.02 208.5
   rotation 0 1 0 1.5708
   name "road(11)"
   id "1"
   startJunction "25"
   endJunction "24"
-  width 21.5
+  width 25
   numberOfLanes 4
   numberOfForwardLanes 2
   lines [
@@ -258,12 +259,12 @@ StraightRoadSegment {
   length 69
 }
 CurvedRoadSegment {
-  translation 64.5 0.02 164.5
+  translation 64.5 0.02 168
   name "road(2)"
   id "2"
   startJunction "23"
   endJunction "24"
-  width 21.5
+  width 25
   numberOfLanes 4
   numberOfForwardLanes 2
   lines [
@@ -281,13 +282,13 @@ CurvedRoadSegment {
   curvatureRadius 40.5
 }
 StraightRoadSegment {
-  translation 105 0.02 64.5
+  translation 105 0.02 68
   rotation 0 1 0 3.1416
   name "road(3)"
   id "3"
   startJunction "23"
   endJunction "22"
-  width 21.5
+  width 25
   numberOfLanes 4
   numberOfForwardLanes 2
   lines [
@@ -311,7 +312,7 @@ StraightRoadSegment {
   id "3"
   startJunction "23"
   endJunction "22"
-  width 21.5
+  width 25
   numberOfLanes 4
   numberOfForwardLanes 2
   lines [
@@ -335,7 +336,7 @@ CurvedRoadSegment {
   id "4"
   startJunction "16"
   endJunction "22"
-  width 21.5
+  width 25
   numberOfLanes 4
   numberOfForwardLanes 2
   lines [
@@ -359,7 +360,7 @@ CurvedRoadSegment {
   id "6"
   startJunction "29"
   endJunction "28"
-  width 21.5
+  width 25
   numberOfLanes 4
   numberOfForwardLanes 2
   lines [
@@ -377,7 +378,7 @@ CurvedRoadSegment {
   curvatureRadius 40.5
 }
 RoadIntersection {
-  translation -45 0.02 -55
+  translation -45 0.02 -53.25
   rotation 0 1 0 0.785398
   name "road intersection(1)"
   id "17"
@@ -387,7 +388,7 @@ RoadIntersection {
     "0"
     "15"
   ]
-  roadsWidth 21.5
+  roadsWidth 25
   startRoadsLength [
     8.75
   ]
@@ -419,7 +420,7 @@ RoadIntersection {
   ]
 }
 BmwX5 {
-  translation -47.8 0.4 -39.6
+  translation -49.65 0.4 -34.9
   controller "ros_car_controller"
   sensorsSlotFront [
     SickLms291 {
@@ -465,14 +466,14 @@ BmwX5 {
   ]
 }
 OilBarrel {
-  translation -52.36 1 -23.89
+  translation -52.23 1 -23.89
   height 2
   radius 0.5
   physics Physics {
   }
 }
 OilBarrel {
-  translation -52.81 1 -36.47
+  translation -52.44 1 -33.49
   name "oil barrel(3)"
   height 2
   radius 0.5
@@ -480,7 +481,7 @@ OilBarrel {
   }
 }
 OilBarrel {
-  translation -42.21 1 -37.13
+  translation -44.08 1 -32.01
   name "oil barrel(2)"
   height 2
   radius 0.5
@@ -488,7 +489,7 @@ OilBarrel {
   }
 }
 OilBarrel {
-  translation -42.34 1 -23.22
+  translation -44.24 1 -23.22
   name "oil barrel(1)"
   height 2
   radius 0.5
