@@ -74,8 +74,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.003314797739235519 -0.9989732985412146 -0.045181422262177695 3.1677608875214127
-  position -49.29355798835254 3.8901751066993264 -53.2451159511803
+  orientation 0.001746159154149549 -0.9974864702187091 -0.07083567363150342 3.113967515791577
+  position -48.18258421005528 8.424157060720603 -74.91862349063862
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -151,9 +151,10 @@ StraightRoadSegment {
     RoadLine {
     }
     RoadLine {
-      type "continuous"
+      type "none"
     }
     RoadLine {
+      type "none"
     }
     RoadLine {
       type "continuous"
