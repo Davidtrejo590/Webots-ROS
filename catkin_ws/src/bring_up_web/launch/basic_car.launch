@@ -4,7 +4,7 @@
 
   <arg name="no_gui" default="false," doc="Start Webots with minimal GUI"/>
   <include file="$(find webots_ros)/launch/webots.launch">
-    <arg name="mode" value="pause"/>
+    <arg name="mode" value="realtime"/>
     <arg name="no_gui" value="$(arg no_gui)"/>
     <arg name="world" value="$(find bring_up_web)/worlds/basic_highway.wbt"/>
   </include>
@@ -16,6 +16,7 @@
   <node pkg="tf" type="static_transform_publisher" name="car_to_gps" args="0 -0.1 0 0 3.1415926 0 car_link gps_link 10"/>
 
 
+  <!-- <node name="lane_detect" pkg="bring_up_web" type="lane_detect.py" output="screen"/> -->
 
   <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find bring_up_web)/rviz/basic_car.rviz"/>
 </launch>

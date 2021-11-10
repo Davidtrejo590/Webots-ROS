@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 from __future__ import division
+from collections import Iterable
 
 """ PROCESS RGB IMAGE FROM ROS TO GET LEFT LINE OF LANE  """
 
@@ -80,14 +81,17 @@ def avg_slope_intercept(image, lines):
 
 # MAKE COORDINATES OF THE LINES
 def make_coordinates(image, line_parameters):
-    slope, intercept = line_parameters                                          # SLOPE = m, INTERCEPT = b
-    # y1 = image.shape[0]                                                       # IMG HEIGHT (480)
-    y1 = 480                                           
-    y2 = int((y1*(0.6)))
-    x1 = int((y1 - intercept)/slope)                                            # X1 = (Y1 - b)/m
-    x2 = int((y2 - intercept)/slope)                                            # X1 = (Y1 - b)/m
-    # print(x1, y1, x2, y2)
-    return np.array([x1, y1, x2, y2])                                           # RETURN TWO POINTS AS A LINE (X1, Y1) - (X2, Y2)
+    if isinstance(line_parameters, Iterable):
+        slope, intercept = line_parameters                                          # SLOPE = m, INTERCEPT = b
+        # y1 = image.shape[0]                                                       # IMG HEIGHT (480)
+        y1 = 480                                           
+        y2 = int((y1*(0.6)))
+        x1 = int((y1 - intercept)/slope)                                            # X1 = (Y1 - b)/m
+        x2 = int((y2 - intercept)/slope)                                            # X1 = (Y1 - b)/m
+        # print(x1, y1, x2, y2)
+        return np.array([x1, y1, x2, y2])                                           # RETURN TWO POINTS AS A LINE (X1, Y1) - (X2, Y2)
+    else:
+        return np.array([0,0,0,0])
 
 # CALCULATE DISTANCE AND ANGLE FROM CAMERA CENTER
 def calculate_distance_angle(line, width, height, side):
