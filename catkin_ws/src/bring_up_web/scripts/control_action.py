@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-""" CALCULATE CONTROL ACTIONS (CRUISE & SPEED) """
+""" CALCULATE CONTROL ACTIONS (CRUISE SPEED & STEERING ANGLE) """
 
 # LIBRARIES
 import rospy
@@ -8,21 +8,22 @@ from std_msgs.msg import Float64
 from std_msgs.msg import Float64MultiArray
 
 
-# GLOBAL
-left_lane = []
-right_lane = []
+# GLOBAL VARIABLES
+left_lane = [0,0]
+right_lane = [0,0]
 
-
+# LEFT LANE CALLBACK
 def callback_left_lane(msg):
     global left_lane
     left_lane = msg.data
 
-
+# RIGHT LANE CALLBACK
 def callback_right_lane(msg):
     global right_lane
     right_lane = msg.data
 
 
+# MAIN FUNCTION
 def main():
     cruise_speed = 0.0
 
@@ -40,15 +41,14 @@ def main():
 
 
     while not rospy.is_shutdown():
-        if( len(left_lane) != 0 and len(right_lane) !=0 ):
-            cruise_speed = 10.0
-        else:
+        if( (left_lane[0] == 0 and left_lane[1] == 0) or (right_lane[0] == 0 and right_lane[1] == 0) ):
             cruise_speed = 0.0
+        else:                                                                                           # THERE ARE LANES
+            cruise_speed = 10.0                                                                         # SET CRUISE SPEED TO 10 km/h
         pub_speed.publish(cruise_speed)
         rate.sleep()
         pass
     
-    # rospy.spin()
 
 if __name__ == "__main__":
     try:

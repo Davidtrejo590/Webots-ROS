@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+from __future__ import division
 
 """ PROCESS RGB IMAGE FROM ROS TO GET LEFT LINE OF LANE  """
 
@@ -9,10 +10,12 @@ import cv2
 from cv_bridge import CvBridge
 import numpy as np
 import matplotlib.pyplot as plt
+import math
+
 
 # GLOBAL VARIABLES
-left_lane = []
-right_lane = []
+polar_left_line = []
+polar_right_line = []
 
 
 # GET EDGES OF AN IMAGE
@@ -47,6 +50,7 @@ def display_lines(image, lines):
     return line_img                                                             # RETURN AN IMAGE WITH LINES
 
 
+# GET THE EQUATION OF THE LINE
 def avg_slope_intercept(image, lines):
     left_fit = []                                                               # LEFT LINES
     right_fit = []                                                              # RIGHT LINES
@@ -85,16 +89,50 @@ def make_coordinates(image, line_parameters):
     # print(x1, y1, x2, y2)
     return np.array([x1, y1, x2, y2])                                           # RETURN TWO POINTS AS A LINE (X1, Y1) - (X2, Y2)
 
+# CALCULATE DISTANCE AND ANGLE FROM CAMERA CENTER
+def calculate_distance_angle(line, width, height, side):
+    x1, y1, x2, y2 = line.reshape(4)                                            # GET POINTS OF LANE LINE 
+    xp = (x1 + x2)/2                                                            # 'XP' IS THE AVG OF 'X1' AND 'X2'
+    yp = (y1 + y2)/2                                                            # 'YP' IS THE AVG OF 'Y1' AND 'Y2'        
+
+    if(side):                                                                   # LEFT LANE
+        a = (width/2) - xp                                                      # ADJACENT SIDE FOR DISTANCE 'D'
+        a_angle = xp - x1                                                       # ADJANCENT SIDE FOR THETA ANGLE
+    else:                                                                       # RIGHT LANE
+        a = xp -(width/2)                                                       # ADJACENT SIDE FOR DISTANCE 'D'
+        a_angle = x1 -xp                                                        # ADJANCENT SIDE FOR THETA ANGLE
+
+    # CALCULATE THE DISTANCE WITH PYTHAGORES THEOREM
+    b = height - 30 - yp                                                        # OPPSITE SIDE FOR DISTANCE AND ANGLE
+    distance = math.sqrt( (math.pow(a, 2) + math.pow(b, 2)) )                   # DISTANCE 'D'
+
+    # CALCULATE ANGLE
+    angle = math.atan((b/a_angle))                                              # ANGLE IN RADIANS
+    angle_degrees = (angle * (180/math.pi))                                     # ANGLE IN DEGREES
+
+    # print('Points: ', 'x1=', x1, 'y1=', y1, 'x2=', x2, 'y2=', y2)
+    # print('AVG Point', 'xp=', xp, 'yp=', yp )
+    # print('Cateto adayacente: ', a)
+    # print('Cateto Opuesto: ', b)
+    # print('Cateto Adyacente Angulo: ', a_angle)
+    # print('Distancia (Hyp): ', distance)
+    # print('Angulo en radianes: ', angle)
+    # print('Angulo en grados: ', angle_degrees)
+
+    return [distance, angle]                                                    # RETURN A LIST WITH CURRENT DISTANCE & ANGLE
+
 
 
 def callback_lane_detect(msg):
 
-    global left_lane
-    global right_lane
+    global polar_left_line
+    global polar_right_line
 
     bridge = CvBridge()
     cv2_img = bridge.imgmsg_to_cv2(msg, 'bgr8')                                 # ROS IMAGE TO CV2 IMAGE ( RGB )
     lane_img = np.copy(cv2_img)                                                 # COPY OF ''cv_img'
+    height = lane_img.shape[0]                                                  # X AXIS
+    width = lane_img.shape[1]                                                   # Y AXIS
     canny_img = canny(lane_img)                                                 # CANNY IMAGE ( EDGES )
     cropped_img = region_of_interest(canny_img)                                 # COPPRED IMAGE ( ONLY INTEREST REGION ) 
     lines = cv2.HoughLinesP(                                                    # HOUGHP ( LANE LINES )
@@ -106,37 +144,38 @@ def callback_lane_detect(msg):
             minLineLength=40,
             maxLineGap=50
         )
-    # print(lines)
-    if(lines is not None):
-        avg_lines = avg_slope_intercept(lane_img, lines)                            # LEFT AND RIGHT LINES AS COORDINATES
-        # print('AVG LINES: ', avg_lines.reshape(2,4))
-        left_lane, right_lane = avg_lines.reshape(2,4)
-        line_img = display_lines(lane_img, avg_lines)                               # DISPLAY LINES IN A IMAGE
-        combo_img = cv2.addWeighted(lane_img, 0.8, line_img, 1, 1)                  # LANE_IMG + LINES
-        cv2.imshow('Result', combo_img)                                             # DISPLAY IMAGE 
+    
+    if(lines is not None):                                                              # IF THERE ARE LINES
+        avg_lines = avg_slope_intercept(lane_img, lines)                                # LEFT AND RIGHT LINES AS COORDINATES
+        left_line, right_line = avg_lines.reshape(2,4)
+        polar_left_line = calculate_distance_angle(left_line, width, height, True)
+        polar_right_line = calculate_distance_angle(right_line, width, height, False)
+        line_img = display_lines(lane_img, avg_lines)                                   # DISPLAY LINES IN A IMAGE
+        combo_img = cv2.addWeighted(lane_img, 0.8, line_img, 1, 1)                      # LANE_IMG + LINES
+        cv2.imshow('Result', combo_img)                                                 # DISPLAY IMAGE 
         cv2.waitKey(33)
-    else:
-        cv2.imshow('Result', lane_img)                                             # DISPLAY IMAGE 
+    else:                                                                               # IF THERE AREN'T LINES
+        cv2.imshow('Result', lane_img)                                                  # DISPLAY ORIGINAL IMAGE 
         cv2.waitKey(33)
         # print('BUG', lines, left_lane, right_lane)
-        left_lane = []
-        right_lane = []
+        polar_left_line = [0,0]                                                         # DISTANCE AND ANGLE NOT CALCULATED FOR LEFT LINE
+        polar_right_line = [0,0]                                                        # DISTANCE AND ANGLE NOT CALCULATED FOR RIGHT LINE
 
 
     # SHOW GRAPH IMAGE
     # plt.imshow(combo_img)
     # plt.show()
 
-
+# MAIN FUNCTION
 def main():
     print('Lane Detect node...')
-    rospy.init_node('left_line')
+    rospy.init_node('lane_detect')
     rate = rospy.Rate(10)
     rospy.Subscriber('/camera/rgb/raw', Image, callback_lane_detect)
 
      # MESSAGES
-    msg_left_lane = Float64MultiArray()
-    msg_right_lane = Float64MultiArray()
+    msg_left_line = Float64MultiArray()
+    msg_right_line = Float64MultiArray()
 
     # PUBLISHERS
     pub_left_lane = rospy.Publisher('/left_lane', Float64MultiArray, queue_size=10)
@@ -144,18 +183,16 @@ def main():
 
 
     while not rospy.is_shutdown():
-        # LEFT AND RIGHT LANE
-        msg_left_lane.data = left_lane
-        msg_right_lane.data = right_lane
+        # LEFT AND RIGHT LINES
+        msg_left_line.data = polar_left_line
+        msg_right_line.data = polar_right_line
 
-        # PUBLISH
-        pub_left_lane.publish(msg_left_lane)
-        pub_right_lane.publish(msg_right_lane)
+        # PUBLISH LEFT AND RIGHT LINES
+        pub_left_lane.publish(msg_left_line)
+        pub_right_lane.publish(msg_right_line)
         
         rate.sleep()
         pass
-
-    # rospy.spin()
 
 
 if __name__ == "__main__":
