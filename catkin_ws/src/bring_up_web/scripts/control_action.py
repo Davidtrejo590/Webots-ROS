@@ -26,7 +26,7 @@ def callback_right_lane(msg):
 def calculate_steering_angle(lane):
     goal_distance = 146.24038429927623
     goal_angle = 0.646238328234549
-    kd = 0.01
+    kd = 0.003
     ka = 0.01
     steering = 0.0
     detected_distace, detected_angle = lane
@@ -40,8 +40,9 @@ def calculate_steering_angle(lane):
     
     ed = goal_distance - detected_distace
     ea = goal_angle - detected_angle
+    #print([ed, ea])
     steering = (kd * ed) + (ka * ea)
-    print('Steering Calculated: ', steering)
+    #print('Steering Calculated: ', steering)
     return steering
 
 
@@ -69,7 +70,7 @@ def main():
             cruise_speed = 0.0
         else:                                                                                           # THERE ARE LINES
             cruise_speed = 10.0                                                                         # SET CRUISE SPEED TO 10 km/h
-            steering_angle = calculate_steering_angle(left_lane)
+            steering_angle = calculate_steering_angle(right_lane)
         pub_speed.publish(cruise_speed)
         pub_angle.publish(steering_angle)
         rate.sleep()
