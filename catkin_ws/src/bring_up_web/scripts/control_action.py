@@ -24,23 +24,24 @@ def callback_right_lane(msg):
     right_lane = msg.data
 
 def calculate_steering_angle(lane):
-
-    goal_distance = 140.0
-    goal_angle = 0.7579
-    # # goal_angle = 48.0
-    kd = 0.1
-    ka = 1.0
+    goal_distance = 146.24038429927623
+    goal_angle = 0.646238328234549
+    kd = 0.01
+    ka = 0.01
     steering = 0.0
     detected_distace, detected_angle = lane
-    if detected_angle < goal_angle:
-        steering = -0.0174533
-    elif detected_angle > goal_angle:
-        steering = 0.0174533
-    # ed = goal_distance - detected_distace
-    # ea = goal_angle - detected_angle
-    # steering = (kd * ed) + (ka * ea)
-    # print('Steering Calculated: ', steering)
-    # print('ed: ', ed, 'ea: ', ea)
+    # print('Distance Detected: ', detected_distace)
+    # print('Angle Detected: ', detected_angle)
+
+    # if detected_angle < goal_angle:
+    #     steering = -0.0174533
+    # elif detected_angle > goal_angle:
+    #     steering = 0.0174533
+    
+    ed = goal_distance - detected_distace
+    ea = goal_angle - detected_angle
+    steering = (kd * ed) + (ka * ea)
+    print('Steering Calculated: ', steering)
     return steering
 
 

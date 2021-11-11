@@ -53,13 +53,13 @@ def check_keyboard():
   # CALCULATE LEFT STEERING ANGLE
   if(key == keyboard.LEFT):
     # left_angle = math.atan(1 / (1/math.tan(driver.getSteeringAngle())) - TRACK_FRONT / (2 * WHEEL_BASE) )
-    left_angle = driver.getSteeringAngle() - 0.0174533
+    left_angle = driver.getSteeringAngle() - (0.0174533*5)
     driver.setSteeringAngle(left_angle)
     print('Left Angle', driver.getSteeringAngle())
   # CALCULATE RIGHT STEERING ANGLE
   elif (key == keyboard.RIGHT):
     # right_angle = math.atan(1 / (1/math.tan(driver.getSteeringAngle())) + TRACK_FRONT / (2 * WHEEL_BASE) )
-    right_angle = driver.getSteeringAngle() + 0.0174533
+    right_angle = driver.getSteeringAngle() + (0.0174533*5)
     driver.setSteeringAngle(right_angle)
     print('Right Angle', driver.getSteeringAngle())
   elif (key == keyboard.UP):
