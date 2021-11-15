@@ -24,8 +24,8 @@ def callback_right_lane(msg):
     right_lane = list(msg.data)
 
 def calculate_steering_angle_right(lane):
-    kd = 0.001
-    ka = 1.0
+    # kd = 0.001
+    # ka = 1.0
 
     detected_distance, detected_angle = lane
     goal_distance, goal_angle = [148.9236381505636, 0.6301090523170392]
