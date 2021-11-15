@@ -74,8 +74,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.001746159154149549 -0.9974864702187091 -0.07083567363150342 3.113967515791577
-  position -48.18258421005528 8.424157060720603 -74.91862349063862
+  orientation 0.0018468771097509605 0.9949040535116666 0.10080929198737755 3.232053784007618
+  position -48.529596868253364 8.321312107218574 -26.052758281387966
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -124,13 +124,14 @@ StraightRoadSegment {
       type "continuous"
     }
     RoadLine {
-      color 0.988235 0.913725 0.309804
-      type "continuous"
+      color 0.933333 0.933333 0.92549
+      type "none"
     }
     RoadLine {
       type "continuous"
     }
     RoadLine {
+      type "none"
     }
     RoadLine {
       type "continuous"
@@ -151,7 +152,7 @@ StraightRoadSegment {
     RoadLine {
     }
     RoadLine {
-      type "none"
+      type "continuous"
     }
     RoadLine {
       type "none"
@@ -195,14 +196,24 @@ CurvedRoadSegment {
   startJunction "25"
   endJunction "17"
   width 25
-  numberOfLanes 4
+  numberOfLanes 8
   numberOfForwardLanes 2
   lines [
     RoadLine {
     }
     RoadLine {
-      color 0.85 0.75 0.3
-      type "double"
+    }
+    RoadLine {
+    }
+    RoadLine {
+      type "continuous"
+    }
+    RoadLine {
+      type "none"
+    }
+    RoadLine {
+      color 0.933333 0.933333 0.92549
+      type "continuous"
     }
   ]
   rightBorder FALSE
@@ -421,7 +432,7 @@ RoadIntersection {
   ]
 }
 BmwX5 {
-  translation -49.65 0.4 -34.9
+  translation -49.68 0.4 0.08
   controller "ros_car_controller"
   sensorsSlotFront [
     SickLms291 {

@@ -56,8 +56,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.14225749824389172 0.9802306097877095 0.1375163838551774 1.5555301900732397
-  position 1094.5106841157942 6.248627205820413 -564.7574725359817
+  orientation -0.08532068429847695 0.9899873067688089 0.11245227106412764 1.8515069848375785
+  position 1124.4903213380799 12.043014649412573 -566.1138589606408
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -70,8 +70,8 @@ Fog {
 TexturedBackground {
 }
 BmwX5 {
-  translation 1076.43 0.4 -562.949
-  rotation 0 -1 0 1.5708
+  translation 1076.43 0.4 -566.889
+  rotation 0 -1 0 1.309
   controller "ros_car_controller"
   sensorsSlotFront [
     SickLms291 {
