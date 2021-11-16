@@ -3,7 +3,6 @@
 """ CALCULATE CONTROL ACTIONS (CRUISE SPEED & STEERING ANGLE) """
 
 # LIBRARIES
-from numpy.lib.function_base import angle
 import rospy
 from std_msgs.msg import Float64
 from std_msgs.msg import Float64MultiArray
@@ -16,104 +15,75 @@ right_lane = [0.0, 0.0]
 # LEFT LANE CALLBACK
 def callback_left_lane(msg):
     global left_lane
-    left_lane = list(msg.data)
+    left_lane = list(msg.data)                                                          # TUPLE TO LIST
 
 # RIGHT LANE CALLBACK
 def callback_right_lane(msg):
     global right_lane
-    right_lane = list(msg.data)
-
-def calculate_steering_angle_right(lane):
-    # kd = 0.001
-    # ka = 1.0
-
-    detected_distance, detected_angle = lane
-    goal_distance, goal_angle = [148.9236381505636, 0.6301090523170392]
-    ed = goal_distance - detected_distance
-    ea = goal_angle - detected_angle
-
-    if ed == 0.0 or ea == 0.0:
-        steering = 0.0
-    elif ea > 0.015:
-        steering = -0.0174533
-    else:
-        steering = (kd * ed) + (ka * ea)
-
-    print([ed, ea, steering])
-    return steering
+    right_lane = list(msg.data)                                                         # TUPLE TO LIST
 
 
-def calculate_steering_angle(lane):
-    # goal_distance = 146.24038429927623
-    # goal_angle =  0.646238328234549
-    # # goal_distance = 125.73881660012552
-    # # goal_angle = 0.6174452308546208
-    # kd = 0.003 # 0.003
-    # ka = 0.01       
-    # steering = 0.0
-    # detected_distace, detected_angle = lane
-    # # print('Distance Detected: ', detected_distace)
-    # # print('Angle Detected: ', detected_angle)
-
-    # # if detected_angle < goal_angle:
-    # #     steering = -0.0174533
-    # # elif detected_angle > goal_angle:
-    # #     steering = 0.0174533
+# CALCULATE STEERING ANGLE ACCORDING TO LEFT LINE OR RIGHT LINE
+def calculate_steering_angle(left_line, right_line, side):
+    kd = 0.003                                                                          # CONSTANT FOR DISTANCE ERROR
+    ka = 0.01                                                                           # CONSTANT FOR ANGLE ERROR
     
-    # ed = goal_distance - detected_distace
-    # ea = goal_angle - detected_angle
-    # # print([ed, ea])
-    # steering = (ka * ed) + (ka * ea)
-    # print([ed, ea, steering])
+    detected_distance, detected_angle = [0.0, 0.0]                                      # INITIAL STATE FOR DETECTED MEASURES
+    goal_distance, goal_angle = [0.0, 0.0]                                              # INTIAL STATE FOR GOAL MEASURES
+    steering = 0.0                                                                      # INITIAL STATE FOR STEERING
 
-    kd = 0.003
-    ka = 0.01
+    if side:                                                                            # IF ONLY THERE ARE LEFT LINES
+        detected_distance, detected_angle = left_line                                   # DETECTED MEASURES FOR LEFT LINES
+        goal_distance, goal_angle = [144.90341610879986, 0.6545707673233914]            # GOAL MEASURES FOR LEFT LINES
 
-    detected_distance, detected_angle = lane
-    goal_distance, goal_angle = [144.90341610879986, 0.6545707673233914]
-    ed = goal_distance - detected_distance
-    ea = goal_angle - detected_angle
+    else:                                                                               # IF ONLY THERE ARE RIGHT LINES
+        detected_distance, detected_angle = right_line                                  # DETECTED MEASURES FOR RIGHT LINES
+        goal_distance, goal_angle = [148.9236381505636, 0.6301090523170392]             # GOAL MEASURES FOR RIGHT LINES
 
-    if ed == 0.0 or ea == 0.0:
+    ed = goal_distance - detected_distance                                              # CALCULATE DISTANCE ERROR
+    ea = goal_angle - detected_angle                                                    # CALCULATE ANGLE ERROR
+
+    if ed == 0.0 or ea == 0.0:                                                          # THE CAR IS ALIGNED 
         steering = 0.0
-    else:
-        steering = (kd * ed) + (ka * ea)
+    elif side:                                                                          # THE CAR IS NOT ALIGNED
+        steering = (kd * ed) + (ka * ea)                                                # CALCULATE STEERING ACCORDING TO LEFT LINES
+        print('ONLY LEFT LINE: ', steering)
+    else:                                                                               # THE CAR IS NOT ALIGNED
+        steering = (-1) * ((kd * ed) + (ka * ea))                                       # CALCULATE STEERING ACCORDING TO RIGHT LINES
+        print('ONLY RIGHT LINE: ', steering)
 
-    print('Only Left Lane', steering)
+    return steering                                                                     # RETURN THE CORRESPOND STEERING
 
-    return steering
 
-def calculate_steering_angle_avg(left_lane, right_lane):
+def calculate_steering_angle_avg(left_line, right_line):
 
-    kd = 0.003
+    kd = 0.003375
     ka = 1.0
 
-    detec_dist_left, detec_angle_left = left_lane
-    detec_dist_right, detec_angle_right = right_lane
+    detec_dist_left, detec_angle_left = left_line                                       # DETECTED MEASURES FOR LEFT LINES
+    detec_dist_right, detec_angle_right = right_line                                    # DETECTED MEASURES FOR RIGHT LINES
 
-    avg_dist_detec = (detec_dist_left + detec_dist_right)/2
-    avg_angle_detec = (detec_angle_left + detec_angle_right)/ 2
+    avg_dist_detec = (detec_dist_left + detec_dist_right)/2                             # AVG OF DETECTED DISTANCE 
+    avg_angle_detec = (detec_angle_left + detec_angle_right)/ 2                         # AVG OF DETECTED ANGLE 
 
     # CHECK IN FIRST FRAME
-    goal_dist_left, goal_angle_left = [144.90341610879986, 0.6545707673233914]
-    goal_dist_right, goal_angle_right = [148.9236381505636, 0.6301090523170392]
+    goal_dist_left, goal_angle_left = [144.90341610879986, 0.6545707673233914]          # GOAL MEASURES FOR LEFT LINES
+    goal_dist_right, goal_angle_right = [148.9236381505636, 0.6301090523170392]         # GOAL MEASURES FOR RIGHT LINES
 
-    avg_goal_dist = (goal_dist_left + goal_dist_right)/2
-    avg_goal_angle = (goal_angle_left + goal_angle_right)/2
+    avg_goal_dist = (goal_dist_left + goal_dist_right)/2                                # AVG OF GOAL DISTANCE
+    avg_goal_angle = (goal_angle_left + goal_angle_right)/2                             # AVG OF GOAL ANGLE
 
-    ed = avg_goal_dist - avg_dist_detec
-    ea = avg_goal_angle - avg_angle_detec
+    ed = avg_goal_dist - avg_dist_detec                                                 # CALCULATE DISTANCE ERROR
+    ea = avg_goal_angle - avg_angle_detec                                               # CALCULATE ANGLE ERROR
 
-    if ed == 0.0 or ea == 0.0:
-        steering = 0.0
+    if ed == 0.0 or ea == 0.0:                                                          # THE CAR IS ALIGNED
+        steering = 0.0                                                                  
     else:
-        steering = (kd * ed) + (ka * ea)
+        steering = (kd * ed) + (ka * ea)                                                # CALCULATE STEERING ACCORDING THE AVGS
 
-    print('AVG STEERING')
+    print('AVG STEERING: ', steering)
 
-    return steering
-
-
+    return steering                                                                     # RETURN THE CORRESPOND ANGLE
 
 
 # MAIN FUNCTION
@@ -142,22 +112,21 @@ def main():
     while not rospy.is_shutdown():
         
         # LAW CONTROL
-
-        if (left_lane[0] == 0.0 and left_lane[1] == 0.0) and (right_lane[0] == 0.0 and right_lane[1] == 0.0):
+        if (left_lane[0] == 0.0 and left_lane[1] == 0.0) and (right_lane[0] == 0.0 and right_lane[1] == 0.0):           # NO LINES DETECTED
             cruise_speed = 0.0
             steering_angle = 0.0
-        elif (left_lane[0] != 0.0 and left_lane[1] != 0.0) and (right_lane[0] != 0.0 and right_lane[1] != 0.0):
-            cruise_speed = 10.0
+        elif (left_lane[0] != 0.0 and left_lane[1] != 0.0) and (right_lane[0] != 0.0 and right_lane[1] != 0.0):         # BOTH LINES DETECTED
+            cruise_speed = 30.0
             steering_angle = calculate_steering_angle_avg(left_lane, right_lane)
-        elif (left_lane[0] != 0.0 and left_lane[1] != 0.0) and (right_lane[0] == 0 or right_lane[1] == 0.0):
-            cruise_speed = 10.0
-            steering_angle = calculate_steering_angle(left_lane)
-        elif (left_lane[0] == 0.0 or left_lane[1] == 0.0) and (right_lane[0] != 0 and right_lane[1] != 0.0):
-            cruise_speed = 10.0
-            steering_angle = calculate_steering_angle_right(right_lane)
+        elif (left_lane[0] != 0.0 and left_lane[1] != 0.0) and (right_lane[0] == 0 or right_lane[1] == 0.0):            # LEFT LINES DETECTED
+            cruise_speed = 20.0
+            steering_angle = calculate_steering_angle(left_lane, right_lane, True)
+        elif (left_lane[0] == 0.0 or left_lane[1] == 0.0) and (right_lane[0] != 0 and right_lane[1] != 0.0):            # RIGHT LINES DETECTED
+            cruise_speed = 20.0
+            steering_angle = calculate_steering_angle(left_lane, right_lane, False)
 
         pub_speed.publish(cruise_speed)
-        # pub_angle.publish(steering_angle)
+        pub_angle.publish(steering_angle)
         rate.sleep()
         pass
     

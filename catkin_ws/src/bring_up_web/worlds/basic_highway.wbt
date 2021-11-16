@@ -74,8 +74,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.0018468771097509605 0.9949040535116666 0.10080929198737755 3.232053784007618
-  position -48.529596868253364 8.321312107218574 -26.052758281387966
+  orientation 0.006022943146747225 -0.9877726524672021 -0.15578482337429084 3.1830335639106355
+  position -40.79799469291066 11.875066062724635 71.3383925273474
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -115,28 +115,39 @@ DEF GROUND Solid {
 StraightRoadSegment {
   translation -45 0.02 -32
   name "road(10)"
-  width 25
-  numberOfLanes 8
+  width 16
+  numberOfLanes 4
   lines [
     RoadLine {
+      type "continuous"
+    }
+    RoadLine {
+      color 0.988235 0.913725 0.309804
+      type "double"
     }
     RoadLine {
       type "continuous"
     }
-    RoadLine {
-      color 0.933333 0.933333 0.92549
-      type "none"
-    }
+  ]
+  rightBarrier TRUE
+  leftBarrier TRUE
+  length 100
+}
+StraightRoadSegment {
+  translation 105 0.02 -32
+  name "road(3)"
+  width 16
+  numberOfLanes 4
+  lines [
     RoadLine {
       type "continuous"
     }
     RoadLine {
-      type "none"
+      color 0.988235 0.913725 0.309804
+      type "double"
     }
     RoadLine {
       type "continuous"
-    }
-    RoadLine {
     }
   ]
   rightBarrier TRUE
@@ -146,26 +157,18 @@ StraightRoadSegment {
 StraightRoadSegment {
   translation -45 0.02 68
   name "road(5)"
-  width 25
-  numberOfLanes 8
+  width 16
+  numberOfLanes 4
   lines [
     RoadLine {
-    }
-    RoadLine {
       type "continuous"
     }
     RoadLine {
-      type "none"
+      color 0.988235 0.913725 0.309804
+      type "double"
     }
     RoadLine {
       type "continuous"
-    }
-    RoadLine {
-    }
-    RoadLine {
-      type "continuous"
-    }
-    RoadLine {
     }
   ]
   rightBarrier TRUE
@@ -175,14 +178,18 @@ StraightRoadSegment {
 StraightRoadSegment {
   translation 105 0.02 68
   name "road(12)"
-  width 25
+  width 16
   numberOfLanes 4
   lines [
     RoadLine {
+      type "continuous"
     }
     RoadLine {
-      color 0.85 0.75 0.3
+      color 0.988235 0.913725 0.309804
       type "double"
+    }
+    RoadLine {
+      type "continuous"
     }
   ]
   rightBarrier TRUE
@@ -195,24 +202,18 @@ CurvedRoadSegment {
   id "0"
   startJunction "25"
   endJunction "17"
-  width 25
-  numberOfLanes 8
+  width 16
+  numberOfLanes 4
   numberOfForwardLanes 2
   lines [
-    RoadLine {
-    }
-    RoadLine {
-    }
-    RoadLine {
-    }
     RoadLine {
       type "continuous"
     }
     RoadLine {
-      type "none"
+      color 0.988235 0.913725 0.309804
+      type "double"
     }
     RoadLine {
-      color 0.933333 0.933333 0.92549
       type "continuous"
     }
   ]
@@ -223,21 +224,25 @@ CurvedRoadSegment {
   curvatureRadius 40.5
 }
 StraightRoadSegment {
-  translation -4.5 0.02 -115
+  translation -4.5 0.02 -72.5
   rotation 0 1 0 1.5708
   name "road(1)"
   id "1"
   startJunction "25"
   endJunction "24"
-  width 25
+  width 16
   numberOfLanes 4
   numberOfForwardLanes 2
   lines [
     RoadLine {
+      type "continuous"
     }
     RoadLine {
-      color 0.85 0.75 0.3
+      color 0.988235 0.913725 0.309804
       type "double"
+    }
+    RoadLine {
+      type "continuous"
     }
   ]
   rightBorder FALSE
@@ -253,15 +258,19 @@ StraightRoadSegment {
   id "1"
   startJunction "25"
   endJunction "24"
-  width 25
+  width 16
   numberOfLanes 4
   numberOfForwardLanes 2
   lines [
     RoadLine {
+      type "continuous"
     }
     RoadLine {
-      color 0.85 0.75 0.3
+      color 0.988235 0.913725 0.309804
       type "double"
+    }
+    RoadLine {
+      type "continuous"
     }
   ]
   rightBorder FALSE
@@ -276,15 +285,19 @@ CurvedRoadSegment {
   id "2"
   startJunction "23"
   endJunction "24"
-  width 25
+  width 16
   numberOfLanes 4
   numberOfForwardLanes 2
   lines [
     RoadLine {
+      type "continuous"
     }
     RoadLine {
-      color 0.85 0.75 0.3
+      color 0.988235 0.913725 0.309804
       type "double"
+    }
+    RoadLine {
+      type "continuous"
     }
   ]
   rightBorder FALSE
@@ -293,70 +306,26 @@ CurvedRoadSegment {
   leftBarrier TRUE
   curvatureRadius 40.5
 }
-StraightRoadSegment {
-  translation 105 0.02 68
-  rotation 0 1 0 3.1416
-  name "road(3)"
-  id "3"
-  startJunction "23"
-  endJunction "22"
-  width 25
-  numberOfLanes 4
-  numberOfForwardLanes 2
-  lines [
-    RoadLine {
-    }
-    RoadLine {
-      color 0.85 0.75 0.3
-      type "double"
-    }
-  ]
-  rightBorder FALSE
-  leftBorder FALSE
-  rightBarrier TRUE
-  leftBarrier TRUE
-  length 69
-}
-StraightRoadSegment {
-  translation 105 0.02 -5.5
-  rotation 0 1 0 3.1416
-  name "road(8)"
-  id "3"
-  startJunction "23"
-  endJunction "22"
-  width 25
-  numberOfLanes 4
-  numberOfForwardLanes 2
-  lines [
-    RoadLine {
-    }
-    RoadLine {
-      color 0.85 0.75 0.3
-      type "double"
-    }
-  ]
-  rightBorder FALSE
-  leftBorder FALSE
-  rightBarrier TRUE
-  leftBarrier TRUE
-  length 69
-}
 CurvedRoadSegment {
-  translation 64.5 0.02 -74.5
+  translation 64.5 0.02 -32
   rotation 0 1 0 1.5708
   name "road(4)"
   id "4"
   startJunction "16"
   endJunction "22"
-  width 25
+  width 16
   numberOfLanes 4
   numberOfForwardLanes 2
   lines [
     RoadLine {
+      type "continuous"
     }
     RoadLine {
-      color 0.85 0.75 0.3
+      color 0.988235 0.913725 0.309804
       type "double"
+    }
+    RoadLine {
+      type "continuous"
     }
   ]
   rightBorder FALSE
@@ -366,21 +335,25 @@ CurvedRoadSegment {
   curvatureRadius 40.5
 }
 CurvedRoadSegment {
-  translation -4.5 0.02 -74.5
+  translation -4.5 0.02 -32
   rotation 0 1 0 3.1416
   name "road(6)"
   id "6"
   startJunction "29"
   endJunction "28"
-  width 25
+  width 16
   numberOfLanes 4
   numberOfForwardLanes 2
   lines [
     RoadLine {
+      type "continuous"
     }
     RoadLine {
-      color 0.85 0.75 0.3
+      color 0.988235 0.913725 0.309804
       type "double"
+    }
+    RoadLine {
+      type "continuous"
     }
   ]
   rightBorder FALSE
@@ -389,50 +362,9 @@ CurvedRoadSegment {
   leftBarrier TRUE
   curvatureRadius 40.5
 }
-RoadIntersection {
-  translation -45 0.02 -53.25
-  rotation 0 1 0 0.785398
-  name "road intersection(1)"
-  id "17"
-  connectedRoadIDs [
-    "7"
-    "8"
-    "0"
-    "15"
-  ]
-  roadsWidth 25
-  startRoadsLength [
-    8.75
-  ]
-  startRoadsNumberOfLanes 8
-  startRoadsStartLine [
-    "https://raw.githubusercontent.com/cyberbotics/webots/R2021b/projects/objects/road/protos/textures/road_line_dashed.png"
-    "https://raw.githubusercontent.com/cyberbotics/webots/R2021b/projects/objects/road/protos/textures/road_line_dashed.png"
-    "https://raw.githubusercontent.com/cyberbotics/webots/R2021b/projects/objects/road/protos/textures/road_line_triangle.png"
-    "https://raw.githubusercontent.com/cyberbotics/webots/R2021b/projects/objects/road/protos/textures/road_line_triangle.png"
-  ]
-  startRoadsLine [
-    RoadLine {
-    }
-    RoadLine {
-      type "continuous"
-    }
-    RoadLine {
-    }
-    RoadLine {
-      type "continuous"
-    }
-    RoadLine {
-    }
-    RoadLine {
-      type "continuous"
-    }
-    RoadLine {
-    }
-  ]
-}
 BmwX5 {
-  translation -49.68 0.4 0.08
+  translation -43.1813 0.460026 106.346
+  rotation -0.9999994571872908 -0.001041929979604729 -2.6535880155736634e-06 0.005093593832194633
   controller "ros_car_controller"
   sensorsSlotFront [
     SickLms291 {
@@ -478,14 +410,16 @@ BmwX5 {
   ]
 }
 OilBarrel {
-  translation -52.23 1 -23.89
+  translation -46.83 0.987685 -23.8917
+  rotation 1 -1.491382601248393e-13 -4.164614668426204e-13 4.235509791806346e-05
   height 2
   radius 0.5
   physics Physics {
   }
 }
 OilBarrel {
-  translation -52.44 1 -33.49
+  translation -47.22 0.987685 -33.4917
+  rotation 1 -1.4586088550697236e-13 -1.0345622056592366e-13 4.235509791802366e-05
   name "oil barrel(3)"
   height 2
   radius 0.5
@@ -493,7 +427,8 @@ OilBarrel {
   }
 }
 OilBarrel {
-  translation -44.08 1 -32.01
+  translation -40.08 0.987685 -32.0117
+  rotation 1 -2.0319959336099595e-13 1.0110590921747463e-13 4.235509791801218e-05
   name "oil barrel(2)"
   height 2
   radius 0.5
@@ -501,7 +436,8 @@ OilBarrel {
   }
 }
 OilBarrel {
-  translation -44.24 1 -23.22
+  translation -39.9 0.987685 -23.2217
+  rotation 1 -1.491382601248393e-13 -4.164614668426204e-13 4.235509791806346e-05
   name "oil barrel(1)"
   height 2
   radius 0.5

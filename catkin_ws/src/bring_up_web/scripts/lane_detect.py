@@ -58,38 +58,30 @@ def avg_slope_intercept(image, lines):
     
     for line in lines:
         x1, y1, x2, y2 = line.reshape(4)                                        # GET 2 POINTS OF EACH LINE
-        # print('Puntos:', x1, y1, x2, y2)
         parameters = np.polyfit((x1, x2), (y1, y2), 1)                          # CALCULATE SLOPE(m) AND INTERCEPT(b) WITH y = mx + b
-        # print('Pendiente[m] y Ordenada al origen[b]: ', parameters)
         slope = parameters[0]                                                   # SLOPE(m)
         intercept = parameters[1]                                               # INTERCEPT(b)
         if slope < 0:
             left_fit.append((slope, intercept))                                 # WITH (-m, b) 
         else:
             right_fit.append((slope, intercept))                                # WITH (+m, b)
-    # print('Left Lines: ', left_fit)
-    # print('Right Lines:', right_fit)
     left_fit_avg = np.average(left_fit, axis=0)                                 # LEFT LINES AVG [m, b]
     right_fit_avg = np.average(right_fit, axis=0)                               # RIGHT LINES AVG [m ,b]
-    # print('Left lines avg: ', left_fit_avg)
-    # print('Right lines avg: ', right_fit_avg)
     left_line = make_coordinates(image, left_fit_avg)                           # LEFT LINE COORDINATES
     right_line = make_coordinates(image, right_fit_avg)                         # RIGHT LINE COORDINATES
-    # print('Left Coordinates: ', left_line)
-    # print('Right Coordinates: ', right_line)
+    
+
     return np.array([left_line, right_line])                                    # RETURN LEFT AND RIGHT COORDINATES
 
 # MAKE COORDINATES OF THE LINES
 def make_coordinates(image, line_parameters):
     if isinstance(line_parameters, Iterable):
-        slope, intercept = line_parameters                                          # SLOPE = m, INTERCEPT = b
-        y1 = image.shape[0]                                                       # IMG HEIGHT (480)
-        # y1 = 480                                           
+        slope, intercept = line_parameters                                      # SLOPE = m, INTERCEPT = b
+        y1 = image.shape[0]                                                     # IMG HEIGHT (480)
         y2 = int((y1*(3/5)))
-        x1 = int((y1 - intercept)/slope)                                            # X1 = (Y1 - b)/m
-        x2 = int((y2 - intercept)/slope)                                            # X1 = (Y1 - b)/m
-        # print(x1, y1, x2, y2)
-        return np.array([x1, y1, x2, y2])                                           # RETURN TWO POINTS AS A LINE (X1, Y1) - (X2, Y2)
+        x1 = int((y1 - intercept)/slope)                                        # X1 = (Y1 - b)/m
+        x2 = int((y2 - intercept)/slope)                                        # X1 = (Y1 - b)/m
+        return np.array([x1, y1, x2, y2])                                       # RETURN TWO POINTS AS A LINE (X1, Y1) - (X2, Y2)
     else:
         return np.array([0,0,0,0])
 
@@ -107,25 +99,15 @@ def calculate_distance_angle(line, width, height, side):
         a_angle = x1 -xp                                                        # ADJANCENT SIDE FOR THETA ANGLE
 
     # CALCULATE THE DISTANCE WITH PYTHAGORES THEOREM
-    b = height - yp                                                        # OPPSITE SIDE FOR DISTANCE AND ANGLE
+    b = height - yp                                                             # OPPSITE SIDE FOR DISTANCE AND ANGLE
     distance = math.sqrt( (math.pow(a, 2) + math.pow(b, 2)) )                   # DISTANCE 'D'
 
     # CALCULATE ANGLE
     if a_angle > 0.0:
-        angle = math.atan((b/a_angle))                                              # ANGLE IN RADIANS
-        angle_degrees = (angle * (180/math.pi))                                     # ANGLE IN DEGREES
+        angle = math.atan((b/a_angle))                                          # ANGLE IN RADIANS
+        angle_degrees = (angle * (180/math.pi))                                 # ANGLE IN DEGREES
     else:
         angle = 0.0
-
-
-    # print('Points: ', 'x1=', x1, 'y1=', y1, 'x2=', x2, 'y2=', y2)
-    # print('AVG Point', 'xp=', xp, 'yp=', yp )
-    # print('Cateto adayacente: ', a)
-    # print('Cateto Opuesto: ', b)
-    # print('Cateto Adyacente Angulo: ', a_angle)
-    # print('Distancia (Hyp): ', distance)
-    # print('Angulo en radianes: ', angle)
-    # print('Angulo en grados: ', angle_degrees)
 
     return [distance, angle]                                                    # RETURN A LIST WITH CURRENT DISTANCE & ANGLE
 
@@ -152,30 +134,20 @@ def callback_lane_detect(msg):
             minLineLength=40,
             maxLineGap=50
         )
-    if(lines is not None):                                                              # IF THERE ARE LINES
-        avg_lines = avg_slope_intercept(lane_img, lines)                                # LEFT AND RIGHT LINES AS COORDINATES
+    if(lines is not None):                                                                  # IF THERE ARE LINES
+        avg_lines = avg_slope_intercept(lane_img, lines)                                    # LEFT AND RIGHT LINES AS COORDINATES
         left_line, right_line = avg_lines.reshape(2,4)
-        polar_left_line = calculate_distance_angle(left_line, width, height-30, True)
-        polar_right_line = calculate_distance_angle(right_line, width, height-30, False)
-        # print('Aun hay lineas')
-        # print('Left', polar_left_line, 'Right',  polar_right_line)
-        line_img = display_lines(lane_img, avg_lines)                                   # DISPLAY LINES IN A IMAGE
-        combo_img = cv2.addWeighted(lane_img, 0.8, line_img, 1, 1)                      # LANE_IMG + LINES
-        cv2.imshow('Result', combo_img)                                                 # DISPLAY IMAGE 
+        polar_left_line = calculate_distance_angle(left_line, width, height-30, True)       # GET DISTANCE AND ANGLE FOR LEFT LINE
+        polar_right_line = calculate_distance_angle(right_line, width, height-30, False)    # GET DISTANCE AND ANGLE FOR RIGHT LINE
+        line_img = display_lines(lane_img, avg_lines)                                       # DISPLAY LINES IN A IMAGE
+        combo_img = cv2.addWeighted(lane_img, 0.8, line_img, 1, 1)                          # LANE_IMG + LINES
+        cv2.imshow('Result', combo_img)                                                     # DISPLAY IMAGE 
         cv2.waitKey(33)
-    else:                                                                               # IF THERE AREN'T LINES
-        polar_left_line = [0.0,0.0]                                                     # DISTANCE AND ANGLE NOT CALCULATED FOR LEFT LINE
-        polar_right_line = [0.0,0.0]                                                    # DISTANCE AND ANGLE NOT CALCULATED FOR RIGHT LINE
-        cv2.imshow('Result', lane_img)                                                  # DISPLAY ORIGINAL IMAGE 
+    else:                                                                                   # IF THERE AREN'T LINES
+        polar_left_line = [0.0,0.0]                                                         # DISTANCE AND ANGLE NOT CALCULATED FOR LEFT LINE
+        polar_right_line = [0.0,0.0]                                                        # DISTANCE AND ANGLE NOT CALCULATED FOR RIGHT LINE
+        cv2.imshow('Result', lane_img)                                                      # DISPLAY ORIGINAL IMAGE 
         cv2.waitKey(33)
-        # print('BUG', lines, left_lane, right_lane)
-
-        # print('No hay lineas')
-        # print(polar_left_line, polar_right_line)
-
-    # SHOW GRAPH IMAGE
-    # plt.imshow(combo_img)
-    # plt.show()
 
 # MAIN FUNCTION
 def main():
