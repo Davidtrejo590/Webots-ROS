@@ -137,8 +137,8 @@ def callback_lane_detect(msg):
     if(lines is not None):                                                                  # IF THERE ARE LINES
         avg_lines = avg_slope_intercept(lane_img, lines)                                    # LEFT AND RIGHT LINES AS COORDINATES
         left_line, right_line = avg_lines.reshape(2,4)
-        polar_left_line = calculate_distance_angle(left_line, width, height-30, True)       # GET DISTANCE AND ANGLE FOR LEFT LINE
-        polar_right_line = calculate_distance_angle(right_line, width, height-30, False)    # GET DISTANCE AND ANGLE FOR RIGHT LINE
+        polar_left_line = calculate_distance_angle(left_line, width, height, True)       # GET DISTANCE AND ANGLE FOR LEFT LINE
+        polar_right_line = calculate_distance_angle(right_line, width, height, False)    # GET DISTANCE AND ANGLE FOR RIGHT LINE
         line_img = display_lines(lane_img, avg_lines)                                       # DISPLAY LINES IN A IMAGE
         combo_img = cv2.addWeighted(lane_img, 0.8, line_img, 1, 1)                          # LANE_IMG + LINES
         cv2.imshow('Result', combo_img)                                                     # DISPLAY IMAGE 

@@ -74,8 +74,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.006022943146747225 -0.9877726524672021 -0.15578482337429084 3.1830335639106355
-  position -40.79799469291066 11.875066062724635 71.3383925273474
+  orientation -0.5761740463185057 -0.8118806663019887 -0.09419794070997202 0.06994456864602287
+  position -43.054507284149125 2.5396206223773627 45.928256869164315
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -122,7 +122,6 @@ StraightRoadSegment {
       type "continuous"
     }
     RoadLine {
-      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
@@ -143,7 +142,6 @@ StraightRoadSegment {
       type "continuous"
     }
     RoadLine {
-      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
@@ -164,7 +162,6 @@ StraightRoadSegment {
       type "continuous"
     }
     RoadLine {
-      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
@@ -185,7 +182,6 @@ StraightRoadSegment {
       type "continuous"
     }
     RoadLine {
-      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
@@ -210,7 +206,6 @@ CurvedRoadSegment {
       type "continuous"
     }
     RoadLine {
-      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
@@ -238,7 +233,6 @@ StraightRoadSegment {
       type "continuous"
     }
     RoadLine {
-      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
@@ -266,7 +260,6 @@ StraightRoadSegment {
       type "continuous"
     }
     RoadLine {
-      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
@@ -293,7 +286,6 @@ CurvedRoadSegment {
       type "continuous"
     }
     RoadLine {
-      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
@@ -321,7 +313,6 @@ CurvedRoadSegment {
       type "continuous"
     }
     RoadLine {
-      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
@@ -349,7 +340,6 @@ CurvedRoadSegment {
       type "continuous"
     }
     RoadLine {
-      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
@@ -363,8 +353,8 @@ CurvedRoadSegment {
   curvatureRadius 40.5
 }
 BmwX5 {
-  translation -43.1813 0.460026 106.346
-  rotation -0.9999994571872908 -0.001041929979604729 -2.6535880155736634e-06 0.005093593832194633
+  translation -42.9313 0.408292 27.4745
+  rotation 6.7459283602393826e-09 0.9999967569266657 -0.002546789380941406 3.14159
   controller "ros_car_controller"
   sensorsSlotFront [
     SickLms291 {

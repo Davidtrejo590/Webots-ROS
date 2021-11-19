@@ -34,11 +34,11 @@ def calculate_steering_angle(left_line, right_line, side):
 
     if side:                                                                            # IF ONLY THERE ARE LEFT LINES
         detected_distance, detected_angle = left_line                                   # DETECTED MEASURES FOR LEFT LINES
-        goal_distance, goal_angle = [144.90341610879986, 0.6545707673233914]            # GOAL MEASURES FOR LEFT LINES
+        goal_distance, goal_angle = [190.8952592391964, 0.7042371269405747]            # GOAL MEASURES FOR LEFT LINES
 
     else:                                                                               # IF ONLY THERE ARE RIGHT LINES
         detected_distance, detected_angle = right_line                                  # DETECTED MEASURES FOR RIGHT LINES
-        goal_distance, goal_angle = [148.9236381505636, 0.6301090523170392]             # GOAL MEASURES FOR RIGHT LINES
+        goal_distance, goal_angle = [197.85095400325974, 0.6829543098903239]             # GOAL MEASURES FOR RIGHT LINES
 
     ed = goal_distance - detected_distance                                              # CALCULATE DISTANCE ERROR
     ea = goal_angle - detected_angle                                                    # CALCULATE ANGLE ERROR
@@ -56,25 +56,24 @@ def calculate_steering_angle(left_line, right_line, side):
 
 
 def calculate_steering_angle_avg(left_line, right_line):
-
-    kd = 0.003375
-    ka = 1.0
+    kd = 0.0001
+    ka = 0.01
 
     detec_dist_left, detec_angle_left = left_line                                       # DETECTED MEASURES FOR LEFT LINES
     detec_dist_right, detec_angle_right = right_line                                    # DETECTED MEASURES FOR RIGHT LINES
 
-    avg_dist_detec = (detec_dist_left + detec_dist_right)/2                             # AVG OF DETECTED DISTANCE 
-    avg_angle_detec = (detec_angle_left + detec_angle_right)/ 2                         # AVG OF DETECTED ANGLE 
+    avg_detec_dist = (detec_dist_left + detec_dist_right)/2                             # AVG OF DETECTED DISTANCE 
+    avg_detec_angle = (detec_angle_left + detec_angle_right)/ 2                         # AVG OF DETECTED ANGLE 
 
     # CHECK IN FIRST FRAME
-    goal_dist_left, goal_angle_left = [144.90341610879986, 0.6545707673233914]          # GOAL MEASURES FOR LEFT LINES
-    goal_dist_right, goal_angle_right = [148.9236381505636, 0.6301090523170392]         # GOAL MEASURES FOR RIGHT LINES
+    goal_dist_left, goal_angle_left = [190.8952592391964, 0.7042371269405747]           # GOAL MEASURES FOR LEFT LINES
+    goal_dist_right, goal_angle_right = [197.85095400325974, 0.6829543098903239]        # GOAL MEASURES FOR RIGHT LINES
 
     avg_goal_dist = (goal_dist_left + goal_dist_right)/2                                # AVG OF GOAL DISTANCE
     avg_goal_angle = (goal_angle_left + goal_angle_right)/2                             # AVG OF GOAL ANGLE
 
-    ed = avg_goal_dist - avg_dist_detec                                                 # CALCULATE DISTANCE ERROR
-    ea = avg_goal_angle - avg_angle_detec                                               # CALCULATE ANGLE ERROR
+    ed = avg_goal_dist - avg_detec_dist                                                 # CALCULATE DISTANCE ERROR
+    ea = avg_goal_angle - avg_detec_angle                                               # CALCULATE ANGLE ERROR
 
     if ed == 0.0 or ea == 0.0:                                                          # THE CAR IS ALIGNED
         steering = 0.0                                                                  
