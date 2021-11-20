@@ -74,8 +74,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.5761740463185057 -0.8118806663019887 -0.09419794070997202 0.06994456864602287
-  position -43.054507284149125 2.5396206223773627 45.928256869164315
+  orientation -0.7762222482188991 0.6298956721067192 0.026654523654011615 0.21331771569173516
+  position -43.50230275941764 4.773299150417619 -2.5347626732078403
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -128,9 +128,13 @@ StraightRoadSegment {
       type "continuous"
     }
   ]
-  rightBarrier TRUE
-  leftBarrier TRUE
+  rightBorder FALSE
+  leftBorder FALSE
   length 100
+}
+CitroenCZeroSimple {
+  translation -45.77 0.4 -17.01
+  name "vehicle(1)"
 }
 StraightRoadSegment {
   translation 105 0.02 -32
@@ -353,12 +357,11 @@ CurvedRoadSegment {
   curvatureRadius 40.5
 }
 BmwX5 {
-  translation -42.9313 0.408292 27.4745
-  rotation 6.7459283602393826e-09 0.9999967569266657 -0.002546789380941406 3.14159
+  translation -42.9313 0.3847 -37.9969
+  rotation 0.9999998633104714 0.00052284992853188 2.6439996385928864e-06 -0.005095307179586506
   controller "ros_car_controller"
   sensorsSlotFront [
     SickLms291 {
-      translation 0 -2.4286129e-17 -0.06
     }
   ]
   sensorsSlotTop [
@@ -408,7 +411,7 @@ OilBarrel {
   }
 }
 OilBarrel {
-  translation -47.22 0.987685 -33.4917
+  translation -51.5 0.987674 -33.2217
   rotation 1 -1.4586088550697236e-13 -1.0345622056592366e-13 4.235509791802366e-05
   name "oil barrel(3)"
   height 2
@@ -417,7 +420,7 @@ OilBarrel {
   }
 }
 OilBarrel {
-  translation -40.08 0.987685 -32.0117
+  translation -37.21 0.987733 -33.1917
   rotation 1 -2.0319959336099595e-13 1.0110590921747463e-13 4.235509791801218e-05
   name "oil barrel(2)"
   height 2
