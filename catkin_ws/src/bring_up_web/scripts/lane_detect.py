@@ -158,6 +158,8 @@ def main():
     print('Lane Detect node...')
     rospy.init_node('lane_detect')
     rate = rospy.Rate(10)
+
+    # SUBSCRIBERS
     rospy.Subscriber('/camera/rgb/raw', Image, callback_lane_detect)
 
      # MESSAGES
@@ -186,5 +188,5 @@ if __name__ == "__main__":
     try:
         main()
     except:
-        rospy.ROSInitException
+        rospy.ROSInterruptException
         pass
