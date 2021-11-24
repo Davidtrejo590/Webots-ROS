@@ -149,9 +149,9 @@ def main():
     msg_gyro.angular_velocity.z = gyro.getValues()[2]                                   # GET Z COMPONENT FROM GYRO
     msg_gps.latitude = gps.getValues()[0]                                               # GET X COMPONENT FROM GPS  
     msg_gps.longitude = gps.getValues()[1]                                              # GET Y COMPONENT FROM GPS  
-    msg_gps.altitude = gps.getValues()[2]                                               # GET Z COMPONENT FROM GPS  
-
-
+    msg_gps.altitude = gps.getValues()[2]                                               # GET Z COMPONENT FROM GPS 
+    
+    
     pub_camera_data.publish(msg_image)                                                  # PUBLISHING IMAGE MESSAGE
     pub_point_cloud.publish(msg_point_cloud)                                            # PUBLISHING POINTCLOUD2 MESSAGE
     pub_imu_gyro.publish(msg_gyro)                                                      # PUBLISHING IMU MESSAGE

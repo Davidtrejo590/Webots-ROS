@@ -74,8 +74,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.7762222482188991 0.6298956721067192 0.026654523654011615 0.21331771569173516
-  position -43.50230275941764 4.773299150417619 -2.5347626732078403
+  orientation -0.004295975644246642 0.999837806825951 0.017490129637491122 2.9643498497348366
+  position -44.39599962990849 4.540659052764884 -60.019391380382764
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -130,6 +130,8 @@ StraightRoadSegment {
   ]
   rightBorder FALSE
   leftBorder FALSE
+  rightBarrier TRUE
+  leftBarrier TRUE
   length 100
 }
 CitroenCZeroSimple {
