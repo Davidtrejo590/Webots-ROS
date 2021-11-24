@@ -31,9 +31,14 @@ def callback_object_detect(msg):
         pose_array.poses.append(pose)
         pub_poses.publish(pose_array)
     
+    # plt.scatter(x, z)
+    # plt.xlabel('X')
+    # plt.ylabel('Z')
+    # plt.title('Points')
+    # plt.show()
     # print('Start',  x, '\n')
-    x.clear()
-    z.clear()
+    # x.clear()
+    # z.clear()
     
 
 def main():
@@ -45,12 +50,6 @@ def main():
     rospy.Subscriber('/point_cloud', PointCloud2, callback_object_detect)
     
     while not rospy.is_shutdown():
-
-        # plt.scatter(x, z)
-        # plt.xlabel('X')
-        # plt.ylabel('Z')
-        # plt.title('Points')
-        # plt.show()
         rate.sleep()
         pass
 

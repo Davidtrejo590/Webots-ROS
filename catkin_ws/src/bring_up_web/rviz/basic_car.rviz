@@ -180,9 +180,8 @@ Visualization Manager:
             gyro_link:
               {}
             lidar_link:
-              {}
-            pose_link:
-              {}
+              pose_link:
+                {}
       Update Interval: 0
       Value: true
     - Alpha: 1
