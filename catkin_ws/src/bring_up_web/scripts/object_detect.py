@@ -11,17 +11,16 @@ x = []
 z = []
 
 def callback_object_detect(msg):
-
-    pose = Pose()
     pose_array = PoseArray()
     pose_array.header.stamp = rospy.Time.now()
-    pose_array.header.frame_id = 'pose_link'
+    pose_array.header.frame_id = 'lidar_link'
 
     # PUBLISHERS
     pub_poses = rospy.Publisher('/object_pose', PoseArray, queue_size=10)   
 
     points = sensor_msgs.point_cloud2.read_points(msg, skip_nans=True)
     for point in points:
+        pose = Pose()
         pose.position.x = point[0]                                                                       # X COMPONENT
         pose.position.y = point[1]                                                                       # Y COMPONENT
         pose.position.z = point[2]                                                                       # Z COMPONENT
