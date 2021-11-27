@@ -129,7 +129,7 @@ def callback_lane_detect(msg):
             cropped_img,
             2,
             np.pi/180,
-            100,
+            80,
             np.array([]),
             minLineLength=40,
             maxLineGap=50
