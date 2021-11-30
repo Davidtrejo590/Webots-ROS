@@ -25,27 +25,28 @@ def callback_object_detect(msg):
         dataset = []
 
         for point in points:
-            dataset.append([point[0], point[2]])                                                # DATASET TO APPLY KMEANS - (X, Z)
+            dataset.append([point[0], point[1], point[2]])                                      # DATASET TO APPLY KMEANS - (X, Y,  Z)
     
         current_centroids = kmeans(dataset)                                                     # CUURENT CENTROIDS
         if current_centroids:
             for point in current_centroids:                                                     # GET THE POSITION OF EACH CENTROID
                 pose = Pose()
                 pose.position.x = point[0]                                                      # X COMPONENT 
-                pose.position.y = 0.0                                                           # Y COMPONENT
-                pose.position.z = point[1]                                                      # Z COMPONENT
+                pose.position.y = point[1]                                                      # Y COMPONENT
+                pose.position.z = point[2]                                                      # Z COMPONENT
             
                 pose_array.poses.append(pose)                                                   # POSE ARRAY <-- POSE FOR EACH CENTROID
 
 
 def generate_centroids(dataset, k):
-    min_x, min_y = np.amin(dataset, axis=0)                                                     # GET MIN VALUE FOR X-AXIS AND Y-AXIS
-    max_x, max_y = np.amax(dataset, axis=0)                                                     # GET MAX VALUE FOR X-AXIS AND Y-AXIS
+    min_x, min_y, min_z = np.amin(dataset, axis=0)                                              # GET MIN VALUE FOR X-AXIS AND Y-AXIS
+    max_x, max_y, max_z = np.amax(dataset, axis=0)                                              # GET MAX VALUE FOR X-AXIS AND Y-AXIS
     centroids = [ 
-        np.array(
-            [ round(uniform(min_x, max_x), 3), round(uniform(min_y, max_y), 3)  ]
-            ) for i in range(k)
-        ]
+        np.array([ 
+            round(uniform(min_x, max_x), 3),
+            round(uniform(min_y, max_y), 3),
+            round(uniform(min_z, max_z), 3)  
+            ]) for i in range(k)]
 
     return centroids                                                                            # RETURN K-CENTROIDS
 
@@ -55,7 +56,9 @@ def calculate_centroids(point_cloud, centroids):
 
     # ASSIGN EACH POINT IN ITS CORRESPOND CLUSTER
     for p in point_cloud:
-        distances = [ math.sqrt((c[0] - p[0])**2 + (c[1] - p[1])**2 ) for c in centroids]       # EUCLEDIAN DISTANCE BETWEEN EACH POINT WITH EACH CENTROID
+        distances = [ 
+            math.sqrt((c[0] - p[0])**2 + (c[1] - p[1])**2 + (c[2] - p[2])**2 )                  # EUCLEDIAN DISTANCE BETWEEN EACH POINT WITH EACH CENTROID
+            for c in centroids ]       
         k_index = distances.index(min(distances))                                               # GET THE MINIMUM DISTANCES FOR EACH POINT
         clusters[k_index].append(p)                                                             # STORE IN THE CORRESPOND CLUSTER (GROUP)
     
@@ -74,14 +77,14 @@ def compare_centroids(new_c, old_c):
     total_distance = 0.0
 
     for (oc, nc) in zip(old_c, new_c):                          
-        distance = math.sqrt( (nc[0] - oc[0])**2 + (nc[1] - oc[1])**2 )                         # EUCLEDIAN DISTANCE D(OLD_CENTROID, NEW_CENTROID)
+        distance = math.sqrt( (nc[0] - oc[0])**2 + (nc[1] - oc[1])**2 + (nc[2] - oc[2])**2 )    # EUCLEDIAN DISTANCE D(OLD_CENTROID, NEW_CENTROID)
         total_distance = total_distance + distance                                              # SUM OF EACH DISTANCE 
     
     return total_distance                                                                       # RETURN THE SUM OF THE DISTANCES
 
 def kmeans(dataset):
     k = 8                                                                                       # INIT NUMBER OF CLUSTERS (GROUPS)
-    tol = 0.01                                                                                  # MINIMUN TOLERANCE FOR DISTANCE
+    tol = 0.1                                                                                   # MINIMUN TOLERANCE FOR DISTANCE
     attempts = 0
     max_attempts = 100
     initial_centroids = generate_centroids(dataset, k)                                          # GENERATE K-CENTROIDS
