@@ -59,12 +59,19 @@ def avg_slope_intercept(image, lines):
     for line in lines:
         x1, y1, x2, y2 = line.reshape(4)                                        # GET 2 POINTS OF EACH LINE
         parameters = np.polyfit((x1, x2), (y1, y2), 1)                          # CALCULATE SLOPE(m) AND INTERCEPT(b) WITH y = mx + b
+        # print('Recta:', [x1, y1, x2, y2, parameters[0], parameters[1]])
         slope = parameters[0]                                                   # SLOPE(m)
         intercept = parameters[1]                                               # INTERCEPT(b)
         if slope < 0:
-            left_fit.append((slope, intercept))                                 # WITH (-m, b) 
+            angle_left = math.atan(slope)
+            if angle_left < -0.3:
+                left_fit.append((slope, intercept))                             # WITH (-m, b) 
         else:
-            right_fit.append((slope, intercept))                                # WITH (+m, b)
+            angle_right = math.atan(slope)
+            if angle_right > 0.3:
+                right_fit.append((slope, intercept))                            # WITH (+m, b)
+
+    
     left_fit_avg = np.average(left_fit, axis=0)                                 # LEFT LINES AVG [m, b]
     right_fit_avg = np.average(right_fit, axis=0)                               # RIGHT LINES AVG [m ,b]
     left_line = make_coordinates(image, left_fit_avg)                           # LEFT LINE COORDINATES
@@ -130,15 +137,14 @@ def callback_lane_detect(msg):
             2,
             np.pi/180,
             80,
-            np.array([]),
             minLineLength=40,
             maxLineGap=50
         )
-    if(lines is not None):                                                                  # IF THERE ARE LINES
+    if lines is not None:                                                                   # IF THERE ARE LINES
         avg_lines = avg_slope_intercept(lane_img, lines)                                    # LEFT AND RIGHT LINES AS COORDINATES
         left_line, right_line = avg_lines.reshape(2,4)
-        polar_left_line = calculate_distance_angle(left_line, width, height, True)       # GET DISTANCE AND ANGLE FOR LEFT LINE
-        polar_right_line = calculate_distance_angle(right_line, width, height, False)    # GET DISTANCE AND ANGLE FOR RIGHT LINE
+        polar_left_line = calculate_distance_angle(left_line, width, height, True)          # GET DISTANCE AND ANGLE FOR LEFT LINE
+        polar_right_line = calculate_distance_angle(right_line, width, height, False)       # GET DISTANCE AND ANGLE FOR RIGHT LINE
         line_img = display_lines(lane_img, avg_lines)                                       # DISPLAY LINES IN A IMAGE
         combo_img = cv2.addWeighted(lane_img, 0.8, line_img, 1, 1)                          # LANE_IMG + LINES
         cv2.imshow('Result', combo_img)                                                     # DISPLAY IMAGE 
