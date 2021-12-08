@@ -74,8 +74,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.6147618869121996 0.6194656465928647 0.4881906749328953 4.477725939640396
-  position -49.28761664282416 20.66688123556711 -0.2907976444022742
+  orientation 0.9755179776228218 -0.21986173955032842 -0.005048843093554897 6.032751002469547
+  position -44.538076862112966 18.67241466710205 38.24095755914265
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -358,14 +358,19 @@ CurvedRoadSegment {
   curvatureRadius 40.5
 }
 BmwX5 {
-  translation -42.9313 0.460921 -5.82642
-  rotation -0.9999998627220744 -0.0005239790626404923 -1.3320362516096613e-06 0.005084301435222495
+  translation -42.9852 0.4 -26.6724
+  rotation 0 -1 0 0
   controller "ros_car_controller"
-  sensorsSlotFront [
-    SickLms291 {
-    }
-  ]
   sensorsSlotTop [
+    SolidBox {
+      translation 0 0.07 0
+      size 0.2 0.25 0.2
+      appearance PBRAppearance {
+        baseColor 0 0.1 0.5
+        roughness 0.5
+        metalness 0.2
+      }
+    }
     Camera {
       translation 0 -0.05 -0.72
       children [
@@ -390,6 +395,9 @@ BmwX5 {
       fieldOfView 1
       width 640
       height 480
+    }
+    VelodyneHDL-32E {
+      translation 0 0.3 0
     }
   ]
   sensorsSlotCenter [

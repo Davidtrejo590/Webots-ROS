@@ -62,14 +62,23 @@ def avg_slope_intercept(image, lines):
         # print('Recta:', [x1, y1, x2, y2, parameters[0], parameters[1]])
         slope = parameters[0]                                                   # SLOPE(m)
         intercept = parameters[1]                                               # INTERCEPT(b)
-        if slope < 0:
-            angle_left = math.atan(slope)
-            if angle_left < -0.3:
+        
+        angle = math.atan(slope)
+
+        if angle < -0.3 or angle > 0.3:
+            if slope < 0:
                 left_fit.append((slope, intercept))                             # WITH (-m, b) 
-        else:
-            angle_right = math.atan(slope)
-            if angle_right > 0.3:
+            else:
                 right_fit.append((slope, intercept))                            # WITH (+m, b)
+
+        # if slope < 0:
+        #     angle_left = math.atan(slope)
+        #     if angle_left < -0.3:
+        #         left_fit.append((slope, intercept))                             # WITH (-m, b) 
+        # else:
+        #     angle_right = math.atan(slope)
+        #     if angle_right > 0.3:
+        #         right_fit.append((slope, intercept))                            # WITH (+m, b)
 
     
     left_fit_avg = np.average(left_fit, axis=0)                                 # LEFT LINES AVG [m, b]

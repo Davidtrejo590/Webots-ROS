@@ -66,8 +66,8 @@ def calculate_steering_angle_avg(left_line, right_line):
     avg_detec_angle = (detec_angle_left + detec_angle_right)/ 2                         # AVG OF DETECTED ANGLE 
 
     # CHECK IN FIRST FRAME
-    goal_dist_left, goal_angle_left = [190.8952592391964, 0.7042371269405747]           # GOAL MEASURES FOR LEFT LINES
-    goal_dist_right, goal_angle_right = [197.85095400325974, 0.6829543098903239]        # GOAL MEASURES FOR RIGHT LINES
+    goal_dist_left, goal_angle_left = [183.5980664386202, 0.7932720164215489]           # GOAL MEASURES FOR LEFT LINES
+    goal_dist_right, goal_angle_right = [197.41390528531673, 0.6342421141311613]        # GOAL MEASURES FOR RIGHT LINES
 
     avg_goal_dist = (goal_dist_left + goal_dist_right)/2                                # AVG OF GOAL DISTANCE
     avg_goal_angle = (goal_angle_left + goal_angle_right)/2                             # AVG OF GOAL ANGLE

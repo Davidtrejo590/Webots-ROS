@@ -56,8 +56,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.10731903547238059 0.9891517113678419 0.10030711103081197 4.7671888622421585
-  position 1030.8888828418017 13.124297592799817 -558.876388630181
+  orientation 0.2489793356296589 0.9405045864622086 0.23121508011581698 4.724276336842563
+  position 1413.0572326272797 41.50900724401371 -604.7873556589145
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -65,7 +65,7 @@ Viewpoint {
 TexturedBackground {
 }
 BmwX5 {
-  translation 1076.43 0.4 -563.659
+  translation 1467.83 0.4 -608.591
   rotation 0 -1 0 -1.65
   controller "ros_car_controller"
   sensorsSlotTop [

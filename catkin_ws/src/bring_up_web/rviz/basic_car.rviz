@@ -6,7 +6,6 @@ Panels:
       Expanded:
         - /Global Options1
         - /TF1/Frames1
-        - /PoseArray1
       Splitter Ratio: 0.5
     Tree Height: 342
   - Class: rviz/Selection
@@ -113,8 +112,8 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 0.20000000298023224
-        Min Value: 0.20000000298023224
+        Max Value: 1.386117935180664
+        Min Value: -7.382342338562012
         Value: true
       Axis: Y
       Channel Name: intensity
@@ -122,7 +121,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: AxisColor
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Min Color: 0; 0; 0
@@ -137,7 +136,7 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 1
       Class: rviz_plugin_tutorials/Imu
       Color: 204; 51; 204
@@ -184,17 +183,17 @@ Visualization Manager:
       Value: true
     - Alpha: 1
       Arrow Length: 0.30000001192092896
-      Axes Length: 0.30000001192092896
-      Axes Radius: 0.009999999776482582
+      Axes Length: 1
+      Axes Radius: 1
       Class: rviz/PoseArray
       Color: 138; 226; 52
       Enabled: true
-      Head Length: 0.07000000029802322
-      Head Radius: 0.029999999329447746
+      Head Length: 0.5
+      Head Radius: 0.5
       Name: PoseArray
-      Shaft Length: 0.23000000417232513
-      Shaft Radius: 0.009999999776482582
-      Shape: Arrow (Flat)
+      Shaft Length: 0.5
+      Shaft Radius: 0.5
+      Shape: Arrow (3D)
       Topic: /object_pose
       Unreliable: false
       Value: true
@@ -241,10 +240,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: -0.4547976851463318
+      Pitch: -0.5697978138923645
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.5304023027420044
+      Yaw: 1.5004023313522339
     Saved: ~
 Window Geometry:
   Displays:
