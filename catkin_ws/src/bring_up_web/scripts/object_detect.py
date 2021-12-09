@@ -20,15 +20,16 @@ def callback_object_detect(msg):
     global pose_array
 
     if msg:
-        points = sensor_msgs.point_cloud2.read_points(msg, skip_nans=True,)                      # GET EACH POINT IN THE POINT CLOUD
+        points = sensor_msgs.point_cloud2.read_points(msg, skip_nans=True)                      # GET EACH POINT IN THE POINT CLOUD
         current_centroids = []
         dataset = []
         
         for point in points:
             if not point.__contains__(np.inf) and not point.__contains__(-np.inf):
-                if point[1] > -1.5 and (point[0] > 1.0 or point[0] < -1.0):
+                if point[1] > -1.5:
                 # print(point)
-                    dataset.append([point[0], point[1], point[2]])                              # DATASET TO APPLY KMEANS - (X, Y,  Z)
+                    dataset.append(list(point))
+                    # dataset.append([point[0], point[1], point[2]])                              # DATASET TO APPLY KMEANS - (X, Y,  Z)
         
         current_centroids = kmeans(dataset)                                                     # CUURENT CENTROIDS
         if current_centroids:
@@ -99,7 +100,7 @@ def kmeans(dataset):
         new_centroids = calculate_centroids(dataset, centroids)                                 # RECOMPUTE CENTROIDS
         total_distance = compare_centroids(new_centroids, centroids)                            # RECOMPUTE TOTAL DISTANCE
         attempts = attempts + 1
-    print(attempts)
+    # print(attempts)
 
     
     return new_centroids                                                                        # RETURN THE CURRENT CENTROIDS
