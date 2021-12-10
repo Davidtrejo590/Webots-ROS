@@ -26,10 +26,8 @@ def callback_object_detect(msg):
         
         for point in points:
             if not point.__contains__(np.inf) and not point.__contains__(-np.inf):
-                if point[1] > -1.5:
-                # print(point)
-                    dataset.append(list(point))
-                    # dataset.append([point[0], point[1], point[2]])                              # DATASET TO APPLY KMEANS - (X, Y,  Z)
+                if (point[0] > 1.0 or point[0] < -1.0) and (point[1] > -1.5) and (point[2] > 2.0 or point[2] < -2.0):
+                    dataset.append(list(point))                                                 # DATASET TO APPLY KMEANS - (X, Y,  Z)
         
         current_centroids = kmeans(dataset)                                                     # CUURENT CENTROIDS
         if current_centroids:
