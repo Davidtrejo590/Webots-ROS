@@ -113,8 +113,8 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 1.4039183855056763
-        Min Value: -7.384265899658203
+        Max Value: 1.3846158981323242
+        Min Value: -7.386968612670898
         Value: true
       Axis: Y
       Channel Name: intensity
@@ -183,9 +183,9 @@ Visualization Manager:
       Update Interval: 0
       Value: true
     - Alpha: 1
-      Arrow Length: 1
-      Axes Length: 1
-      Axes Radius: 1
+      Arrow Length: 0.30000001192092896
+      Axes Length: 0.30000001192092896
+      Axes Radius: 0.009999999776482582
       Class: rviz/PoseArray
       Color: 252; 233; 79
       Enabled: true
@@ -195,7 +195,7 @@ Visualization Manager:
       Shaft Length: 0.5
       Shaft Radius: 0.5
       Shape: Arrow (3D)
-      Topic: /object_pose
+      Topic: /centroid_pose
       Unreliable: false
       Value: true
   Enabled: true
