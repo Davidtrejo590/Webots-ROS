@@ -1,34 +1,24 @@
 #include "ros/ros.h"
-#include "std_msgs/String.h"
-#include "sensor_msgs/PointCloud2.h"
-#include <sensor_msgs/PointCloud.h> 
-#include <sensor_msgs/point_cloud_conversion.h> 
-#include "typeinfo"
-#include <cmath>
-
+#include <sensor_msgs/PointCloud2.h>
+#include <pcl_conversions/pcl_conversions.h>
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
 
 /**
  * OBJECT DETECT CALLBACK
  */
-void objectDetectCallback(const sensor_msgs::PointCloud2& msg)
+void objectDetectCallback(const sensor_msgs::PointCloud2::ConstPtr& msg)
 {
+  // GET EACH POINT IN THE POINT CLOUD
+  void* p = (void*)(&msg-> data[0]);
+  for(size_t i = 0; i < msg->width*msg->height; i++){
+    float x = *((float*)(p + 0));
+    float y = *((float*)(p + 4));
+    float z = *((float*)(p + 8));
+    p += msg -> point_step;
 
-  // GET THE POINT CLOUD
-  sensor_msgs::PointCloud point_cloud;
-  sensor_msgs::convertPointCloud2ToPointCloud(msg, point_cloud);
-
-  // std::cout << "SIZE" << point_cloud.points.size() << std::endl;
-  // 144000 - 
-
-  
-  // FILTER POINTS
-  for(int i = 0; i < point_cloud.points.size(); i++){
-    if( (isinf(point_cloud.points[i].x) || isinf(point_cloud.points[i].y) || isinf(point_cloud.points[i].z)) != true){
-      std::cout << point_cloud.points[i] << std::endl;
-    }
+    std::cout << x << "-" << y << "-" << z << "-" << std::endl;
   }
-  
-  
 
 }
 
@@ -45,3 +35,20 @@ int main(int argc, char **argv)
 
   return 0;
 }
+
+
+
+// // GET THE POINT CLOUD
+//   sensor_msgs::PointCloud point_cloud;
+//   sensor_msgs::convertPointCloud2ToPointCloud(msg, point_cloud);
+
+//   // std::cout << "SIZE" << point_cloud.points.size() << std::endl;
+//   // 144000 - 
+
+  
+//   // FILTER POINTS
+//   for(int i = 0; i < point_cloud.points.size(); i++){
+//     if( (isinf(point_cloud.points[i].x) || isinf(point_cloud.points[i].y) || isinf(point_cloud.points[i].z)) != true){
+//       std::cout << point_cloud.points[i] << std::endl;
+//     }
+//   }

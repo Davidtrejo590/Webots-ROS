@@ -8,6 +8,8 @@ project(bring_up_web)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  pcl_conversions
+  pcl_ros
   roscpp
   rospy
   std_msgs
