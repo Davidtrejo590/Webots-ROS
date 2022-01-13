@@ -6,6 +6,12 @@
 #include <iostream>
 #include <math.h>
 #include <bits/stdc++.h>
+#include <limits>
+
+//MESSAGE 
+geometry_msgs::PoseArray centroids;
+ros::Publisher pub_poses;
+
 
 
 /* FUNCTION TO GET THE INDEX OF MINIMUN ELEMENT */
@@ -18,7 +24,7 @@ int get_min_index(std::vector<double> data){
 }
 
 /* GENERATE RANDOMLY INITIAL CENTROIDS */
-std::vector<std::vector<double>> generate_centroids(std::vector<std::vector<double>> dataset, int k){
+geometry_msgs::PoseArray generate_centroids(std::vector<std::vector<double>>& dataset, int k){
 
     int size = dataset.size();
     std::vector<double> x, y, z;
@@ -46,89 +52,102 @@ std::vector<std::vector<double>> generate_centroids(std::vector<std::vector<doub
     // DEFINE SRAND
     srand(time(NULL));
     // GENERATE INITIAL CENTROIDS
-    std::vector<std::vector<double>> initial_centroids(k);                                          // INITIAL CENTROIDS
+    geometry_msgs::PoseArray initial_centroids;                                                     // INITIAL CENTROIDS
+    initial_centroids.poses.resize(k);
     // NUMBER OF CENTROIDS ( K )
     for(int i = 0; i < k; i++){
-        std::vector<double> point = {(rand() % int(max_x)) + min_x, (rand() % int(max_y)) + min_y, (rand() % int(max_z)) + min_z };
-        initial_centroids[i] = point;
+        initial_centroids.poses[i].position.x = (rand() % int(max_x)) + min_x;
+        initial_centroids.poses[i].position.y = (rand() % int(max_y)) + min_y;
+        initial_centroids.poses[i].position.z = (rand() % int(max_z)) + min_z;
     }
 
     return initial_centroids;                                                                        // RETURN K INITIAL CENTROIDS
 }
 
 /* CALCULATE CENTROIDS - ASIGN EACH POINT IN THE NEAREST CLUSTER */
-std::vector<std::vector<double>> calulate_centroids(std::vector<std::vector<double>> pc, std::vector<std::vector<double>> c){
+geometry_msgs::PoseArray calulate_centroids(std::vector<std::vector<double>>& pc, geometry_msgs::PoseArray& c){
 
-    std::vector<double> p = {0.0, 0.0, 0.0};
-    int m_size = c.size();                                                                  // M
+    int m_size = c.poses.size();                                                    // M
 
     // SET OF COUNTERS
     std::vector<int> counters;
     counters.resize(m_size);
 
     // SET OF NEW CENTROIDS
-    std::vector<std::vector<double>> new_centroids;
-    new_centroids.resize(m_size);
+    geometry_msgs::PoseArray new_centroids;                                         // NEW CENTROIDS
+    new_centroids.poses.resize(m_size);
 
     // INITIALIZE WHIT M VECTORS {0.0, 0.0, 0.0}
-    for(int i = 0; i < new_centroids.size(); i++){
-        new_centroids[i] = p;
+    for(int i = 0; i < new_centroids.poses.size(); i++){
+        new_centroids.poses[i].position.x = 0.0;
+        new_centroids.poses[i].position.y = 0.0;
+        new_centroids.poses[i].position.z = 0.0;
     }
 
 
     // CALCULATE DISTANCE FOR EACH POINT 
     for(int i = 0; i < pc.size(); i++){
-        std::vector<double> distances;                                                      // VECTOR OF DISTANCES WHIT M SIZE
-        distances.resize(m_size); 
-        for(int j = 0; j < distances.size(); j++){
+        double min_dist = std::numeric_limits<double>::infinity();                              // MIN_DISTANCE
+        int j_idx = 0;                                                                          // J INDEX
+
+        for(int j = 0; j < m_size; j++){
                 // CALCULATE EUCLIDIAN DISTANCE
-                double distance = sqrt( pow((c[j][0] - pc[i][0]), 2) + pow((c[j][1] - pc[i][1]), 2) + pow((c[j][2] - pc[i][2]), 2));
-                distances[j] = distance;                                                    // STORE EACH DISTANCE
+                double distance = sqrt( 
+                    pow((c.poses[j].position.x - pc[i][0]), 2) + 
+                    pow((c.poses[j].position.y - pc[i][1]), 2) + 
+                    pow((c.poses[j].position.z - pc[i][2]), 2)
+                );
+                if(distance < min_dist){
+                    min_dist = distance;
+                    j_idx = j;
+                }
         }
 
-        int j_idx = get_min_index(distances);                                               // FIND J INDEX
-        for(int k = 0; k < new_centroids[j_idx].size(); k++){
-            new_centroids[j_idx][k] += pc[i][k];                                            // NEW_CENTROIDS[j] += CLOUD[I]
-        }
-        counters[j_idx]++;                                                                  // COUNTERS[J] ++ 
+        new_centroids.poses[j_idx].position.x += pc[i][0];                                      // NEW_CENTROIDS[J] += CLOUD[I] - X
+        new_centroids.poses[j_idx].position.y += pc[i][1];                                      // NEW_CENTROIDS[J] += CLOUD[I] - Y
+        new_centroids.poses[j_idx].position.z += pc[i][2];                                      // NEW_CENTROIDS[J] += CLOUD[I] - Z
+        counters[j_idx]++;                                                                      // COUNTERS[J] ++ 
     }
 
 
     // COMPUTE NEW CENTROIDS
-    for(int j = 0; j < new_centroids.size(); j++ ){
-        for(int k = 0; k < new_centroids[j].size(); k++){
-            // IF THE CURRENT CLUSTER HAVE POINTS
-            if(new_centroids[j][0] != 0.0 or new_centroids[j][1] != 0.0 or new_centroids[j][2] != 0.0){
-                new_centroids[j][k] /= counters[j];                                         // NEW_CENTROIDS[J] /= COUNTERS[J]
-            }
+    for(int j = 0; j < new_centroids.poses.size(); j++ ){
+        // SKIP IF THE CURRENT CLUSTER HAVE NOT POINTS
+        if(counters[j] == 0){
+            continue;
         }
+        new_centroids.poses[j].position.x /= counters[j];                                       // NEW CENTROIDS[J] /= COUNTERS[J] - X
+        new_centroids.poses[j].position.y /= counters[j];                                       // NEW CENTROIDS[J] /= COUNTERS[J] - Y
+        new_centroids.poses[j].position.z /= counters[j];                                       // NEW CENTROIDS[J] /= COUNTERS[J] - Z
     }
 
-    return new_centroids;                                                                   // RETURN NEW CENTROIDS
+    return new_centroids;                                                                       // RETURN NEW CENTROIDS
 }
 
 /* CALCULATE THE DISTANCE BETWEEN EACH CENTROID d(OLD_CENTROID, NEW_CENTROID)*/
-double compare_centroids(std::vector<std::vector<double>> nc, std::vector<std::vector<double>> oc ){
+double compare_centroids(geometry_msgs::PoseArray& nc, geometry_msgs::PoseArray& oc ){
     double total_distance = 0.0;
 
-    for(int i = 0; i < nc.size(); i++){
+    for(int i = 0; i < nc.poses.size(); i++){
         // EUCLEDIAN DISTANCE d(OLD_CENTROID, NEW_CENTROID)
         double distance = sqrt( 
-            pow((nc[i][0]- oc[i][0]), 2) + pow((nc[i][1]- oc[i][1]), 2) + pow((nc[i][2]- oc[i][2]), 2) 
+            pow((nc.poses[i].position.x - oc.poses[i].position.x), 2) +
+            pow((nc.poses[i].position.y - oc.poses[i].position.y), 2) + 
+            pow((nc.poses[i].position.z - oc.poses[i].position.z), 2) 
             );
-        total_distance += distance;                                                           // SUM OF EACH DISTANCE
+        total_distance += distance;                                                             // SUM OF EACH DISTANCE
     }
 
-    return total_distance;                                                                    // RETURN THE SUM OF DISTANCES
+    return total_distance;                                                                      // RETURN THE SUM OF DISTANCES
 }
 
 
 
 /* KMEANS FUNCTION */
-std::vector<std::vector<double>> kmeans(std::vector<std::vector<double>> point_cloud){
+geometry_msgs::PoseArray kmeans(std::vector<std::vector<double>>& point_cloud){
 
-    std::vector<std::vector<double>> initial_centroids;                                 // INITAL CENTROIDS
-    std::vector<std::vector<double>> new_centroids;                                     // CENTROIDS CALCULATED
+    geometry_msgs::PoseArray initial_centroids;                                         // INITIAL CENTROIDS
+    geometry_msgs::PoseArray new_centroids;                                             // CENTROIDS CALCULATED
     int k = 8;                                                                          // NUMBER OF CLUSTERS
     int attemps = 0;
     int max_attemps = 100;
@@ -140,7 +159,7 @@ std::vector<std::vector<double>> kmeans(std::vector<std::vector<double>> point_c
     total_distance = compare_centroids(new_centroids, initial_centroids);               // COMPUTE TOTAL DISTANCE BETWEEN INITAL & NEW CENTROIDS
 
     do{
-        std::vector<std::vector<double>> centroids(new_centroids);                      // CENTROIDS <- NEW CENTROIDS
+        geometry_msgs::PoseArray centroids = new_centroids;                             // CENTROIDS <- NEW CENTROIDS
         new_centroids = calulate_centroids(point_cloud, centroids);                     // RECOMPUTE CENTROIDS
         total_distance = compare_centroids(new_centroids, centroids);                   // RECOMPUTE TOTAL DISTANCE
         attemps += 1;
@@ -168,32 +187,34 @@ void objectDetectCallback(const sensor_msgs::PointCloud2::ConstPtr& msg){
         p += msg -> point_step;
 
         // FILL POINT CLOUD
-        if( (isinf(x) or isinf(y) or isinf(z)) != true){
+        if( (isinf(x) or isinf(y) or isinf(z))  != true){
             if ( (x > 1.0 or x < -1.0) and (y > -1.5) and (z > 2.0 or z < -2.0)){
                 std::vector<double> point;
                 point.push_back(x);
                 point.push_back(y);
                 point.push_back(z);
                 point_cloud.push_back(point);
+
+                // CLUSTER HERE
+
             }
         }
     }
 
     // CLUSTERING
-    std::vector<std::vector<double>> current_centroids;                                  // ACTUAL CENTROIDS
+    geometry_msgs::PoseArray current_centroids;                                  // ACTUAL CENTROIDS
     current_centroids = kmeans(point_cloud);                                             // APPLY KMEANS
+    current_centroids.header.frame_id = "lidar_link";
+
+    // // DISPLAYING NEW CENTROIDS
+    // // std::cout << "----------" << std::endl;
+    // // for(int i = 0; i < current_centroids.poses.size(); i++){
+    // //     std::cout << current_centroids.poses[i].position.x << " " << current_centroids.poses[i].position.y << " " << current_centroids.poses[i].position.z << std::endl;
+    // // }
+
+    pub_poses.publish(current_centroids);
 
 
-    // DISPLAYING NEW CENTROIDS
-    std::cout << "----------" << std::endl;
-    for(int i = 0; i < current_centroids.size(); i++){
-        for(int j = 0; j < current_centroids[i].size(); j++){
-            if(current_centroids[i][j] != 0.0){
-                std::cout << current_centroids[i][j] << " ";
-            }
-        }
-        std::cout << std::endl;
-    }
 }
 
 /*   
@@ -201,11 +222,25 @@ void objectDetectCallback(const sensor_msgs::PointCloud2::ConstPtr& msg){
  */
 int main(int argc, char **argv)
 {
-  std::cout << "OBJECT DETECT NODE..." << std::endl;
-  ros::init(argc, argv, "object_detect");
-  ros::NodeHandle n;
-  ros::Subscriber sub = n.subscribe("/point_cloud", 10, objectDetectCallback);
-  ros::spin();
+    std::cout << "OBJECT DETECT NODE..." << std::endl;
+    ros::init(argc, argv, "object_detect");
+    ros::NodeHandle n;
 
-  return 0;
+    // PUBLISHERS
+    pub_poses = n.advertise<geometry_msgs::PoseArray>("/centroid_pose", 10);
+    // SUBCRIBERS
+    ros::Subscriber sub = n.subscribe("/point_cloud", 10, objectDetectCallback);
+
+    ros::spin();
+
+
+    return 0;
 }
+
+
+// PUBLICAR LOS CENTROIDES CALCULADOS DESDE EL CALLBACK EN UN POSE ARRAY -- DONE
+// ELIMINAR FOR'S NO NECESARIOS -- DONE
+// REVISAR VECTORES DONDE SE USA RESIZE -- DONE
+// CLUSTERIZAR DESDE EL FILTRADO DE LA NUBE DE PUNTOS
+// GENERAR CENTROIDES INICIALES AL INICIO DEL CALLBACK
+// ELIMINAR EL VECTOR DE DISTANCES -- INICIAR UNA VARIABLE MIN_DISTANCIA EN INF -- DONE
