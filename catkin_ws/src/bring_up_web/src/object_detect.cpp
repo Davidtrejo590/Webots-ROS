@@ -7,6 +7,7 @@
 #include <math.h>
 #include <bits/stdc++.h>
 
+
 //MESSAGE 
 ros::Publisher pub_poses;
 
@@ -136,14 +137,13 @@ geometry_msgs::PoseArray kmeans(std::vector<std::vector<double>> point_cloud){
     new_centroids = calulate_centroids(point_cloud, initial_centroids);                 // CALCULATE NEW CENTROIDS
     total_distance = compare_centroids(new_centroids, initial_centroids);               // COMPUTE TOTAL DISTANCE BETWEEN INITAL & NEW CENTROIDS
 
-    do{
+    while (total_distance > tol)
+    {
         std::vector<std::vector<double>> centroids(new_centroids);                      // CENTROIDS <- NEW CENTROIDS
         new_centroids = calulate_centroids(point_cloud, centroids);                     // RECOMPUTE CENTROIDS
         total_distance = compare_centroids(new_centroids, centroids);                   // RECOMPUTE TOTAL DISTANCE
         attemps += 1;
-    }while(total_distance > tol and attemps < max_attemps);
-
-
+    }
 
     // RETURN A POSE ARRAY TO PUBLIH THEM
     actual_centroids.poses.resize(new_centroids.size());
@@ -175,25 +175,18 @@ void objectDetectCallback(const sensor_msgs::PointCloud2::ConstPtr& msg){
 
         // FILL POINT CLOUD
         if( (isinf(x) or isinf(y) or isinf(z)) != true){
-            if ( (x > 1.0 or x < -1.0) and (y > -1.5) and (z > 2.0 or z < -2.0) ){
+            if ( (x > 1.0 or x < -1.0) and (y > -1.5) and (z > 2.5 or z < -2.5) ){
                 std::vector<double> point = {x, y, z};
                 point_cloud.push_back(point);
             }
         }
     }
 
-    std::cout << point_cloud.size() << std::endl;
-
     // CLUSTERING
-    // std::vector<std::vector<double>> current_centroids;                                  // ACTUAL CENTROIDS
-    // current_centroids = kmeans(point_cloud);                                             // APPLY KMEANS
-
     geometry_msgs::PoseArray centroids;                                                 // ACTUAL CENTROIDS
-    // centroids.poses.resize(current_centroids.size());
-    centroids = kmeans(point_cloud);
+    centroids = kmeans(point_cloud);                                                    // APPLY KMEANS
     centroids.header.frame_id = "lidar_link";
-
-    pub_poses.publish(centroids);
+    pub_poses.publish(centroids);                                                       // PUBLISH CENTROIDS
 }
 
 /*   
@@ -211,3 +204,12 @@ int main(int argc, char **argv)
 
     return 0;
 }
+
+
+// PUBLICAR LOS CENTROIDES CALCULADOS DESDE EL CALLBACK EN UN POSE ARRAY -- DONE
+// ELIMINAR FOR'S NO NECESARIOS -- DONE
+// REVISAR VECTORES DONDE SE USA RESIZE -- DONE
+// CLUSTERIZAR DESDE EL FILTRADO DE LA NUBE DE PUNTOS
+// GENERAR CENTROIDES INICIALES AL INICIO DEL CALLBACK
+// ELIMINAR EL VECTOR DE DISTANCES -- INICIAR UNA VARIABLE MIN_DISTANCIA EN INF -- DONE
+// REVISAR EL AREA DE INTERES DE LA NUBE DE PUNTOS
