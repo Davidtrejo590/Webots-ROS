@@ -29,8 +29,8 @@ camera = Camera('camera')                                     # GET CAMERA FROM 
 camera.enable(TIME_STEP)    
 
 # INIT LIDAR
-# lidar = Lidar('Sick LMS 291')
-lidar = Lidar('Velodyne HDL-32E')
+lidar = Lidar('Sick LMS 291')
+# lidar = Lidar('Velodyne HDL-32E')
 lidar.enable(TIME_STEP)
 lidar.enablePointCloud()
 

@@ -7,6 +7,16 @@
 #include <math.h>
 #include <bits/stdc++.h>
 
+std::vector<std::vector<double>> initial_centroids = {
+        {3.184,  0.   , -2.778},
+        {-2.457,  0.   , -7.841},
+        {-4.469,   0.   , -10.935},
+        {-2.123,   0.   , -13.339},
+        {-5.538,  0.   , -3.623},
+        {2.546,   0.   , -12.516},
+        {-3.366,  0.   , -9.381},
+        {-1.63 ,  0.   , -7.704}
+};
 
 //MESSAGE 
 ros::Publisher pub_poses;
@@ -124,7 +134,7 @@ double compare_centroids(std::vector<std::vector<double>> nc, std::vector<std::v
 geometry_msgs::PoseArray kmeans(std::vector<std::vector<double>> point_cloud){
 
     geometry_msgs::PoseArray actual_centroids;
-    std::vector<std::vector<double>> initial_centroids;                                 // INITAL CENTROIDS
+    // std::vector<std::vector<double>> initial_centroids;                                 // INITAL CENTROIDS
     std::vector<std::vector<double>> new_centroids;                                     // CENTROIDS CALCULATED
     int k = 8;                                                                          // NUMBER OF CLUSTERS
     int attemps = 0;
@@ -132,7 +142,7 @@ geometry_msgs::PoseArray kmeans(std::vector<std::vector<double>> point_cloud){
     double total_distance = 0.0;
     double tol = 0.1;
 
-    initial_centroids = generate_centroids(point_cloud, k);                             // GENERATE INITIAL CENTROIDS
+    // initial_centroids = generate_centroids(point_cloud, k);                             // GENERATE INITIAL CENTROIDS
 
     new_centroids = calulate_centroids(point_cloud, initial_centroids);                 // CALCULATE NEW CENTROIDS
     total_distance = compare_centroids(new_centroids, initial_centroids);               // COMPUTE TOTAL DISTANCE BETWEEN INITAL & NEW CENTROIDS
@@ -144,6 +154,8 @@ geometry_msgs::PoseArray kmeans(std::vector<std::vector<double>> point_cloud){
         total_distance = compare_centroids(new_centroids, centroids);                   // RECOMPUTE TOTAL DISTANCE
         attemps += 1;
     }
+
+    std::cout << attemps << std::endl;
 
     // RETURN A POSE ARRAY TO PUBLIH THEM
     actual_centroids.poses.resize(new_centroids.size());
@@ -175,10 +187,8 @@ void objectDetectCallback(const sensor_msgs::PointCloud2::ConstPtr& msg){
 
         // FILL POINT CLOUD
         if( (isinf(x) or isinf(y) or isinf(z)) != true){
-            if ( (x > 1.0 or x < -1.0) and (y > -1.5) and (z > 2.5 or z < -2.5) ){
-                std::vector<double> point = {x, y, z};
-                point_cloud.push_back(point);
-            }
+            std::vector<double> point = {x, y, z};
+            point_cloud.push_back(point);
         }
     }
 
@@ -198,7 +208,7 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "object_detect");
     ros::NodeHandle n;
     // PUBLISHERS
-    pub_poses = n.advertise<geometry_msgs::PoseArray>("/centroid_pose", 10);
+    pub_poses = n.advertise<geometry_msgs::PoseArray>("/object_pose", 10);
     ros::Subscriber sub = n.subscribe("/point_cloud", 10, objectDetectCallback);
     ros::spin();
 
@@ -213,3 +223,15 @@ int main(int argc, char **argv)
 // GENERAR CENTROIDES INICIALES AL INICIO DEL CALLBACK
 // ELIMINAR EL VECTOR DE DISTANCES -- INICIAR UNA VARIABLE MIN_DISTANCIA EN INF -- DONE
 // REVISAR EL AREA DE INTERES DE LA NUBE DE PUNTOS
+
+
+/* 
+    * COSAS QUE PUEDEN ESTAR AFECTANDO EL CLUSTERING
+    * LAS LECTURAS DEL LIDAR VELODYNE CAMBIAN BASTANTE RESPECTO A LAS ANTERIORES
+    * LA OBTENCIÓN DE LOS CENTROIDES INICIALES DE MANERA ALEATORIA HACE QUE LOS CENTROIDES FINALES SE MUEVAN
+    * EL LIDAR SICK SOLO DA PUNTOS FRONTALES EN 180 GRADOS
+    * HACER UNA MEJOR ELECCIÓN DE LOS CENTROIDES INCIALES
+    * 
+
+
+*/

@@ -12,6 +12,7 @@ import copy
 
 # GLOBAL VARIABLES
 pose_array = PoseArray()
+initial_centroids = [ [ 3.184,  0.   , -2.778], [-2.457,  0.   , -7.841], [ -4.469,   0.   , -10.935], [ -2.123,   0.   , -13.339], [-5.538,  0.   , -3.623], [  2.546,   0.   , -12.516], [-3.366,  0.   , -9.381], [-1.63 ,  0.   , -7.704] ]
 
 
 # OBEJCT DETECT CALLBACK
@@ -26,10 +27,12 @@ def callback_object_detect(msg):
         
         for point in points:
             if not point.__contains__(np.inf) and not point.__contains__(-np.inf):
-                if (point[0] > 0.5 or point[0] < -0.5) and (point[1] > -1.5) and (point[2] > 2.5 or point[2] < -2.5):
-                    dataset.append(list(point))                                                 # DATASET TO APPLY KMEANS - (X, Y,  Z)
+                # if (point[0] > 0.5 or point[0] < -0.5) and (point[1] > -1.5) and (point[2] > 2.5 or point[2] < -2.5):
+                dataset.append(list(point))                                                 # DATASET TO APPLY KMEANS - (X, Y,  Z)
 
+        print(len(dataset))
         current_centroids = kmeans(dataset)                                                     # CUURENT CENTROIDS
+
         if current_centroids:
             for point in current_centroids:                                                     # GET THE POSITION OF EACH CENTROID
                 pose = Pose()
@@ -50,6 +53,11 @@ def generate_centroids(dataset, k):
             round(uniform(min_z, max_z), 3)  
             ]) for i in range(k)]
 
+    # index = uniform(0, len(dataset))
+    # for i in range(k):
+    #     point = [dataset[int(index)]]
+    #     print(point)
+    #     centroids.append(point)
     return centroids                                                                            # RETURN K-CENTROIDS
 
 def calculate_centroids(point_cloud, centroids):
@@ -89,7 +97,7 @@ def kmeans(dataset):
     tol = 0.1                                                                                   # MINIMUN TOLERANCE FOR DISTANCE
     attempts = 0
     max_attempts = 100
-    initial_centroids = generate_centroids(dataset, k)                                          # GENERATE K-CENTROIDS
+    # initial_centroids = generate_centroids(dataset, k)                                          # GENERATE K-CENTROIDS
     new_centroids = calculate_centroids(dataset, initial_centroids)                             # CALCULATE NEW CENTROIDS
     total_distance = compare_centroids(new_centroids, initial_centroids)                        # COMPUTE TOTAL DISTANCE BETWEEN INITAL & NEW CENTROIDS
 
@@ -98,8 +106,7 @@ def kmeans(dataset):
         new_centroids = calculate_centroids(dataset, centroids)                                 # RECOMPUTE CENTROIDS
         total_distance = compare_centroids(new_centroids, centroids)                            # RECOMPUTE TOTAL DISTANCE
         attempts = attempts + 1
-    # print(attempts)
-
+    print(attempts)
     
     return new_centroids                                                                        # RETURN THE CURRENT CENTROIDS
 

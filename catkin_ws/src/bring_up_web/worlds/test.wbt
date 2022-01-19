@@ -74,8 +74,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.010401139016971732 0.9933352094451617 0.11479101874139097 3.0093683164859617
-  position -45.88623041696543 8.10647255083904 -41.961157693498116
+  orientation 0.018960782369103934 0.9590125078828204 0.282728665784449 3.2892975703016925
+  position -48.029773366737665 29.0969135148014 -45.502759369526984
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -134,8 +134,20 @@ StraightRoadSegment {
   length 100
 }
 CitroenCZeroSimple {
+  translation -39.33 0.25 1.86
+  name "vehicle(3)"
+}
+CitroenCZeroSimple {
+  translation -47.5 0.25 13.45
+  name "vehicle(4)"
+}
+CitroenCZeroSimple {
   translation -42.97 0.25 8.48
   name "vehicle(1)"
+}
+CitroenCZeroSimple {
+  translation -47.58 0.25 1.74
+  name "vehicle(2)"
 }
 StraightRoadSegment {
   translation 105 0.02 -32
@@ -358,32 +370,27 @@ CurvedRoadSegment {
   curvatureRadius 40.5
 }
 BmwX5 {
-  hidden position_0_0 1.4984394273826486e-10
-  hidden position2_0_0 0.0006735297503723897
-  hidden position_0_1 -1.4984385506612074e-10
-  hidden position2_0_1 0.0006735297503140897
-  hidden position_0_2 0.0018387271228590245
-  hidden position_0_3 0.0018387271127538716
-  hidden position_0_9 3.065590700698029e-07
-  hidden rotation_1 2.2247560258590497e-07 0.9999999999999752 7.492197136913057e-11 0.0006735297502265215
-  hidden rotation_2 2.224754724369837e-07 -0.9999999999999752 -7.492192753305852e-11 0.0006735297502265215
-  hidden rotation_3 0 1 0 0.001838727122860892
-  hidden rotation_4 0 -1 0 0.0018387271127170545
-  hidden translation_26 6.07754626624768e-07 -1.1753769102451628e-07 -1.0471539679812736e-07
-  hidden rotation_26 0 -0.6652060421485012 0.7466598432279095 3.068336886461678e-07
-  translation -42.9852 0.3089302259808757 -6.0728911304568856
-  rotation -1 -4.644120009384178e-13 4.097064038821602e-14 0.005101489796548004
-  controller "ros_bmw_x5_controller"
-  sensorsSlotTop [
-    SolidBox {
-      translation 0 0.07 0
-      size 0.2 0.25 0.2
-      appearance PBRAppearance {
-        baseColor 0 0.1 0.5
-        roughness 0.5
-        metalness 0.2
-      }
+  hidden position_0_0 1.4940142656584797e-10
+  hidden position2_0_0 1.3133826984648385e-06
+  hidden position_0_1 -1.4940122616871583e-10
+  hidden position2_0_1 1.3133827161738073e-06
+  hidden position_0_2 -0.00017726981868911392
+  hidden position_0_3 -0.00017726981859190845
+  hidden position_0_9 3.0107593029505403e-07
+  hidden rotation_1 0.00011375315494398179 0.9999999935301098 7.470071279961858e-11 1.3133325896579681e-06
+  hidden rotation_2 0.00011375300082928482 -0.9999999935301273 -7.470061260105446e-11 1.3133325896579681e-06
+  hidden rotation_3 0 -1 0 0.00017726981775095384
+  hidden rotation_4 0 1 0 0.00017726981775095384
+  hidden translation_25 5.96884278780685e-07 -1.1543540412439768e-07 -1.0284245055558472e-07
+  hidden rotation_25 0 -0.6652060421485012 0.7466598432279096 3.009887021291878e-07
+  translation -42.985199999999956 0.3090486917943462 -2.811903848445405
+  rotation -1 1.6904482667530886e-12 -3.466146609068833e-14 0.005084300737263071
+  controller "ros_car_controller"
+  sensorsSlotFront [
+    SickLms291 {
     }
+  ]
+  sensorsSlotTop [
     Camera {
       translation 0 -0.05 -0.72
       children [
@@ -408,9 +415,6 @@ BmwX5 {
       fieldOfView 1
       width 640
       height 480
-    }
-    VelodyneHDL-32E {
-      translation 0 0.3 0
     }
   ]
   sensorsSlotCenter [
