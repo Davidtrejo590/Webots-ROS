@@ -23,15 +23,16 @@ def callback_object_detect(msg):
         dataset = []
         for point in points:
             if not point.__contains__(np.inf) and not point.__contains__(-np.inf):                                  # DELETE (-inf, inf)
-                if (point[0] > 0.5 or point[0] < -0.5) and (point[1] > -1.5) and (point[2] > 2.5 or point[2] < -2.5):    
-                    dataset.append(list(point))                                                                     # DATASET TO CLUSTER
+                # if( ((point[0] > 0.0 and point[0] < 10.0) or (point[0] < 0.0 and point[0] > -10.0)) and ((point[2] > 0.0 and point[2] < 10.0) or (point[2] < 0.0 and point[2] > -10.0)) ):
+                dataset.append(list(point))                                                                     # DATASET TO CLUSTER
             
         # APPLY KMEANS
-        # kmeans = kmeans = KMeans(n_clusters=8, init='k-means++', n_init=10, max_iter=100, tol=0.01)     
-        # kmeans.fit_predict(dataset)
-        # centroids = kmeans.cluster_centers_                                                                         # GET CENTROIDS
-        initial_centroids = [ [ 3.184,  0.   , -2.778], [-2.457,  0.   , -7.841], [ -4.469,   0.   , -10.935], [ -2.123,   0.   , -13.339], [-5.538,  0.   , -3.623], [  2.546,   0.   , -12.516], [-3.366,  0.   , -9.381], [-1.63 ,  0.   , -7.704] ]
-        centroids, dist = kmeans(dataset, initial_centroids)
+        kmeans = kmeans = KMeans(n_clusters=8, init='k-means++', n_init=10, max_iter=100, tol=0.01)     
+        kmeans.fit_predict(dataset)
+        centroids = kmeans.cluster_centers_                                                                         # GET CENTROIDS
+        # initial_centroids = [ [ 3.184,  0.   , -2.778], [-2.457,  0.   , -7.841], [ -4.469,   0.   , -10.935], [ -2.123,   0.   , -13.339], [-5.538,  0.   , -3.623], [  2.546,   0.   , -12.516], [-3.366,  0.   , -9.381], [-1.63 ,  0.   , -7.704] ]
+        # centroids, dist = kmeans(dataset, 8)
+        print(centroids)
 
 
         

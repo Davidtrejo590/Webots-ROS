@@ -8,15 +8,16 @@
 #include <bits/stdc++.h>
 
 std::vector<std::vector<double>> initial_centroids = {
-        {3.184,  0.   , -2.778},
-        {-2.457,  0.   , -7.841},
-        {-4.469,   0.   , -10.935},
-        {-2.123,   0.   , -13.339},
-        {-5.538,  0.   , -3.623},
-        {2.546,   0.   , -12.516},
-        {-3.366,  0.   , -9.381},
-        {-1.63 ,  0.   , -7.704}
+    { -3.24854239, -0.78178249,  21.68897923},
+    {  5.23484374,  -1.10132963, -27.92289582},
+    {  3.28875793,  -0.4766275,   -8.91994962},
+    {  3.87006921,  -0.37626108,   6.56706054},
+    { 10.89367012,  -1.22822929,  24.94426386},
+    { -6.5163362,   -1.36696403, -26.10448287},
+    { -6.54936334,  -1.22340166,  25.60631742},
+    { -4.05076476,  -0.42877155,  -7.2448349 },
 };
+
 
 //MESSAGE 
 ros::Publisher pub_poses;
@@ -155,11 +156,13 @@ geometry_msgs::PoseArray kmeans(std::vector<std::vector<double>> point_cloud){
         attemps += 1;
     }
 
-    std::cout << attemps << std::endl;
+    // std::cout << attemps << std::endl;
 
-    // RETURN A POSE ARRAY TO PUBLIH THEM
+   
     actual_centroids.poses.resize(new_centroids.size());
+
     for(int i = 0; i < new_centroids.size(); i++){
+    
         actual_centroids.poses[i].position.x = new_centroids[i][0];
         actual_centroids.poses[i].position.y = new_centroids[i][1];
         actual_centroids.poses[i].position.z = new_centroids[i][2];
