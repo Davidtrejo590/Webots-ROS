@@ -8,11 +8,18 @@ import numpy as np
 from sklearn.cluster import KMeans, kmeans_plusplus
 from scipy.cluster.vq import kmeans
 
-
-
-
-
 # GLOBAL VARIABLES
+initial_centroids = [
+    [ -3.64229929,  -0.55005622,  -6.23897093],
+    [  3.79652465,  -0.35820951,  -0.04962473],
+    [  3.32333617,  -0.58985401, -14.47182993],
+    [ -3.03360501,  -0.47881233,  22.09920644],
+    [  4.61459438,  -0.60176526, -28.79273614],
+    [ -3.74919798,  -0.60729853, -19.39469276],
+    [ -3.68494749,  -0.58626728, -35.58342223],
+    [ -4.00155359,  -0.52482279,  -5.27777102]
+]
+
 centroids = []
 
 def callback_object_detect(msg):
@@ -23,19 +30,16 @@ def callback_object_detect(msg):
         dataset = []
         for point in points:
             if not point.__contains__(np.inf) and not point.__contains__(-np.inf):                                  # DELETE (-inf, inf)
-                # if( ((point[0] > 0.0 and point[0] < 10.0) or (point[0] < 0.0 and point[0] > -10.0)) and ((point[2] > 0.0 and point[2] < 10.0) or (point[2] < 0.0 and point[2] > -10.0)) ):
-                dataset.append(list(point))                                                                     # DATASET TO CLUSTER
+                if( (point[0] > 1.0 or point[0] < -1.0) and (point[1] > -0.75) ):
+                    dataset.append(list(point))                                                                         # DATASET TO CLUSTER
             
-        # APPLY KMEANS
-        kmeans = kmeans = KMeans(n_clusters=8, init='k-means++', n_init=10, max_iter=100, tol=0.01)     
-        kmeans.fit_predict(dataset)
-        centroids = kmeans.cluster_centers_                                                                         # GET CENTROIDS
-        # initial_centroids = [ [ 3.184,  0.   , -2.778], [-2.457,  0.   , -7.841], [ -4.469,   0.   , -10.935], [ -2.123,   0.   , -13.339], [-5.538,  0.   , -3.623], [  2.546,   0.   , -12.516], [-3.366,  0.   , -9.381], [-1.63 ,  0.   , -7.704] ]
-        # centroids, dist = kmeans(dataset, 8)
+        # APPLY KMEANS BY SKLEARN
+        # kmeans = kmeans = KMeans(n_clusters=8, init='k-means++', n_init=10, max_iter=100, tol=0.01)     
+        # kmeans.fit_predict(dataset)
+        # centroids = kmeans.cluster_centers_                                                                         # GET CENTROIDS
+        # APPLY KMEANS BY SCIPY
+        centroids, dist = kmeans(dataset, 8)
         print(centroids)
-
-
-        
         
 def main():
 

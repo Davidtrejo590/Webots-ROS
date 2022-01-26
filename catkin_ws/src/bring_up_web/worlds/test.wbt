@@ -74,8 +74,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.043646955157463835 0.9782081426837729 0.2029871249430514 3.5830998385600297
-  position -47.17212822344813 7.679726050464349 -18.07946782969393
+  orientation 0.10323344346249903 -0.9892936003065661 -0.10315536119536933 4.650937882083565
+  position 8.241858736161475 11.346817140421507 -12.460149887000927
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -134,19 +134,39 @@ StraightRoadSegment {
   length 100
 }
 CitroenCZeroSimple {
-  translation -46.23 0.25 3.42
+  translation -46.23 0.25 9.28
   name "vehicle(1)"
+}
+CitroenCZeroSimple {
+  translation -38.9 0.25 14.13
+  name "vehicle(6)"
+}
+CitroenCZeroSimple {
+  translation -46.48 0.25 47.34
+  name "vehicle(9)"
+}
+CitroenCZeroSimple {
+  translation -46.47 0.25 67.31
+  name "vehicle(11)"
+}
+CitroenCZeroSimple {
+  translation -38.73 0.25 57.37
+  name "vehicle(12)"
+}
+CitroenCZeroSimple {
+  translation -38.95 0.25 30.41
+  name "vehicle(8)"
 }
 CitroenCZeroSimple {
   translation -39.62 0.25 -28.98
   name "vehicle(2)"
 }
 CitroenCZeroSimple {
-  translation -46.83 0.25 -12.7
+  translation -46.83 0.25 -5.81
   name "vehicle(3)"
 }
 CitroenCZeroSimple {
-  translation -38.6 0.25 1.54
+  translation -38.6 0.25 0.16
   name "vehicle(4)"
 }
 CitroenCZeroSimple {
@@ -374,30 +394,30 @@ CurvedRoadSegment {
   curvatureRadius 40.5
 }
 BmwX5 {
-  hidden position_0_0 1.4945264822993001e-10
-  hidden position2_0_0 -0.022421761295007274
-  hidden position_0_1 -1.4945238933698947e-10
-  hidden position2_0_1 -0.02403348614998009
-  hidden position_0_2 0.01273900856969012
-  hidden position_0_3 0.05273690997148324
-  hidden position_0_9 3.0095691066875753e-07
-  hidden rotation_1 6.6652385131578185e-09 -1 -7.472632411496501e-11 0.022421761295002323
-  hidden rotation_2 6.218207154306887e-09 1 7.472619466849475e-11 0.024033486149987682
-  hidden rotation_3 0 0.9999999999999999 0 0.012739008569688792
-  hidden rotation_4 0 -0.9999999999999999 0 0.0527369099714833
-  hidden translation_25 5.966483234143283e-07 -1.153897702943496e-07 -1.028017924120661e-07
+  hidden position_0_0 1.4940137885513208e-10
+  hidden position2_0_0 2.6946682173426325e-06
+  hidden position_0_1 -1.4940110715407076e-10
+  hidden position2_0_1 2.6946687625111155e-06
+  hidden position_0_2 9.663296167163827e-05
+  hidden position_0_3 9.663296403547583e-05
+  hidden position_0_9 3.005028062745384e-07
+  hidden rotation_1 0.00015770956207249677 0.9999999875638469 -4.0448785059137316e-11 3.7625358246273845e-06
+  hidden rotation_2 0.0001577092388078519 -0.9999999875638979 4.044868759589147e-11 3.7625358246273845e-06
+  hidden rotation_3 0 -1 0 0.0007478433773585677
+  hidden rotation_4 0 1 0 0.0007478433732017822
+  hidden translation_25 5.957480581075814e-07 -1.1521566278815953e-07 -1.0264668093284968e-07
   hidden rotation_25 0 -0.6652060421485012 0.7466598432279096 3.009887021291878e-07
-  translation -42.79623669177199 0.3090140111327273 -6.106450452867353
-  rotation -0.9786024686214706 0.2057594092066627 0.0005233840736479877 0.005198565374352556
+  translation -42.796234894015825 0.3090486917943462 -6.104769766659854
+  rotation -0.978577782103424 0.205876784646726 0.0005233708715506404 0.005195601561238327
   controller "ros_car_controller"
   sensorsSlotTop [
     Lidar {
-      translation 0 0.13 0
+      translation 0 0.09 0
+      rotation 0 -1 0 5.92017e-06
       horizontalResolution 2009
       fieldOfView 6.28
-      verticalFieldOfView 0.1
       numberOfLayers 32
-      maxRange 30
+      maxRange 50
     }
     Camera {
       translation 0 -0.05 -0.72

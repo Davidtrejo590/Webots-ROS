@@ -1,63 +1,50 @@
 #include "ros/ros.h"
 #include <sensor_msgs/PointCloud2.h>
 #include <geometry_msgs/PoseArray.h>
+#include <algorithm>
 #include <ctime>
 #include <vector>
 #include <iostream>
 #include <math.h>
 #include <bits/stdc++.h>
+#include <limits>
 
 std::vector<std::vector<double>> initial_centroids = {
-    { -3.24854239, -0.78178249,  21.68897923},
-    {  5.23484374,  -1.10132963, -27.92289582},
-    {  3.28875793,  -0.4766275,   -8.91994962},
-    {  3.87006921,  -0.37626108,   6.56706054},
-    { 10.89367012,  -1.22822929,  24.94426386},
-    { -6.5163362,   -1.36696403, -26.10448287},
-    { -6.54936334,  -1.22340166,  25.60631742},
-    { -4.05076476,  -0.42877155,  -7.2448349 },
+    { -3.64229929,  -0.55005622,  -6.23897093 },
+    {  3.79652465,  -0.35820951,  -0.04962473 },
+    {  3.32333617,  -0.58985401, -14.47182993 },
+    { -3.03360501,  -0.47881233,  22.09920644 },
+    {  4.61459438,  -0.60176526, -28.79273614 },
+    { -3.74919798,  -0.60729853, -19.39469276 },
+    { -3.68494749,  -0.58626728, -35.58342223 },
+    { -4.00155359,  -0.52482279,  -5.27777102 }
 };
 
+// std::vector<std::vector<double>> initial_centroids;
 
 //MESSAGE 
 ros::Publisher pub_poses;
 
 /* GENERATE RANDOMLY INITIAL CENTROIDS */
-std::vector<std::vector<double>> generate_centroids(std::vector<std::vector<double>> dataset, int k){
+std::vector<std::vector<double>> generate_centroids(int k){
 
-    int size = dataset.size();
-    std::vector<double> x, y, z;
-    x.resize(size);
-    y.resize(size);
-    z.resize(size);
-    double min_x, min_y, min_z, max_x, max_y, max_z;
-
-    for(int i = 0; i < dataset.size(); i++){
-        x[i] = dataset[i][0];
-        y[i] = dataset[i][1];
-        z[i] = dataset[i][2];
-    }
-
-    // GET THE MIN AND MAX OF EACH COMPONENT (X, Y, Z)
-    min_x = *min_element(x.begin(), x.end());
-    min_y = *min_element(y.begin(), y.end());
-    min_z = *min_element(z.begin(), z.end());
-
-    max_x = *max_element(x.begin(), x.end());
-    max_y = *max_element(y.begin(), y.end());
-    max_z = *max_element(z.begin(), z.end());
+    double min = -10.0;
+    double max = 10.0;
 
     // DEFINE SRAND
     srand(time(NULL));
     // GENERATE INITIAL CENTROIDS
-    std::vector<std::vector<double>> initial_centroids;                                          // INITIAL CENTROIDS
+    std::vector<std::vector<double>> initial_centroids;                                                     // INITIAL CENTROIDS
     initial_centroids.resize(k);
     // NUMBER OF CENTROIDS ( K )
     for(int i = 0; i < initial_centroids.size(); i++){
-        initial_centroids[i] = {(rand() % int(max_x)) + min_x, (rand() % int(max_y)) + min_y, (rand() % int(max_z)) + min_z };
+        std::vector<double> point = { (rand() % int(max)) + min, (rand() % int(max)) + min, (rand() % int(max)) + min };
+        initial_centroids[i] = point;
+        
     }
 
-    return initial_centroids;                                                                        // RETURN K INITIAL CENTROIDS
+    return initial_centroids;
+
 }
 
 /* CALCULATE CENTROIDS - ASIGN EACH POINT IN THE NEAREST CLUSTER */
@@ -129,21 +116,38 @@ double compare_centroids(std::vector<std::vector<double>> nc, std::vector<std::v
     return total_distance;                                                                    // RETURN THE SUM OF DISTANCES
 }
 
+/* CALCULATE THE DISTANCE FOR EACH CENTROID  */
+std::vector<std::vector<double>> centroid_distance(std::vector<std::vector<double>> c){
+
+    for(int i = 0; i < c.size(); i++){
+        for(int j = 0; j < c.size(); j++){
+            double distance = sqrt( 
+                pow((c[i][0]- c[j][0]), 2) + pow((c[i][1]- c[j][1]), 2) + pow((c[i][2]- c[j][2]), 2) 
+            );
+            if( distance != 0.0 and distance < 2.0 ){
+                c[i][0] = ( c[i][0] + c[j][0] ) / 2;
+                c[i][1] = ( c[i][1] + c[j][1] ) / 2;
+                c[i][2] = ( c[i][2] + c[j][2] ) / 2;
+            }
+        }
+    }
+
+    return c;
+
+}
+
 
 
 /* KMEANS FUNCTION */
 geometry_msgs::PoseArray kmeans(std::vector<std::vector<double>> point_cloud){
 
     geometry_msgs::PoseArray actual_centroids;
-    // std::vector<std::vector<double>> initial_centroids;                                 // INITAL CENTROIDS
     std::vector<std::vector<double>> new_centroids;                                     // CENTROIDS CALCULATED
     int k = 8;                                                                          // NUMBER OF CLUSTERS
     int attemps = 0;
     int max_attemps = 100;
     double total_distance = 0.0;
     double tol = 0.1;
-
-    // initial_centroids = generate_centroids(point_cloud, k);                             // GENERATE INITIAL CENTROIDS
 
     new_centroids = calulate_centroids(point_cloud, initial_centroids);                 // CALCULATE NEW CENTROIDS
     total_distance = compare_centroids(new_centroids, initial_centroids);               // COMPUTE TOTAL DISTANCE BETWEEN INITAL & NEW CENTROIDS
@@ -156,17 +160,18 @@ geometry_msgs::PoseArray kmeans(std::vector<std::vector<double>> point_cloud){
         attemps += 1;
     }
 
-    // std::cout << attemps << std::endl;
+    // CHECK DISTANCE BETWEEN CENTROIDS
+    new_centroids = centroid_distance(new_centroids);
 
-   
+    // PASS TO POSE ARRAY
     actual_centroids.poses.resize(new_centroids.size());
 
     for(int i = 0; i < new_centroids.size(); i++){
-    
         actual_centroids.poses[i].position.x = new_centroids[i][0];
         actual_centroids.poses[i].position.y = new_centroids[i][1];
         actual_centroids.poses[i].position.z = new_centroids[i][2];
     }
+
 
     return actual_centroids;                                                            // RETURN THE CURRENT CENTROIDS
     
@@ -189,9 +194,12 @@ void objectDetectCallback(const sensor_msgs::PointCloud2::ConstPtr& msg){
         p += msg -> point_step;
 
         // FILL POINT CLOUD
+
         if( (isinf(x) or isinf(y) or isinf(z)) != true){
-            std::vector<double> point = {x, y, z};
-            point_cloud.push_back(point);
+            if( (x > 1.0 or x < -1.0) and (y > -0.75) ){
+                std::vector<double> point = {x, y, z};
+                point_cloud.push_back(point);
+            }
         }
     }
 
@@ -217,24 +225,3 @@ int main(int argc, char **argv)
 
     return 0;
 }
-
-
-// PUBLICAR LOS CENTROIDES CALCULADOS DESDE EL CALLBACK EN UN POSE ARRAY -- DONE
-// ELIMINAR FOR'S NO NECESARIOS -- DONE
-// REVISAR VECTORES DONDE SE USA RESIZE -- DONE
-// CLUSTERIZAR DESDE EL FILTRADO DE LA NUBE DE PUNTOS
-// GENERAR CENTROIDES INICIALES AL INICIO DEL CALLBACK
-// ELIMINAR EL VECTOR DE DISTANCES -- INICIAR UNA VARIABLE MIN_DISTANCIA EN INF -- DONE
-// REVISAR EL AREA DE INTERES DE LA NUBE DE PUNTOS
-
-
-/* 
-    * COSAS QUE PUEDEN ESTAR AFECTANDO EL CLUSTERING
-    * LAS LECTURAS DEL LIDAR VELODYNE CAMBIAN BASTANTE RESPECTO A LAS ANTERIORES
-    * LA OBTENCIÓN DE LOS CENTROIDES INICIALES DE MANERA ALEATORIA HACE QUE LOS CENTROIDES FINALES SE MUEVAN
-    * EL LIDAR SICK SOLO DA PUNTOS FRONTALES EN 180 GRADOS
-    * HACER UNA MEJOR ELECCIÓN DE LOS CENTROIDES INCIALES
-    * 
-
-
-*/

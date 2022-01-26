@@ -12,7 +12,16 @@ import copy
 
 # GLOBAL VARIABLES
 pose_array = PoseArray()
-initial_centroids = []
+initial_centroids = [
+    [ -3.64229929,  -0.55005622,  -6.23897093],
+    [  3.79652465,  -0.35820951,  -0.04962473],
+    [  3.32333617,  -0.58985401, -14.47182993],
+    [ -3.03360501,  -0.47881233,  22.09920644],
+    [  4.61459438,  -0.60176526, -28.79273614],
+    [ -3.74919798,  -0.60729853, -19.39469276],
+    [ -3.68494749,  -0.58626728, -35.58342223],
+    [ -4.00155359,  -0.52482279,  -5.27777102]
+]
 
 
 # OBEJCT DETECT CALLBACK
@@ -27,7 +36,8 @@ def callback_object_detect(msg):
         
         for point in points:
             if not point.__contains__(np.inf) and not point.__contains__(-np.inf):
-                dataset.append(point)                                                           # DATASET TO APPLY KMEANS - (X, Y,  Z)
+                if( (point[0] > 1.0 or point[0] < -1.0) and (point[1] > -0.75) ):
+                    dataset.append(point)                                                           # DATASET TO APPLY KMEANS - (X, Y,  Z)
 
         # print(len(dataset))
         current_centroids = kmeans(dataset)                                                     # CUURENT CENTROIDS
@@ -113,8 +123,6 @@ def main():
     print('Object detect node...')
     rospy.init_node('object_detect')
     rate = rospy.Rate(10)
-
-    initial_centroids = [ [ 3.184,  0.   , -2.778], [-2.457,  0.   , -7.841], [ -4.469,   0.   , -10.935], [ -2.123,   0.   , -13.339], [-5.538,  0.   , -3.623], [  2.546,   0.   , -12.516], [-3.366,  0.   , -9.381], [-1.63 ,  0.   , -7.704] ]
 
     # SUBSCRIBERS
     rospy.Subscriber('/point_cloud', PointCloud2, callback_object_detect)
