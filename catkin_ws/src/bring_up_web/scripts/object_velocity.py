@@ -5,6 +5,7 @@ import rospy
 import time
 import numpy as np
 from geometry_msgs.msg import PoseArray
+from kalman_filter import Kalman
 
 
 # GLOBAL VARIABLES FOR EKF
@@ -47,7 +48,11 @@ def callback_object_pose(msg):
     #         print([centroid.position.x, centroid.position.y, centroid.position.z])
     #         ekf(centroid.position.x)
     centroid = [ msg.poses[0].position.x, msg.poses[0].position.y, msg.poses[0].position.z ]
-    ekf(centroid)
+    print('POSITION', [centroid[0], centroid[1]])
+    # # ekf(centroid)
+    # k = Kalman(centroid[0], centroid[1])
+    # [x, y]= k.ekf()
+    # print([x, y])
 
 
 

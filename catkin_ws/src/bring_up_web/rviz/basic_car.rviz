@@ -5,7 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /TF1/Frames1
-        - /PoseArray1
+        - /MarkerArray1/Status1
       Splitter Ratio: 0.5
     Tree Height: 408
   - Class: rviz/Selection
@@ -188,14 +188,29 @@ Visualization Manager:
       Class: rviz/PoseArray
       Color: 239; 41; 41
       Enabled: true
-      Head Length: 0.5
-      Head Radius: 0.5
+      Head Length: 0.30000001192092896
+      Head Radius: 0.30000001192092896
       Name: PoseArray
-      Shaft Length: 0.5
-      Shaft Radius: 0.5
+      Shaft Length: 0.30000001192092896
+      Shaft Radius: 0.30000001192092896
       Shape: Arrow (3D)
       Topic: /object_pose
       Unreliable: false
+      Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /marker
+      Name: MarkerArray
+      Namespaces:
+        marker0: true
+        marker1: true
+        marker2: true
+        marker3: true
+        marker4: true
+        marker5: true
+        marker6: true
+        marker7: true
+      Queue Size: 100
       Value: true
   Enabled: true
   Global Options:
@@ -225,7 +240,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 75.25114440917969
+      Distance: 25.49282455444336
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -240,10 +255,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: -1.204797387123108
+      Pitch: -1.3447965383529663
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.5354022979736328
+      Yaw: 1.6054000854492188
     Saved: ~
 Window Geometry:
   Displays:
