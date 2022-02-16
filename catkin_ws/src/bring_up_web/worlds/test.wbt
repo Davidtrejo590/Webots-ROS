@@ -74,8 +74,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.002976929452418831 -0.9817033629541192 -0.19039339551467746 3.0823160671049994
-  position -51.82046933924222 20.7510373014497 -62.97154561103872
+  orientation -0.10452609753005307 -0.9880533227049767 -0.11324719169495315 1.613667885375645
+  position -154.22193246839453 40.770386945673806 27.91764156101912
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -132,46 +132,6 @@ StraightRoadSegment {
   rightBarrier TRUE
   leftBarrier TRUE
   length 100
-}
-CitroenCZeroSimple {
-  translation -46.23 0.25 9.28
-  name "vehicle(1)"
-}
-CitroenCZeroSimple {
-  translation -38.9 0.25 14.13
-  name "vehicle(6)"
-}
-CitroenCZeroSimple {
-  translation -47.45 0.25 47.34
-  name "vehicle(9)"
-}
-CitroenCZeroSimple {
-  translation -46.47 0.25 67.31
-  name "vehicle(11)"
-}
-CitroenCZeroSimple {
-  translation -38.73 0.25 57.37
-  name "vehicle(12)"
-}
-CitroenCZeroSimple {
-  translation -38.95 0.25 30.41
-  name "vehicle(8)"
-}
-CitroenCZeroSimple {
-  translation -39.62 0.25 -28.98
-  name "vehicle(2)"
-}
-CitroenCZeroSimple {
-  translation -46.83 0.25 -5.81
-  name "vehicle(3)"
-}
-CitroenCZeroSimple {
-  translation -38.6 0.25 0.16
-  name "vehicle(4)"
-}
-CitroenCZeroSimple {
-  translation -47.49 0.25 23.47
-  name "vehicle(5)"
 }
 StraightRoadSegment {
   translation 105 0.02 -32
@@ -394,19 +354,8 @@ CurvedRoadSegment {
   curvatureRadius 40.5
 }
 BmwX5 {
-  hidden position_0_0 1.4940137885513208e-10
-  hidden position2_0_0 2.6946682173426325e-06
-  hidden position_0_1 -1.4940110715407076e-10
-  hidden position2_0_1 2.6946687625111155e-06
-  hidden position_0_2 9.663296167163827e-05
-  hidden position_0_3 9.663296403547583e-05
-  hidden position_0_9 3.005028062745384e-07
-  hidden rotation_1 0.00015766146350575338 0.9999999875714313 -4.0394627155898534e-11 3.7617095292787514e-06
-  hidden rotation_2 0.00015766121510620262 -0.9999999875714706 4.039461398694353e-11 3.7617095292787514e-06
-  hidden rotation_3 0 -1 0 0.0007478433773585677
-  hidden rotation_4 0 1 0 0.0007478433720141291
-  hidden translation_25 5.957480585516706e-07 -1.1521566234407032e-07 -1.0264667915649284e-07
-  hidden rotation_25 0 -0.6652060421485012 0.7466598432279096 3.009887021291878e-07
+  hidden rotation_1 0.00015763506592651573 0.9999999875755929 -4.036490407600484e-11 3.7612372790064395e-06
+  hidden rotation_2 0.00015763485496182034 -0.9999999875756261 4.0364933056690786e-11 3.7612372790064395e-06
   translation -42.796234894015825 0.3090486917943462 -6.104769766659854
   rotation -0.978577782103424 0.205876784646726 0.0005233708715506404 0.005195601561238327
   controller "ros_car_controller"
@@ -455,4 +404,26 @@ BmwX5 {
       height 150
     }
   ]
+}
+DEF CAR-4 LincolnMKZSimple {
+  translation 107.38 0.29 0
+  name "vehicle(3)"
+}
+DEF CAR-2 CitroenCZeroSimple {
+  translation -50.81 0.26 166.52
+  rotation 0 1 0 3.14159
+  name "vehicle(2)"
+}
+Robot {
+  name "supervisor"
+  controller "supervisor_controller"
+  supervisor TRUE
+}
+DEF CAR-3 RangeRoverSportSVRSimple {
+  translation 98.97 0.33 167
+  rotation 0 1 0 3.14159
+  name "vehicle(1)"
+}
+DEF CAR-1 ToyotaPriusSimple {
+  translation -38.72 0.31 0
 }
