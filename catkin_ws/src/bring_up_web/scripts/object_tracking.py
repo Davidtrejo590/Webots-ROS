@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 
-from turtle import pu
 import rospy
 import numpy as np
 from geometry_msgs.msg import PoseArray
 from visualization_msgs.msg import Marker, MarkerArray
 
+# GLOBAL VARIABLES 
 marker_array = MarkerArray()
-
-# GLOBAL VARIABLES FOR EKF
 
 def callback_object_pose(msg):
 
@@ -16,60 +14,41 @@ def callback_object_pose(msg):
     centroids = []
 
     for centroid in msg.poses:
-        if centroid.position.x != 0.0:
-            centroids.append([centroid.position.x, centroid.position.y, centroid.position.z])
-    
-    # print('MEASUERENTS')
-    # for c in centroids:
-    #     print([c[0], c[1]])
+        if centroid.position.x != 0.0:                                                                      # OBJECT DETECTED
+            centroids.append([centroid.position.x, centroid.position.y, centroid.position.z])               # GET THE CURRENTS CENTROIDS COMPUTED
 
-    estimate = [ [] for i in centroids ]
+    estimates = [ [] for i in centroids ]                                                                   # LIST FOR ESTIMATIONS
     for i in range(len(centroids)):    
-        estimate[i] = ekf(centroids[i])
+        estimates[i] = ekf(centroids[i])                                                                    # EXTENDED KALMAN FILTER
     
-    if estimate:
-        i = 0
-        print('ESTIMSTED')
-        for e in estimate:
-            marker = Marker()
+    if estimates:
+        id = 0
+        # print('OBJECT TRACKING')
+        for e in estimates:
+            marker = Marker()                                                                               # CREATE A MARKER FOR EACH OBJECT
             marker.header.frame_id = 'lidar_link'
-            marker.ns = 'marker' + str(i)
-            marker.id = i
+            marker.ns = 'marker' + str(id)
+            marker.id = id
             marker.type = Marker.TEXT_VIEW_FACING
             marker.action = Marker.ADD
             marker.text = 'p[x, z] = ' + str(np.round(e[0])) + str(np.round(e[1], 2)) + '\n' 'v[x, z] = ' + str(np.round(e[2])) + str(np.round(e[3], 2))
             marker.pose.position.x = e[0]
             marker.pose.position.y = e[1]
-            marker.pose.position.z = centroids[i][2]
-            marker.scale.z = 0.3
+            marker.pose.position.z = centroids[id][2]
+            marker.scale.z = 1.0
             marker.color.r, marker.color.g, marker.color.b = [1.0, 1.0, 1.0]
             marker.color.a = 1.0
+            marker.frame_locked = False
             marker_array.markers.append(marker)
-            i +=1
-    else:
-        print('NOT ESTIMATED')
-
-
-    # print('ESTIMATES')
-    # for e in estimate:
-    #     print(e[0], e[1])
-        
-
-    
-    # centroid = [ msg.poses[0].position.x, msg.poses[0].position.y, msg.poses[0].position.z ]
-    # [x, y] = ekf(centroid)
-    
-    
+            id +=1
 
 
 
-# KALMAN FILTER
+# EXTENDED KALMAN FILTER
 def ekf( centroid ):
 
-    #  2D SYSTEM
-
     """ 
-        LINEAR DYNAMIC SYSTEM
+        LINEAR DYNAMIC SYSTEM (2D)
         x = P_x = P_x + dtV_x + w
         P_y = P_y + dtV_y + w
         V_x = V_x         + w
@@ -109,15 +88,9 @@ def ekf( centroid ):
         [0, 0, 0, 0.01]
     ])
 
-
-    # print('X POSITION', [centroid[0], centroid[1]])
-
     # PREDICT
     x_hat = np.dot(F_k, x) + w                                                  # x' = F * x + U
     P_hat = np.dot(np.dot(F_k, P_k),  np.transpose(F_k)) + Q_k                  # P' = F * P  * F_t + Q
-
-    # print('X_HAT', x_hat)
-    # print('P_HAT', P_hat)
 
     # UPDATE
     z = np.array([
@@ -127,23 +100,17 @@ def ekf( centroid ):
     y = z - np.dot(H_k, x)                                                      # y = z - H * x'
     S_k = np.dot(np.dot(H_k, P_hat), np.transpose(H_k)) + R_k                   # S = H * P' * H_t + R
     K_k = np.dot(np.dot(P_hat, np.transpose(H_k)), np.linalg.inv(S_k))          # K = P' * H_t * S ^-1
-    x = x_hat + np.dot(K_k, y)                                                       # x = x' + K * y
+    x = x_hat + np.dot(K_k, y)                                                  # x = x' + K * y
     P_k = np.dot(( I_k - np.dot(K_k, H_k)), np.transpose(P_hat))                # P = (I -  k * H) * P'
 
-    # print('X PREDICT + UPDATE', [x[0], x[1]]) 
-
     return x
-
-# KALMAN FILTER 2D
-
-
 
 def main():
 
     global marker_array
 
-    print('Kalman Filter Node...')
-    rospy.init_node('object_velocity')
+    print('Object Tracking Node...')
+    rospy.init_node('object_tracking')
     rate = rospy.Rate(10)
 
     # SUBSCRIBERS
