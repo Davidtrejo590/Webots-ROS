@@ -27,8 +27,8 @@ tf_3 = car_3.getField('translation')
 tf_4 = car_4.getField('translation')
 
 # Z VELOCITY 
-vel = [0.0, 0.0, 10.0, 0.0, 0.0, 0.0]
-vel_1 = [0.0, 0.0, -10.0, 0.0, 0.0, 0.0]
+vel = [0.0, 0.0, 5.0, 0.0, 0.0, 0.0]
+vel_1 = [0.0, 0.0, -5.0, 0.0, 0.0, 0.0]
 
 i = 0
 while robot.step(TIME_STEP) != -1:

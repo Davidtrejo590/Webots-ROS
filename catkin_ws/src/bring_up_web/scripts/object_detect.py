@@ -36,7 +36,7 @@ def callback_object_detect(msg):
         
         for point in points:
             if not point.__contains__(np.inf) and not point.__contains__(-np.inf):
-                if( (point[0] > 1.0 or point[0] < -1.0) and (point[1] > -0.75) ):
+                if( (point[1] > -0.75) ):
                     dataset.append(point)                                                           # DATASET TO APPLY KMEANS - (X, Y,  Z)
 
         # print(len(dataset))

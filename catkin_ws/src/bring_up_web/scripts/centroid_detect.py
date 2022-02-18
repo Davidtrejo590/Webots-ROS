@@ -30,16 +30,21 @@ def callback_object_detect(msg):
         dataset = []
         for point in points:
             if not point.__contains__(np.inf) and not point.__contains__(-np.inf):                                  # DELETE (-inf, inf)
-                if( (point[0] > 1.0 or point[0] < -1.0) and (point[1] > -0.75) ):
+                if( (point[1] > -1.0) ):
                     dataset.append(list(point))                                                                         # DATASET TO CLUSTER
+
+        
+        print('--------')
+        for d in dataset:
+            print(d, ',')
             
         # APPLY KMEANS BY SKLEARN
         # kmeans = kmeans = KMeans(n_clusters=8, init='k-means++', n_init=10, max_iter=100, tol=0.01)     
         # kmeans.fit_predict(dataset)
         # centroids = kmeans.cluster_centers_                                                                         # GET CENTROIDS
         # APPLY KMEANS BY SCIPY
-        centroids, dist = kmeans(dataset, 8)
-        print(centroids)
+        # centroids, dist = kmeans(dataset, 8)
+        # print(centroids)
         
 def main():
 

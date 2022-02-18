@@ -132,7 +132,7 @@ void objectDetectCallback(const sensor_msgs::PointCloud2::ConstPtr& msg){
 
         // FILL POINT CLOUD
         if( (isinf(x) == false) and (isinf(y) == false) and (isinf(z) == false) ){
-            if ( (x > 1.0 or x < -1.0) and (y > -2.5) and (z > 2.0 or z < -2.0) ){
+            if ( y > -1.0 ){
                 // CALCULATE DISTANCE
                 calculate_distance(x, y, z, initial_centroids);
             }

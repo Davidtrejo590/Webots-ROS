@@ -10,15 +10,40 @@
 #include <limits>
 
 std::vector<std::vector<double>> initial_centroids = {
-    { -3.64229929,  -0.55005622,  -6.23897093 },
-    {  3.79652465,  -0.35820951,  -0.04962473 },
-    {  3.32333617,  -0.58985401, -14.47182993 },
-    { -3.03360501,  -0.47881233,  22.09920644 },
-    {  4.61459438,  -0.60176526, -28.79273614 },
-    { -3.74919798,  -0.60729853, -19.39469276 },
-    { -3.68494749,  -0.58626728, -35.58342223 },
-    { -4.00155359,  -0.52482279,  -5.27777102 }
+    {  3.263,  0.0, 12.978 }, 
+    { -2.741,  0.0, 10.540 }, 
+    {  9.354,  0.0,  0.814 }, 
+    { -3.217,  0.0, 10.458 },
+    { -6.015,  0.0,  0.903 }
 };
+
+// TEST
+// { -3.64229929,  -0.55005622,  -6.23897093 },
+// {  3.79652465,  -0.35820951,  -0.04962473 },
+// {  3.32333617,  -0.58985401, -14.47182993 },
+// { -3.03360501,  -0.47881233,  22.09920644 },
+// {  4.61459438,  -0.60176526, -28.79273614 },
+// { -3.74919798,  -0.60729853, -19.39469276 },
+// { -3.68494749,  -0.58626728, -35.58342223 },
+// { -4.00155359,  -0.52482279,  -5.27777102 }
+
+// INICIALES
+// { -6.543,  0.0, 14.637 },
+// {  2.605,  0.0, 11.867 },
+// { -0.537,  0.0, 11.077 },
+// {  0.285,  0.0, 4.541  },
+// { 10.772,  0.0, 6.781  },
+// { -1.693,  0.0, 4.295  },
+// { -6.117,  0.0, 10.157 },
+// { -1.236,  0.0, 1.803  }
+
+
+// FINALES
+// {  3.263,  0.0, 12.978 }, 
+// { -2.741,  0.0, 10.540 }, 
+// {  9.354,  0.0,  0.814 }, 
+// { -3.217,  0.0, 10.458 },
+// { -6.015,  0.0,  0.903 }
 
 // std::vector<std::vector<double>> initial_centroids;
 
@@ -28,8 +53,8 @@ ros::Publisher pub_poses;
 /* GENERATE RANDOMLY INITIAL CENTROIDS */
 std::vector<std::vector<double>> generate_centroids(int k){
 
-    double min = -10.0;
-    double max = 10.0;
+    double min = 0.0;
+    double max = 20.0;
 
     // DEFINE SRAND
     srand(time(NULL));
@@ -51,7 +76,7 @@ std::vector<std::vector<double>> generate_centroids(int k){
 std::vector<std::vector<double>> calulate_centroids(std::vector<std::vector<double>> pc, std::vector<std::vector<double>> c){
 
     std::vector<double> p = {0.0, 0.0, 0.0};
-    int m_size = c.size();                                                                  // M
+    int m_size = c.size();                                                                      // M
 
     // SET OF COUNTERS
     std::vector<int> counters;
@@ -84,13 +109,14 @@ std::vector<std::vector<double>> calulate_centroids(std::vector<std::vector<doub
         new_centroids[j_idx][0] += pc[i][0];                                      // NEW_CENTROIDS[J] += CLOUD[I] - X
         new_centroids[j_idx][1] += pc[i][1];                                      // NEW_CENTROIDS[J] += CLOUD[I] - Y
         new_centroids[j_idx][2] += pc[i][2];                                      // NEW_CENTROIDS[J] += CLOUD[I] - Z
-        counters[j_idx]++;                                                                      // COUNTERS[J] ++ 
+        counters[j_idx]++;                                                        // COUNTERS[J] ++ 
     }
 
 
     // COMPUTE NEW CENTROIDS
     for(int j = 0; j < new_centroids.size(); j++ ){
         if(counters[j] == 0){
+            // std::cout << new_centroids[j][0] << "-" << new_centroids[j][1] << "-" << new_centroids[j][2]  << std::endl;
             continue;
         }
         new_centroids[j][0] /= counters[j];                                       // NEW CENTROIDS[J] /= COUNTERS[J] - X
@@ -119,20 +145,39 @@ double compare_centroids(std::vector<std::vector<double>> nc, std::vector<std::v
 /* CALCULATE THE DISTANCE FOR EACH CENTROID  */
 std::vector<std::vector<double>> centroid_distance(std::vector<std::vector<double>> c){
 
+    std::vector<std::vector<double>> mean_centroids;
+
     for(int i = 0; i < c.size(); i++){
         for(int j = 0; j < c.size(); j++){
-            double distance = sqrt( 
-                pow((c[i][0]- c[j][0]), 2) + pow((c[i][1]- c[j][1]), 2) + pow((c[i][2]- c[j][2]), 2) 
-            );
-            if( distance != 0.0 and distance < 2.0 ){
-                c[i][0] = ( c[i][0] + c[j][0] ) / 2;
-                c[i][1] = ( c[i][1] + c[j][1] ) / 2;
-                c[i][2] = ( c[i][2] + c[j][2] ) / 2;
+            if(i == j){
+                continue;
+            }else{
+                double distance = sqrt( 
+                    pow((c[i][0]- c[j][0]), 2) + pow((c[i][1]- c[j][1]), 2) + pow((c[i][2]- c[j][2]), 2) 
+                );
+                if(distance < 2.0){
+                    mean_centroids.push_back({
+                        ( c[i][0] + c[j][0] ) / 2,
+                        ( c[i][1] + c[j][1] ) / 2,
+                        ( c[i][2] + c[j][2] ) / 2,            
+                     });
+                }else{
+                    mean_centroids.push_back(c[i]);
+                }
             }
+
+            // double distance = sqrt( 
+            //     pow((c[i][0]- c[j][0]), 2) + pow((c[i][1]- c[j][1]), 2) + pow((c[i][2]- c[j][2]), 2) 
+            // );
+            // if( distance != 0.0 and distance < 2.0 ){
+            //     c[i][0] = ( c[i][0] + c[j][0] ) / 2;
+            //     c[i][1] = ( c[i][1] + c[j][1] ) / 2;
+            //     c[i][2] = ( c[i][2] + c[j][2] ) / 2;
+            // }
         }
     }
 
-    return c;
+    return mean_centroids;
 
 }
 
@@ -143,7 +188,6 @@ geometry_msgs::PoseArray kmeans(std::vector<std::vector<double>> point_cloud){
 
     geometry_msgs::PoseArray actual_centroids;
     std::vector<std::vector<double>> new_centroids;                                     // CENTROIDS CALCULATED
-    int k = 8;                                                                          // NUMBER OF CLUSTERS
     int attemps = 0;
     int max_attemps = 100;
     double total_distance = 0.0;
@@ -172,7 +216,6 @@ geometry_msgs::PoseArray kmeans(std::vector<std::vector<double>> point_cloud){
         actual_centroids.poses[i].position.z = new_centroids[i][2];
     }
 
-
     return actual_centroids;                                                            // RETURN THE CURRENT CENTROIDS
     
 }
@@ -196,7 +239,7 @@ void objectDetectCallback(const sensor_msgs::PointCloud2::ConstPtr& msg){
         // FILL POINT CLOUD
 
         if( (isinf(x) or isinf(y) or isinf(z)) != true){
-            if( (x > 1.0 or x < -1.0) and (y > -0.75) ){
+            if( y > -1.5 ){
                 std::vector<double> point = {x, y, z};
                 point_cloud.push_back(point);
             }
@@ -218,6 +261,7 @@ int main(int argc, char **argv)
     std::cout << "OBJECT DETECT NODE..." << std::endl;
     ros::init(argc, argv, "object_detect");
     ros::NodeHandle n;
+
     // PUBLISHERS
     pub_poses = n.advertise<geometry_msgs::PoseArray>("/object_pose", 10);
     ros::Subscriber sub = n.subscribe("/point_cloud", 10, objectDetectCallback);
