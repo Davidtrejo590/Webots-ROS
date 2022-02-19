@@ -14,12 +14,12 @@ vert_dist = 0.0
 
 def callback_centroid_pose(msg):
 
-    for centroid in msg.poses:
-        if (centroid.position.x < 0.25 and centroid.position.x > -0.25) and (centroid.position.z < 0.0):                # OBJECT IN FRONT
-            if centroid.position.z < min_tol:                                                                           # OBJECT IS VERY CLOSE
+    for obstacle in msg.poses:
+        if (obstacle.position.x < 0.25 and obstacle.position.x > -0.25) and (obstacle.position.z < 0.0):                # OBJECT IN FRONT
+            if obstacle.position.z < min_tol:                                                                           # OBJECT IS VERY CLOSE
                 print('DISMINUIR VELOCIDAD Y MANTENER CARRIL')
                 print('STOP')
-            elif centroid.position.z < tol:                                                                             # OBJECT IS CLOSE
+            elif obstacle.position.z < tol:                                                                             # OBJECT IS CLOSE
                 print('OBSERVAR PARTE HORIZONTAL POSITIVA')
                 if not right_obstacle:                                                                                  # NO OBSTACLE IN RIGHT
                     print('OBSERVAR PARTE VERTICAL POSITIVA Y NEGATIVA')
@@ -58,7 +58,7 @@ def main():
     rate = rospy.Rate(10)
 
     # SUBSCRIBERS
-    rospy.Subscriber('/centroid_pose', PoseArray, callback_centroid_pose)
+    rospy.Subscriber('/filter_pose', PoseArray, callback_centroid_pose)
     rospy.spin()
 
 

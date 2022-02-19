@@ -74,8 +74,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.0029931534781098405 -0.9948513418018246 -0.10130078354763913 3.1466861685946435
-  position -42.22099285893283 11.180321186846708 -26.453079511323065
+  orientation -0.3717559438765891 -0.916744680249556 -0.14620776117075807 0.7715342974208036
+  position -166.8450882176095 59.07942405182548 233.66449345968798
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -92,7 +92,7 @@ DEF GROUND Solid {
   children [
     Shape {
       appearance PBRAppearance {
-        baseColor 0.8 0.8 0.8
+        baseColor 0.45098 0.823529 0.0862745
         baseColorMap ImageTexture {
           url [
             "https://raw.githubusercontent.com/cyberbotics/webots/R2021b/projects/vehicles/worlds/textures/ground.jpg"
@@ -119,18 +119,14 @@ StraightRoadSegment {
   numberOfLanes 4
   lines [
     RoadLine {
-      type "continuous"
     }
     RoadLine {
+      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
     }
   ]
-  rightBorder FALSE
-  leftBorder FALSE
-  rightBarrier TRUE
-  leftBarrier TRUE
   length 100
 }
 StraightRoadSegment {
@@ -140,17 +136,14 @@ StraightRoadSegment {
   numberOfLanes 4
   lines [
     RoadLine {
-      type "continuous"
     }
     RoadLine {
+      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
-      type "continuous"
     }
   ]
-  rightBarrier TRUE
-  leftBarrier TRUE
   length 100
 }
 StraightRoadSegment {
@@ -160,17 +153,14 @@ StraightRoadSegment {
   numberOfLanes 4
   lines [
     RoadLine {
-      type "continuous"
     }
     RoadLine {
+      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
-      type "continuous"
     }
   ]
-  rightBarrier TRUE
-  leftBarrier TRUE
   length 100
 }
 StraightRoadSegment {
@@ -180,17 +170,14 @@ StraightRoadSegment {
   numberOfLanes 4
   lines [
     RoadLine {
-      type "continuous"
     }
     RoadLine {
+      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
-      type "continuous"
     }
   ]
-  rightBarrier TRUE
-  leftBarrier TRUE
   length 100
 }
 CurvedRoadSegment {
@@ -204,19 +191,14 @@ CurvedRoadSegment {
   numberOfForwardLanes 2
   lines [
     RoadLine {
-      type "continuous"
     }
     RoadLine {
+      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
-      type "continuous"
     }
   ]
-  rightBorder FALSE
-  leftBorder FALSE
-  rightBarrier TRUE
-  leftBarrier TRUE
   curvatureRadius 40.5
 }
 StraightRoadSegment {
@@ -231,19 +213,14 @@ StraightRoadSegment {
   numberOfForwardLanes 2
   lines [
     RoadLine {
-      type "continuous"
     }
     RoadLine {
+      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
-      type "continuous"
     }
   ]
-  rightBorder FALSE
-  leftBorder FALSE
-  rightBarrier TRUE
-  leftBarrier TRUE
   length 69
 }
 StraightRoadSegment {
@@ -258,19 +235,14 @@ StraightRoadSegment {
   numberOfForwardLanes 2
   lines [
     RoadLine {
-      type "continuous"
     }
     RoadLine {
+      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
-      type "continuous"
     }
   ]
-  rightBorder FALSE
-  leftBorder FALSE
-  rightBarrier TRUE
-  leftBarrier TRUE
   length 69
 }
 CurvedRoadSegment {
@@ -284,19 +256,14 @@ CurvedRoadSegment {
   numberOfForwardLanes 2
   lines [
     RoadLine {
-      type "continuous"
     }
     RoadLine {
+      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
-      type "continuous"
     }
   ]
-  rightBorder FALSE
-  leftBorder FALSE
-  rightBarrier TRUE
-  leftBarrier TRUE
   curvatureRadius 40.5
 }
 CurvedRoadSegment {
@@ -311,19 +278,14 @@ CurvedRoadSegment {
   numberOfForwardLanes 2
   lines [
     RoadLine {
-      type "continuous"
     }
     RoadLine {
+      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
-      type "continuous"
     }
   ]
-  rightBorder FALSE
-  leftBorder FALSE
-  rightBarrier TRUE
-  leftBarrier TRUE
   curvatureRadius 40.5
 }
 CurvedRoadSegment {
@@ -338,33 +300,29 @@ CurvedRoadSegment {
   numberOfForwardLanes 2
   lines [
     RoadLine {
-      type "continuous"
     }
     RoadLine {
+      color 0.988235 0.913725 0.309804
       type "double"
     }
     RoadLine {
-      type "continuous"
     }
   ]
-  rightBorder FALSE
-  leftBorder FALSE
-  rightBarrier TRUE
-  leftBarrier TRUE
   curvatureRadius 40.5
 }
 BmwX5 {
-  translation -42.7738 0.346789 14.8251
-  rotation -0.9797762300890003 0.2000956380438692 0.0005240118350839874 0.005345711746357501
+  translation -42.75259972859264 0.309173732034244 34.47565373319815
+  rotation -0.9785174180294364 0.2061634999938847 0.0005233385869732009 0.005188375975700859
   controller "ros_car_controller"
   sensorsSlotTop [
     Lidar {
-      translation 0 0.09 0
+      translation 0 0.22 0
       rotation 0 -1 0 5.92017e-06
-      horizontalResolution 2009
+      horizontalResolution 12858
       fieldOfView 6.28
+      verticalFieldOfView 0.3
       numberOfLayers 32
-      maxRange 50
+      maxRange 75
     }
     Camera {
       translation 0 -0.05 -0.72
@@ -404,11 +362,11 @@ BmwX5 {
   ]
 }
 DEF CAR-4 LincolnMKZSimple {
-  translation 107.38 0.29 8.959999999999999
+  translation 107.38 0.29 -29.88
   name "vehicle(3)"
 }
 DEF CAR-2 CitroenCZeroSimple {
-  translation -50.81 0.26 157.5600000000002
+  translation -50.81 0.26 169.34
   rotation 0 1 0 3.14159
   name "vehicle(2)"
 }
@@ -418,11 +376,11 @@ Robot {
   supervisor TRUE
 }
 DEF CAR-3 RangeRoverSportSVRSimple {
-  translation 98.97 0.33 158.0400000000002
+  translation 98.97 0.33 169.08
   rotation 0 1 0 3.14159
   name "vehicle(1)"
 }
 DEF CAR-1 ToyotaPriusSimple {
-  translation -38.72 0.31 8.959999999999999
+  translation -38.72 0.31 -16.47
   name "vehicle(0)"
 }
