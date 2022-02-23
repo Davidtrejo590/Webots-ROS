@@ -184,7 +184,7 @@ std::vector<std::vector<double>> centroid_distance(std::vector<std::vector<doubl
 
 
 /* KMEANS FUNCTION */
-geometry_msgs::PoseArray kmeans(std::vector<std::vector<double>> point_cloud){
+std::vector<std::vector<double>> kmeans(std::vector<std::vector<double>> point_cloud){
 
     geometry_msgs::PoseArray actual_centroids;
     std::vector<std::vector<double>> new_centroids;                                     // CENTROIDS CALCULATED
@@ -205,18 +205,18 @@ geometry_msgs::PoseArray kmeans(std::vector<std::vector<double>> point_cloud){
     }
 
     // CHECK DISTANCE BETWEEN CENTROIDS
-    new_centroids = centroid_distance(new_centroids);
+    // new_centroids = centroid_distance(new_centroids);
 
     // PASS TO POSE ARRAY
-    actual_centroids.poses.resize(new_centroids.size());
+    // actual_centroids.poses.resize(new_centroids.size());
 
-    for(int i = 0; i < new_centroids.size(); i++){
-        actual_centroids.poses[i].position.x = new_centroids[i][0];
-        actual_centroids.poses[i].position.y = new_centroids[i][1];
-        actual_centroids.poses[i].position.z = new_centroids[i][2];
-    }
+    // for(int i = 0; i < new_centroids.size(); i++){
+    //     actual_centroids.poses[i].position.x = new_centroids[i][0];
+    //     actual_centroids.poses[i].position.y = new_centroids[i][1];
+    //     actual_centroids.poses[i].position.z = new_centroids[i][2];
+    // }
 
-    return actual_centroids;                                                            // RETURN THE CURRENT CENTROIDS
+    return new_centroids;                                                            // RETURN THE CURRENT CENTROIDS
     
 }
 
@@ -248,7 +248,15 @@ void objectDetectCallback(const sensor_msgs::PointCloud2::ConstPtr& msg){
 
     // CLUSTERING
     geometry_msgs::PoseArray centroids;                                                 // ACTUAL CENTROIDS
-    centroids = kmeans(point_cloud);                                                    // APPLY KMEANS
+    initial_centroids = kmeans(point_cloud);                                            // APPLY KMEANS
+
+    // ARRAY TO POSE ARRAY
+    centroids.poses.resize(initial_centroids.size());
+    for(int i = 0; i < initial_centroids.size(); i++){
+        centroids.poses[i].position.x = initial_centroids[i][0];
+        centroids.poses[i].position.y = initial_centroids[i][1];
+        centroids.poses[i].position.z = initial_centroids[i][2];
+    }
     centroids.header.frame_id = "lidar_link";
     pub_poses.publish(centroids);                                                       // PUBLISH CENTROIDS
 }
