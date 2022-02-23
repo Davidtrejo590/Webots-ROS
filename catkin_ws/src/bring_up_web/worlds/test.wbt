@@ -74,8 +74,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.6650189860980453 -0.7460604396320882 0.03381669033336972 6.18825285183583
-  position -46.667082708542345 3.1231704417786337 59.26012466851897
+  orientation -0.791291749481567 -0.6068881843485635 -0.07445870600879982 0.1187650059257604
+  position -48.14173741058352 2.9120839261480578 72.19680131900097
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -366,12 +366,13 @@ BmwX5 {
   ]
 }
 DEF CAR-4 LincolnMKZSimple {
-  translation 110.53 0.29 -29.88
+  translation 111.19 0.29 154.01
+  rotation 0 1 0 3.14159
   name "vehicle(3)"
 }
 DEF CAR-2 CitroenCZeroSimple {
-  translation -50.81 0.26 169.34
-  rotation 0 1 0 3.14159
+  translation -50.81 0.26 45.16
+  rotation 0 1 0 -5.307179586466759e-06
   name "vehicle(2)"
 }
 Robot {

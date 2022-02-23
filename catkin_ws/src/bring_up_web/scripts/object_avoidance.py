@@ -5,8 +5,10 @@ from geometry_msgs.msg import PoseArray
 
 
 # GLOBAL VARIABLES
-tol = 10.0
-min_tol = 5.0
+dist_tol = 10.0                                                     # TOLERANCE DISTANCE
+min_dist_tol = -3.0                                                  # MIN TOLERANCE DISTANCE
+vel_tol = 0.0                                                       # TOLERANCE VELOCITY                                                           
+
 right_obstacle = False
 left_obstacle = False
 vertical_obstacle = False
@@ -15,37 +17,15 @@ vert_dist = 0.0
 def callback_centroid_pose(msg):
 
     for obstacle in msg.poses:
+        # obstacle - 1 OBSTACLE
+
         if (obstacle.position.x < 0.25 and obstacle.position.x > -0.25) and (obstacle.position.z < 0.0):                # OBJECT IN FRONT
-            if obstacle.position.z < min_tol:                                                                           # OBJECT IS VERY CLOSE
+            if (obstacle.position.z > min_dist_tol and obstacle.orientation.z < vel_tol):                               # OBJECT IS VERY CLOSE
                 print('DISMINUIR VELOCIDAD Y MANTENER CARRIL')
                 print('STOP')
-            elif obstacle.position.z < tol:                                                                             # OBJECT IS CLOSE
-                print('OBSERVAR PARTE HORIZONTAL POSITIVA')
-                if not right_obstacle:                                                                                  # NO OBSTACLE IN RIGHT
-                    print('OBSERVAR PARTE VERTICAL POSITIVA Y NEGATIVA')
-                    if vertical_obstacle:                                                                               # CHECK OBJECT IN VERTICAL AXIS
-                        if vert_dist > 10.0 or vert_dist < -10.0:                                                       # CHECK RANGE IN Z AXIS
-                            print('GIRAR VOLANTE A LA DERECHA POR "1s" ')
-                        else:
-                            print('DISMINUIR VELOCIDAD Y MANTENER CARRIL')
-                    else:
-                        print('GIRAR VOLANTE A LA DERECHA POR "1s" ')
-
-                print('OBSERVAR PARTE HORIZONTAL NEGATIVA')
-                if not left_obstacle:                                                                                   # NO OBSTACLE IN LEFT
-                    print('OBSREVAR PARTE VERTICAL POSITIVA Y NEGATIVA')
-                    if vertical_obstacle:                                                                               # CHECK OBJECT IN VERTICAL AXIS
-                        if vert_dist > 10.0 or vert_dist < -10.0:                                                       # CHECK RANGE IN Z AXIS
-                            print('GIRAR A LA IZQUIERDA POR "1s" ')
-                        else:
-                            print('DISMINUIR VELOCIDAD Y MANTENER CARRIL')
-                    else:
-                        print('GIRAR A LA IZQUIERDA POR "1s" ')
-                else:                                                                                                   # THERE ARE OBJECTS IN LEFT & RIGHT
-                    print('DISMINUIR VELOCIDAD Y MANTENER CARRIL')
-            else:                                                                                                       # THERE AREN'T OBJECTS IN FRONT
-                print('VELOCIDAD CONSTANTE Y MANTENER CARRIL')
-        else:
+            elif obstacle.position.z < dist_tol and obstacle.orientation.z < vel_tol:
+                print('INICIAR ACCIÓN DE REBASE')
+        else:                                                                                                           # THERE AREN'T OBJECTS IN FRONT
             print('VELOCIDAD CONSTANTE Y MANTENER CARRIL')
                         
 
@@ -73,37 +53,38 @@ if __name__ == '__main__':
 
 
 """ 
-    MAQUINA DE ESTADOS PARA REBASE
+    MAQUINA DE ESTADOS PARA REBASE POR MEDIO DE ESTIMACIONES
 
-    OBSERVAR LA PARTE FRONTAL DEL CARRIL ACTUAL
-    SI HAY OBJETO
-	    CALCULAR DISTANCIA FRONTAL
-	    SI distancia < tolerancia_minima
-		    DISMINUIR LA VELOCIDAD HASTA 0
-	    SI distancia < tolerancia
-	    OBSERVAR PARTE POSITIVA HORIZONTAL
-	    SI NO HAY OBJETO
-		    OBSERVAR PARTE POSITIVA Y NEGATIVA VERTICAL
-		    SI HAY OBJETO
-			    SI distancia_vertical > 10.0 O distancia_vertical < -10.0
-				    GIRAR VOLANTE A LA DERECHA POR 't' SEGUNDOS
-			    SI NO
-				    DISMINUIR VELOCIDAD Y MANTENER EN CARRIL
-		    SI NO HAY OBJETO
-			    GIRAR VOLANTE A LA DERECHA POR 't' SEGUNDOS
-	    SI HAY OBJETO
-		    OBSERVAR PARTE NEGATIVA HORIZONTAL
-		    SI NO HAY OBJETO
-			    OBSERVAR PARTE POSITIVA Y NEGATIVA VERTICAL
-			    SI HAY OBJETO
-				    SI distancia_Vertical > 10.0 O distancia_vertical < -10.0
-					    GIRAR A LA IZQUIERDA POR 't' SEGUNDOS
-				    SI NO
-					    DISMINUIR VELOCIDAD Y MANTENER CARRIL
-			    SI NO HAY OBJETO
-				    GIRAR A LA IZQUIERDA POT 't' SEGUNDOS
-		    SI HAY OBJETO
-			    DISMINUIR VELOCIDAD Y MANTENER CARRIL
+    OBSERVAR EL CARRIL ACTUAL (EN EL QUE ESTOY )
+    SI HAY OBJETO - ( OBJETO AL FRENTE EN MI CARRIL )
+	    VERIFICAR DISTANCIA FRONTAL Y VELOCIDAD (EJE - Z)
+	    SI distancia < tolerancia_minima && velocidad < min_vel
+		    DISMINUIR LA VELOCIDAD HASTA 0, EL OBJETO ESTÁ MUY CERCA
+	    SI distancia < tolerancia && velocidad < min_vel
+            INICIAR ACCIÓN DE REBASE
+	        OBSERVAR PARTE POSITIVA HORIZONTAL (EJE - X, DERECHA)
+	        SI NO HAY OBJETO
+		        OBSERVAR PARTE POSITIVA Y NEGATIVA VERTICAL (EJE - Z) 
+                SI HAY OBJETO
+                    SI (distancia_vertical > 10.0 && velocidad_vertical < vel_tol) || (distancia_vertical < -10.0 && velocidad_vertical < vel_tol)
+                        GIRAR VOLANTE A LA DERECHA POR 't' SEGUNDOS - PUEDO PASAR AL CARRIL DERECHO (NO HAY OBSTÁCULO)
+                    SI NO
+                        DISMINUIR VELOCIDAD Y MANTENER EN CARRIL - HAY OBTÁCULO EN EL CARRIL DERECHO
+                SI NO HAY OBJETO
+                    GIRAR VOLANTE A LA DERECHA POR 't' SEGUNDOS - PUEDO PASAR AL CARRIL DERECHO (NO HAY OBSTÁCULO)
+            SI HAY OBJETO
+                OBSERVAR PARTE NEGATIVA HORIZONTAL (EJE - X, IZQUIERDA)
+                SI NO HAY OBJETO
+                    OBSERVAR PARTE POSITIVA Y NEGATIVA VERTICAL (EJE - Z)
+                    SI HAY OBJETO
+                        SI ( distancia_vertical > 10.0 && velocidad_vertical < vel_tol ) || ( distancia_vertical < -10.0 && velocidad_vertical < vel_tol )
+                            GIRAR A LA IZQUIERDA POR 't' SEGUNDOS - PUEDO PASAR AL CARRIL IZQUIERDO (NO HAY OBSTÁCULO)
+                        SI NO
+                            DISMINUIR VELOCIDAD Y MANTENER CARRIL - HAY OBSTÁCULO EN EL CARRIL IZQUIERDO
+                    SI NO HAY OBJETO
+                        GIRAR A LA IZQUIERDA POT 't' SEGUNDOS - PUEDO PASAR AL CARRIL IZQUIERDO (NO HAY OBSTÁCULO)
+                SI HAY OBJETO
+                    DISMINUIR VELOCIDAD Y MANTENER CARRIL - HAY OBSTÁCULO EN EL CARRIL IZQUIERDO
     SI NO HAY OBJETO
 	    MANTENER VELOCIDAD Y CARRIL
 
