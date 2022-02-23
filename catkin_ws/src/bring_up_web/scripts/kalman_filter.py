@@ -12,7 +12,7 @@ class Kalman_Filter:
 
         self.id = Kalman_Filter.new_id()
         # self.measures = measures
-        self.delta_t = 1/10                                          # SAMPLING TIME
+        self.delta_t = 1.0/20.0                                          # SAMPLING TIME
         self.x = np.zeros((6, 1))                                    # INITIAL SYSTEM
         self.P_k = np.identity(6)                                    # SYSTEM UNCERTAINTY
         self.I_k = np.identity(6)                                    # IDENTITY MATRIX 6x6   

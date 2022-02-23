@@ -11,7 +11,7 @@ from std_msgs.msg import Float64
 from sensor_msgs.msg import Image, PointCloud2, PointField, NavSatFix, NavSatStatus, Imu
 
 # CONSTANTS
-TIME_STEP = 64
+TIME_STEP = 50
 TRACK_FRONT = 1.7
 WHEEL_BASE = 4.0
 
@@ -86,7 +86,7 @@ def main():
   # INIT ROS
   print('RUNNING ROS CAR CONTROLLER NODE ...')
   rospy.init_node('ros_car_controller')
-  rate = rospy.Rate(10)
+  rate = rospy.Rate(20)
 
   # PRINT HELP FOR USER
   help()                        

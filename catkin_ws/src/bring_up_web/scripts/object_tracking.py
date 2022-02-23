@@ -55,8 +55,8 @@ def callback_object_pose(msg):
 
 
     # APPLY EKF TO FILTERS UPDATED
-    for f in filters:
-        f[1].ekf(f[0])
+    for c,kalman_filter in filters:
+        kalman_filter.ekf(c)
 
 
     # ADD MARKER TO EACH FILTER
