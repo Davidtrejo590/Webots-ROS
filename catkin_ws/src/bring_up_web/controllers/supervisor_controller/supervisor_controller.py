@@ -28,6 +28,7 @@ tf_4 = car_4.getField('translation')
 
 # Z VELOCITY 
 vel = [0.0, 0.0, 5.0, 0.0, 0.0, 0.0]
+vel_1 = [0.0, 0.0, -5.0, 0.0, 0.0, 0.0]
 
 def main():
     print('Starting Controller Supervisor...')
@@ -37,9 +38,12 @@ def main():
         if i == 0:                                                                  # SET INITIAL VELOCITY
             car_1.setVelocity(vel)
             car_2.setVelocity(vel)
-            car_3.setVelocity(vel)
-            car_4.setVelocity(vel)
-        elif i == 400:                                                              # RETURN TO INITIAL POSITION
+            car_3.setVelocity(vel_1)
+            car_4.setVelocity(vel_1)
+        elif i == 190:
+            tf_2.setSFVec3f(sp_2)
+            tf_4.setSFVec3f(sp_4)
+        elif i == 380:                                                              # RETURN TO INITIAL POSITION
             tf_1.setSFVec3f(sp_1)
             tf_2.setSFVec3f(sp_2)
             tf_3.setSFVec3f(sp_3)

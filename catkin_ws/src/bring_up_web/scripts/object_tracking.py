@@ -12,26 +12,64 @@ marker_array = MarkerArray()                            # FILTER MARKERS
 pose_array = PoseArray()                                # FILTER POSES
 centroids = []                                          # ACTUAL CENTROIDS
 filters = None                                          # TO STORE OBJECTS OF KALMAN FILTER                    
-flag = True                                             # FLAG TO CHECK THE FIRST TIME
+first_time = True                                       # FLAG TO CHECK THE FIRST TIME
+
+
+# ADD LABELS TO OBJECTS ESTIMATES
+def add_labels( filters ):
+    object_markers = MarkerArray()                      # LABELS FOR ESTIMATES
+    object_poses = PoseArray()                          # POSITION & VELOCITIES ESTIMATED
+
+    id = 0
+    for f in filters:
+        if f[0][0] == 0.0 or f[0][1] == 0.0 or f[0][2] == 0.0:
+            continue
+        else:
+            marker = Marker()                                       # CREATE A NEW MARKER FOR EACH OBJECT
+            marker.header.frame_id = 'lidar_link'
+            marker.ns = 'marker'
+            marker.id = id
+            marker.type = Marker.TEXT_VIEW_FACING
+            marker.action = Marker.ADD
+            marker.text = 'p[x, z] = ' + str(np.round(f[1].x[0],2)) + str(np.round(f[1].x[2], 2)) + '\n' 'v[x, z] = ' + str(np.round(f[1].x[3])) + str(np.round(f[1].x[5], 2))
+            marker.pose.position.x = f[1].x[0]
+            marker.pose.position.y = f[1].x[1]
+            marker.pose.position.z = f[1].x[2]
+            marker.scale.z = 1.5
+            marker.color.r, marker.color.g, marker.color.b = [1.0, 1.0, 1.0]
+            marker.color.a = 1.0
+            marker.lifetime = rospy.Duration(0.5)
+            object_markers.markers.append(marker)
+            id +=1
+
+            object_pose = Pose()                                    # CREATE A NEW POSE FOR EACH ESTIMATE
+            object_pose.position.x = f[1].x[0]                      # X - POSITION
+            object_pose.position.y = f[1].x[1]                      # Y - POSITION
+            object_pose.position.z = f[1].x[2]                      # Z - POSITION
+            object_pose.orientation.x = f[1].x[3]                   # X - VELOCITY
+            object_pose.orientation.y = f[1].x[4]                   # Y - VELOCITY
+            object_pose.orientation.z = f[1].x[5]                   # Z - VELOCITY
+            object_poses.poses.append(object_pose)
+
+    return [object_markers, object_poses]                           # RETURN LABELS AND POSES ESTIMATES INTO AN ARRAY
 
 
 
 def callback_object_pose(msg):
 
-    global marker_array, pose_array, centroids, filters, flag
+    global marker_array, pose_array, centroids, filters, first_time
 
     last_centroids = centroids.copy()                   # LAST CENTROIDS ( LAST <-- NEW )
     centroids.clear() 
 
     # GET NEW CENTROIDS
     for centroid in msg.poses:
-        # POSE ARRAY TO LIST
         centroids.append(
-            [centroid.position.x, centroid.position.y, centroid.position.z]
+            [centroid.position.x, centroid.position.y, centroid.position.z]         # POSE ARRAY TO LIST
         )  
     
     
-    if not flag:                                                                    # AFTER FIRST TIME
+    if not first_time:                                                              # AFTER FIRST TIME
         for nc in centroids:
             distances = [                                                           # COMPUTE DISTANCES
                 math.sqrt( 
@@ -51,54 +89,19 @@ def callback_object_pose(msg):
     else:                                                                           # IS THE FIRST TIME
         filters = [ [ c, Kalman_Filter() ] for c in centroids ]                     # CREATE N OBJECTS
 
-    flag = False                                                                    
+    first_time = False                                                              # FOR NEXT ITMES                                                    
 
 
     # APPLY EKF TO FILTERS UPDATED
     for c,kalman_filter in filters:
         kalman_filter.ekf(c)
 
-
-    # ADD MARKER TO EACH FILTER
+    # ADD LABELS AND GET AN ARRAY WITH POSITION & VELOCITIES TO PUBLISH FOR EACH FILTER
     if filters:
-        id = 0
-        for f in filters:
-            if f[0][0] == 0.0 or f[0][1] == 0.0 or f[0][2] == 0.0:
-                continue
-            else:
-                marker = Marker()                                                   # CREATE A NEW MARKER FOR EACH OBJECT
-                marker.header.frame_id = 'lidar_link'
-                marker.ns = 'marker'
-                marker.id = id
-                marker.type = Marker.TEXT_VIEW_FACING
-                marker.action = Marker.ADD
-                marker.text = 'p[x, z] = ' + str(np.round(f[1].x[0],2)) + str(np.round(f[1].x[2], 2)) + '\n' 'v[x, z] = ' + str(np.round(f[1].x[3])) + str(np.round(f[1].x[5], 2))
-                marker.pose.position.x = f[1].x[0]
-                marker.pose.position.y = f[1].x[1]
-                marker.pose.position.z = f[1].x[2]
-                marker.scale.z = 1.5
-                marker.color.r, marker.color.g, marker.color.b = [1.0, 1.0, 1.0]
-                marker.color.a = 1.0
-                marker.lifetime = rospy.Duration(0.5)
-                marker_array.markers.append(marker)
-                id +=1
+        marker_array, pose_array = add_labels(filters)
+        
 
-                # POSE FOR EACH ESTIMATE
-                object_pose = Pose()
-                object_pose.position.x = f[1].x[0]                                  # X - POSITION
-                object_pose.position.y = f[1].x[1]                                  # Y - POSITION
-                object_pose.position.z = f[1].x[2]                                  # Z - POSITION
-                object_pose.orientation.x = f[1].x[3]                               # X - VELOCITY
-                object_pose.orientation.y = f[1].x[4]                               # Y - VELOCITY
-                object_pose.orientation.z = f[1].x[5]                               # Z - VELOCITY
-                
-
-                pose_array.poses.append(object_pose)
-
-    
-    
-
-
+# MAIN FUNCTION
 def main():
 
     global marker_array, pose_array
@@ -128,19 +131,3 @@ if __name__ == '__main__':
         main()
     except:
         rospy.ROSInterruptException
-
-
-# PESUDOCÓDIGO
-
-
-# PARA TODO centroide nuevo CN:
-#     Obtener el centroide más cercano C de los centroides previos. 
-#     Si la distancia entre C y CN es mayor que un umbral (1 o dos metros) 
-#         entonces CN es un nuevo centroide
-#         Agregar CN al conjunto de centroides con un nuevo ID
-#         Crear un nuevo filtro de kalman con el ID anterior
-#     Si no
-#         entonces CN es el mismo que C y no es necesario crear un nuevo filtro de Kalman-
-#         Actualizar el EKF correspondiente a C con las coordenadas de CN
-
-
