@@ -36,18 +36,20 @@ def main():
     i = 0
     while robot.step(TIME_STEP) != -1:
         if i == 0:                                                                  # SET INITIAL VELOCITY
-            car_1.setVelocity(vel)
-            car_2.setVelocity(vel)
-            car_3.setVelocity(vel_1)
-            car_4.setVelocity(vel_1)
+            # car_1.setVelocity(vel)
+            # car_2.setVelocity(vel)
+            # car_3.setVelocity(vel_1)
+            # car_4.setVelocity(vel_1)
+            print('')
         elif i == 190:
-            tf_2.setSFVec3f(sp_2)
-            tf_4.setSFVec3f(sp_4)
+            # tf_2.setSFVec3f(sp_2)
+            # tf_4.setSFVec3f(sp_4)
+            print('')
         elif i == 380:                                                              # RETURN TO INITIAL POSITION
-            tf_1.setSFVec3f(sp_1)
-            tf_2.setSFVec3f(sp_2)
-            tf_3.setSFVec3f(sp_3)
-            tf_4.setSFVec3f(sp_4)
+            # tf_1.setSFVec3f(sp_1)
+            # tf_2.setSFVec3f(sp_2)
+            # tf_3.setSFVec3f(sp_3)
+            # tf_4.setSFVec3f(sp_4)
             i = 0
     
         i+=1
