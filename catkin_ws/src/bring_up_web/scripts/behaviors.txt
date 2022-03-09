@@ -71,3 +71,50 @@
         SI NO:
             MANTENER DISTANCIA
 """
+
+CALLBACK:
+   free_N  = 1
+   free_NW = 1
+   free_W  = 1
+   free_SW = 1
+   FOR ALL CENTROIDS C:
+         free_N  =  free_N  and C not in BoundingBoxN
+         free_NW =  free_NW and C not in BoundingBoxNW
+         free_W  =  free_W  and C not in BoundingBoxW
+         free_SW =  free_SW and C not in BoundingBoxSW
+
+
+
+
+MAIN:
+
+      state = SM_CRUISE
+
+      WHILE true:
+              SWITCH(state):
+                      case  SM_CRUISE:
+                               publish enable lane tracking
+                               publish disable keep distance
+                               publish disable passing
+                               IF not free_N and free_W and free_NW:
+                                     state = PASS_CAR
+                               ELIF not free_N and (not free_W or not free_NW)
+                                     state = KEEP DISTANCE
+                      case SM_PASS_CAR:
+                               publish disable lane tracking
+                               publish disable keep distance
+                               publish enable passing
+                               IF pass_finish_received:
+                                      pass_finish_received = False   #Esta bandera la publica el nodo de rebase
+                                      state = CRUISE
+                      case SM_KEEP_DISTANCE:
+                               publish disable lane tracking
+                               publish enable keep distance
+                               publish disable passing
+                               IF free_N:
+                                      state = CRUISE
+                               ELIF free_NW and free_W:
+                                      state = PASS
+                               
+                      
+
