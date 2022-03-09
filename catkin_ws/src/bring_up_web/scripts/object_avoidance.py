@@ -3,46 +3,73 @@
 import rospy
 from geometry_msgs.msg import PoseArray
 
-# CONSTANTS 
-MIN_DISTANCE = 3.0
-MAX_DISTANCE = 5.0
+# STATES
+SM_INIT = 'INIT'
+SM_C = 'CRUISE'
+SM_KD = 'KEEP DISTANCE'
+SM_CL = 'CHANGE LANE'
+
+# CAR OBSTACLES - EVERYTHING IS FREE
+fn  = 1
+fnw = 1
+fsw = 1
+fw  = 1
 
 def callback_centroid_pose(msg):
 
-    obstacles = []
+    global fn, fnw, fsw, fw
+    cars = []
+    for car in msg.poses:
+        cars.append([car.position.x, car.position.z])
 
-    for obstacle in msg.poses:
-        if obstacle.position.x != 0.0:
-            # OBSTACLE[XP, ZP, XV, ZV]
-            obstacles.append([obstacle.position.x, obstacle.position.z, obstacle.orientation.x, obstacle.orientation.z]) 
     
-    # BEHAVIORS STATES MACHINE
-    choose_behavior(obstacles)
+    # BUSCAR COCHE AL NORTE
+    for c in cars:
+        if (c[0] > -0.5 and c[0] < 0.5) and (c[1] > -15.0 and c[1] < -10.0):
+        # COCHE AL FRENTE
+            fn = 0
+            break
+
+    if fn:                              # SI NORTE LIBRE
+        print('CRUCERO')
+    else:
+        # BUSCAR COCHE AL OESTE
+        for c in cars:
+            if (c[0] > -4.0 and c[0] < -3.0) and ( c[1] > -0.5 and c[1] < 0.5):
+                # COCHE AL OESTE
+                fw = 0
+                break
+        if fw:                          # SI OESTE LIBRE
+            # BUSCAR COCHE AL NOROESTE
+            for c in cars:
+                if (c[0] > -4.0 and c[0] < -3.0) and ( c[1] > -15.0 and c[1] < -10.0):
+                    # COCHE AL NOROESTE
+                    fnw = 0
+                    break
+            if fnw:                     # SI NOROESTE LIBRE
+                # BUSCAR COCHE AL SUROESTE
+                for c in cars:
+                    if (c[0] > -4.0 and c[0] < -3.0) and (c[1] < 15.0 and c[1] > 10.0):
+                        # COCHE AL SUROESTE
+                        fsw = 0
+                        break
+                if fsw:                 # SI SUROESTE LIBRE
+                    # CAMBIAR DE CARRIL
+                    print('CAMBIAR DE CARRIL')
+                else:
+                    # MANTENER DISTANCIA
+                    print('MANTENER DISTANCIA')
+            else:
+                # MANTENER DISTANCIA
+                print('MANTENER DISTANCIA')
+        else:
+            # MANTENER DISTANCIA
+            print('MANTENER DISTANCIA')
 
 
-def choose_behavior( obstacles ):
-    print('Behaviors')
-    
-    if obstacles:                                                     # THERE ARE OBSTACLES
-        for obstacle in obstacles:
-            if obstacle[1] > MIN_DISTANCE:
-                print('STATE - 0 / CRUISE BEHAVIOR')   
-            elif obstacle[1] < MIN_DISTANCE:                          # Z - DISTANCE / CAR IN FRONT
-                print('STATE - 1 / CAR IN FRONT')
-                for obs in obstacles:
-                    if obs[0] < 3.0 and obs[1] < MIN_DISTANCE:
-                        print('CAR IN FRONT AND LEFT - STATE 2')
-                        print('BEHAVIOR FOLLOW CAR')
-                    elif obs[0] < -3.0 and obs[1] < 0.5:
-                        print('CAR ON THE LEFT - STATE 3')
-                        print('BEHAVIOR FOLLOW CAR')
-                    elif obs[0] < -3.0 and obs[1] > MAX_DISTANCE:
-                        print('CAR LEFT AND AWAY - STATE 4')
-                        print('BEHAVIOR PASSING ACTION')
-    else:                                                             # THERE AREN'T OBSTACLES
-        print('STATE - 0 / CRUISE BEHAVIOR')
-
-                        
+    # COMPORTAMIENTO
+    print('[FW, FSW, FNW, FN]', [fw, fsw, fnw, fn])
+     
 
 
 def main():
@@ -54,7 +81,23 @@ def main():
 
     # SUBSCRIBERS
     rospy.Subscriber('/filter_pose', PoseArray, callback_centroid_pose)
-    rospy.spin()
+    
+    global fn, fnw, fsw, fw
+
+    state = SM_INIT
+    # STATE MACHINE
+    while not rospy.is_shutdown():
+        if state == SM_INIT:
+            if fn:
+                state = SM_C
+            else:
+                state = SM_KD
+        elif state == SM_C:
+            state = SM_C
+
+
+
+        rate.sleep()
 
 
 
@@ -63,7 +106,3 @@ if __name__ == '__main__':
         main()
     except:
         rospy.ROSInterruptException
-
-
-
-

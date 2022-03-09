@@ -1,0 +1,73 @@
+""" 
+    0 0     KEEP DISTANCE (KD)
+    0 1     CRUISE (C)
+    1 0     CHANGE LANE (CL)
+    1 1
+
+    ENTRADAS        SALIDAS     COMPORTAMIENTO
+    
+    FW FSW FNW FN       
+     0   0   0  0       0 0             KD
+     0   0   0  1       0 1              C
+     0   0   1  0       0 0             KD 
+     0   0   1  1       0 1              C
+     0   1   0  0       0 0             KD
+     0   1   0  1       0 1              C
+     0   1   1  0       0 0             KD
+     0   1   1  1       0 1              C
+     1   0   0  0       0 0             KD 
+     1   0   0  1       0 1              C
+     1   0   1  0       1 0             CL
+     1   0   1  1       0 1              C
+     1   1   0  0       0 0             KD
+     1   1   0  1       0 1              C
+     1   1   1  0       1 0             CL
+     1   1   1  1       0 1              C
+
+"""
+    
+
+""" 
+    BUSCAR COCHES (MEDICIONES DE POSICIÓN Y VELOCIDAD), ESTÁN EN UNA LISTA
+
+    FN  - FREE NORTH        [0, 1]
+    FW  - FREE WEST         [0, 1]
+    FNW - FREE NORTH WEST   [0, 1]
+    FSW - FREE SOUTH WEST   [0, 1]
+
+
+    BUSCAR COCHE AL NORTE
+    SI EXISTE COCHE AL NORTE:
+        FN = 0
+    SI NO:
+        FN = 1
+
+    SI NORTE LIBRE:
+        CRUCERO
+    SI NO:
+        BUSCAR COCHE AL OESTE
+        SI EXISTE COCHE AL OESTE:
+            FW = 0
+        SI NO
+            FW = 1
+        SI OESTE LIBRE:
+            BUSCAR COCHE AL NOROESTE
+            SI COCHE AL NOROESTE:
+                FNW = 0
+            SI NO:
+                FNW = 1
+            SI NOROESTE LIBRE:
+                BUSCAR COCHE AL SUROESTE
+                SI COCHE AL SUROESTE:
+                    FSW = 0
+                SI NO:
+                    FSW = 1
+                SI SUROESTE LIBRE:
+                    CAMBIAR DE CARRIL
+                SI NO:
+                    MANTENER CARRIL
+            SI NO:
+                MANTENER DISTANCIA
+        SI NO:
+            MANTENER DISTANCIA
+"""
