@@ -22,7 +22,7 @@ def add_labels( filters ):
 
     id = 0
     for f in filters:
-        if f[0][0] == 0.0 or f[0][1] == 0.0 or f[0][2] == 0.0:
+        if f[0][0] == 0.0 or f[0][1] == 0.0 or f[0][2] == 0.0:      # CHECK CENTROIDS IN 0.0
             continue
         else:
             marker = Marker()                                       # CREATE A NEW MARKER FOR EACH OBJECT
@@ -31,10 +31,10 @@ def add_labels( filters ):
             marker.id = id
             marker.type = Marker.TEXT_VIEW_FACING
             marker.action = Marker.ADD
-            marker.text = 'p[x, z] = ' + str(np.round(f[1].x[0],2)) + str(np.round(f[1].x[2], 2)) + '\n' 'v[x, z] = ' + str(np.round(f[1].x[3])) + str(np.round(f[1].x[5], 2))
+            marker.text = 'p[x, z] = ' + str(np.round(f[1].x[0],2)) + str(np.round(f[1].x[1], 2)) + '\n' 'v[x, z] = ' + str(np.round(f[1].x[2])) + str(np.round(f[1].x[3], 2))
             marker.pose.position.x = f[1].x[0]
-            marker.pose.position.y = f[1].x[1]
-            marker.pose.position.z = f[1].x[2]
+            marker.pose.position.y = 0.0
+            marker.pose.position.z = f[1].x[1]
             marker.scale.z = 1.5
             marker.color.r, marker.color.g, marker.color.b = [1.0, 1.0, 1.0]
             marker.color.a = 1.0
@@ -44,11 +44,11 @@ def add_labels( filters ):
 
             object_pose = Pose()                                    # CREATE A NEW POSE FOR EACH ESTIMATE
             object_pose.position.x = f[1].x[0]                      # X - POSITION
-            object_pose.position.y = f[1].x[1]                      # Y - POSITION
-            object_pose.position.z = f[1].x[2]                      # Z - POSITION
-            object_pose.orientation.x = f[1].x[3]                   # X - VELOCITY
-            object_pose.orientation.y = f[1].x[4]                   # Y - VELOCITY
-            object_pose.orientation.z = f[1].x[5]                   # Z - VELOCITY
+            object_pose.position.y = 0.0                            # Y - POSITION
+            object_pose.position.z = f[1].x[1]                      # Z - POSITION
+            object_pose.orientation.x = f[1].x[2]                   # X - VELOCITY
+            object_pose.orientation.y = 0.0                         # Y - VELOCITY
+            object_pose.orientation.z = f[1].x[3]                   # Z - VELOCITY
             object_poses.poses.append(object_pose)
 
     return [object_markers, object_poses]                           # RETURN LABELS AND POSES ESTIMATES INTO AN ARRAY

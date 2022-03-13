@@ -11,28 +11,24 @@ class Kalman_Filter:
     def __init__( self ):
 
         self.id = Kalman_Filter.new_id()
-        # self.measures = measures
-        self.delta_t = 1.0/20.0                                          # SAMPLING TIME
-        self.x = np.zeros((6, 1))                                    # INITIAL SYSTEM
-        self.P_k = np.identity(6)                                    # SYSTEM UNCERTAINTY
-        self.I_k = np.identity(6)                                    # IDENTITY MATRIX 6x6   
+        self.delta_t = 1.0/20.0                                      # SAMPLING TIME
+        self.x = np.zeros((4, 1))                                    # INITIAL SYSTEM
+        self.P_k = np.identity(4)                                    # SYSTEM UNCERTAINTY
+        self.I_k = np.identity(4)                                    # IDENTITY MATRIX 6x6   
         self.H_k = np.array([                                        # JACOBIAN OF H
-            [1, 0, 0, 0, 0, 0],
-            [0, 1, 0, 0, 0, 0],
-            [0, 0, 1, 0, 0, 0]
+            [1, 0, 0, 0],
+            [0, 1, 0, 0]
         ])
-        self.R_k = np.identity(3) * 0.01                             # MOVEMENT NOISE
+        self.R_k = np.identity(2) * 0.01                             # MOVEMENT NOISE
 
         self.F_k = np.array([                                        # JACOBIAN OF X SYSTEM
-            [1, 0, 0, self.delta_t, 0, 0],
-            [0, 1, 0, 0, self.delta_t, 0],
-            [0, 0, 1, 0, 0, self.delta_t],
-            [0, 0, 0, 1, 0, 0],
-            [0, 0, 0, 0, 1, 0],
-            [0, 0, 0, 0, 0, 1]
+            [1, 0, self.delta_t, 0],
+            [0, 1, 0, self.delta_t],
+            [0, 0, 1, 0],
+            [0, 0, 0, 1],
         ])
 
-        self.Q_k = np.identity(6) * 0.1
+        self.Q_k = np.identity(4) * 0.1
     
     
     def ekf(self, measure):
@@ -43,7 +39,6 @@ class Kalman_Filter:
         # UPDATE
         z = np.array([
             [measure[0]],
-            [measure[1]],
             [measure[2]]
         ])
         y = z - np.dot(self.H_k, x_hat)                                                             # y = z - H * x'
