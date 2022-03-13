@@ -186,7 +186,7 @@ def main():
         pub_right_lane.publish(msg_right_line)
         
         rate.sleep()
-        pass
+
 
 
 if __name__ == "__main__":

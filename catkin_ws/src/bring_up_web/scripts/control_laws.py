@@ -13,13 +13,13 @@ class Control:
             self.cruise_speed = 0.0
             self.steering_angle = 0.0
         elif (left_line[0] != 0.0 and left_line[1] != 0.0) and (right_line[0] != 0.0 and right_line[1] != 0.0): # BOTH LINES DETECTED
-            self.cruise_speed = 30.0 if distance == 0.0 else (distance * 1.0/5.0)
+            self.cruise_speed = 30.0 if distance == 0.0 else (distance/2.0)
             self.steering_angle = self.compute_steering_angle_avg(left_line, right_line)
         elif (left_line[0] != 0.0 and left_line[1] != 0.0) and (right_line[0] == 0 or right_line[1] == 0.0):    # LEFT LINES DETECTED
-            self.cruise_speed = 20.0 if distance == 0.0 else (distance * 1.0/5.0)
+            self.cruise_speed = 20.0 if distance == 0.0 else (distance/2.0)
             self.steering_angle = self.compute_steering_angle(left_line, right_line, True)
         elif (left_line[0] == 0.0 or left_line[1] == 0.0) and (right_line[0] != 0 and right_line[1] != 0.0):    # RIGHT LINES DETECTED
-            self.cruise_speed = 20.0 if distance == 0.0 else (distance * 1.0/5.0)
+            self.cruise_speed = 20.0 if distance == 0.0 else (distance/2.0)
             self.steering_angle = self.compute_steering_angle(left_line, right_line, False)
 
     # CONPUTE STEERING ANGLE BY SIDE
@@ -33,11 +33,11 @@ class Control:
 
         if side:                                                                            # IF ONLY THERE ARE LEFT LINES
             detected_distance, detected_angle = left_line                                   # DETECTED MEASURES FOR LEFT LINES
-            goal_distance, goal_angle = [190.8952592391964, 0.7042371269405747]            # GOAL MEASURES FOR LEFT LINES
+            goal_distance, goal_angle = [194.36306233438492, 0.6955929768432806]            # GOAL MEASURES FOR LEFT LINES
 
         else:                                                                               # IF ONLY THERE ARE RIGHT LINES
             detected_distance, detected_angle = right_line                                  # DETECTED MEASURES FOR RIGHT LINES
-            goal_distance, goal_angle = [197.85095400325974, 0.6829543098903239]             # GOAL MEASURES FOR RIGHT LINES
+            goal_distance, goal_angle = [190.46325104859469, 0.7064260556560561]             # GOAL MEASURES FOR RIGHT LINES
 
         ed = goal_distance - detected_distance                                              # CALCULATE DISTANCE ERROR
         ea = goal_angle - detected_angle                                                    # CALCULATE ANGLE ERROR
@@ -55,7 +55,7 @@ class Control:
 
     # COMPUTE AVG STEERING ANGLE (BOTH LINES)
     def compute_steering_angle_avg(self, left_line, right_line):
-        kd = 0.0001
+        kd = 0.00005
         ka = 0.01
 
         detec_dist_left, detec_angle_left = left_line                                       # DETECTED MEASURES FOR LEFT LINES
@@ -65,8 +65,8 @@ class Control:
         avg_detec_angle = (detec_angle_left + detec_angle_right)/ 2                         # AVG OF DETECTED ANGLE 
 
         # CHECK IN FIRST FRAME
-        goal_dist_left, goal_angle_left = [183.5980664386202, 0.7932720164215489]           # GOAL MEASURES FOR LEFT LINES
-        goal_dist_right, goal_angle_right = [197.41390528531673, 0.6342421141311613]        # GOAL MEASURES FOR RIGHT LINES
+        goal_dist_left, goal_angle_left = [194.36306233438492, 0.6955929768432806]           # GOAL MEASURES FOR LEFT LINES
+        goal_dist_right, goal_angle_right = [190.46325104859469, 0.7064260556560561]        # GOAL MEASURES FOR RIGHT LINES
 
         avg_goal_dist = (goal_dist_left + goal_dist_right)/2                                # AVG OF GOAL DISTANCE
         avg_goal_angle = (goal_angle_left + goal_angle_right)/2                             # AVG OF GOAL ANGLE
