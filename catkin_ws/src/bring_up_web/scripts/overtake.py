@@ -4,6 +4,7 @@
 
 import rospy
 from std_msgs.msg import Bool, Float64
+import time
 
 # GLOBAL VARIABLES
 pass_finished = Bool()
@@ -19,6 +20,8 @@ def main():
     
     global enable_PS, pass_finished
 
+    pass_speed = 15.0
+
     print('Pass Node')
     rospy.init_node('pass_node')
     rate = rospy.Rate(10)
@@ -32,18 +35,37 @@ def main():
     pub_pass_finished = rospy.Publisher('/pass_finished', Bool, queue_size=10)
 
     while not rospy.is_shutdown():
-        pass_finished.data = False
         if enable_PS:
-            # COMPUTE STEERING AND SPEED FOR PASSING
-            pass_speed = 30.0/10.0                                # COMPUTE SPEED
-            steering_angle = -0.1                                 # COMPUTE STEERING ANGLE
 
-            # -----------------------------------------------------
+            # PASSING ACTION
 
-            pub_speed.publish(pass_speed)                         # PUBLISH PASS SPEED
-            pub_angle.publish(steering_angle)                     # PUBLISH STEERING ANGLE
-            pass_finished.data = True                             # PASS FINISHED
-            pub_pass_finished.publish(pass_finished)              # PUBLISH PASS FINISHED
+            # pub_speed.publish(pass_speed)                         # DISMINUIR VELOCIDAD
+
+            steering_angle = -( 0.0174533 * 7 )                     # GIRAR A LA IZQUIERDA
+            pub_angle.publish(steering_angle)
+            time.sleep(3)
+
+            steering_angle = ( 0.0174533 * 7 )                      # GIRAR A LA DERECHA
+            pub_angle.publish(steering_angle)
+            time.sleep(1)
+
+            steering_angle = 0.0                                    # MANTENERSE
+            pub_angle.publish(steering_angle)
+            time.sleep(4)
+
+            steering_angle = ( 0.0174533 * 14 )                     # GIRAR A LA DERECHA
+            pub_angle.publish(steering_angle)
+            time.sleep(3)
+
+            steering_angle = -( 0.0174533 * 14 )                    # GIRAR A LA IZQUIERDA PARA ALINEAR
+            pub_angle.publish(steering_angle)
+            time.sleep(1)
+
+            pass_finished.data = True                               # REBASE TERMINADO 
+            print('PASS FINISHED')
+
+            pub_pass_finished.publish(pass_finished)                # PUBLISH PASS FINISHED
+            
         rate.sleep()
 
 
