@@ -1,0 +1,412 @@
+#VRML_SIM R2021b utf8
+WorldInfo {
+  info [
+    "Autonomous Vehicle Simulation"
+    "The simple controller example uses an on-board camera to follow the yellow road lines and a SICK sensor to avoid the obstacles."
+    "The control of the vehicle is done using the driver library."
+    "The vehicle based on the Car PROTO is modelled with realistic physics properties: motor torques, body mass, friction forces, suspensions, etc."
+  ]
+  title "City"
+  ERP 0.6
+  basicTimeStep 50
+  coordinateSystem "NUE"
+  lineScale 1
+  contactProperties [
+    ContactProperties {
+      coulombFriction [
+        8
+      ]
+      softCFM 1e-05
+      bumpSound ""
+      rollSound ""
+      slideSound ""
+    }
+    ContactProperties {
+      material2 "CitroenCZeroWheels"
+      coulombFriction [
+        8
+      ]
+      softCFM 1e-05
+      bumpSound ""
+      rollSound ""
+      slideSound ""
+    }
+    ContactProperties {
+      material2 "ToyotaPriusWheels"
+      coulombFriction [
+        8
+      ]
+      softCFM 1e-05
+      bumpSound ""
+      rollSound ""
+      slideSound ""
+    }
+    ContactProperties {
+      material2 "LincolnMKZWheels"
+      coulombFriction [
+        8
+      ]
+      softCFM 1e-05
+      bumpSound ""
+      rollSound ""
+      slideSound ""
+    }
+    ContactProperties {
+      material2 "RangeRoverSportSVRWheels"
+      coulombFriction [
+        8
+      ]
+      softCFM 1e-05
+      bumpSound ""
+      rollSound ""
+      slideSound ""
+    }
+    ContactProperties {
+      material2 "TruckWheels"
+      coulombFriction [
+        8
+      ]
+      softCFM 1e-05
+      bumpSound ""
+      rollSound ""
+      slideSound ""
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.0030296577053014104 -0.9957981557258702 -0.09152515625304411 3.016165900593477
+  position -46.78712725232557 18.91826132329591 -14.443607728834913
+  near 1
+  follow "vehicle"
+  followSmoothness 0
+}
+TeslaModel3Simple {
+  translation -47.21 0.311 94.79
+  name "vehicle(6)"
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+DEF GROUND Solid {
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.45098 0.823529 0.0862745
+        baseColorMap ImageTexture {
+          url [
+            "https://raw.githubusercontent.com/cyberbotics/webots/R2021b/projects/vehicles/worlds/textures/ground.jpg"
+          ]
+        }
+        roughness 0.5
+        metalness 0
+        textureTransform TextureTransform {
+          scale 500 500
+        }
+      }
+      geometry DEF GROUND_PLANE Plane {
+        size 2000 2000
+      }
+    }
+  ]
+  boundingObject USE GROUND_PLANE
+  locked TRUE
+}
+StraightRoadSegment {
+  translation -45 0.02 -32
+  name "road(10)"
+  width 16
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+    }
+    RoadLine {
+      color 0.988235 0.913725 0.309804
+      type "double"
+    }
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  length 100
+}
+StraightRoadSegment {
+  translation 105 0.02 -32
+  name "road(3)"
+  width 16
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+    }
+    RoadLine {
+      color 0.988235 0.913725 0.309804
+      type "double"
+    }
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  length 100
+}
+StraightRoadSegment {
+  translation -45 0.02 68
+  name "road(5)"
+  width 16
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+    }
+    RoadLine {
+      color 0.988235 0.913725 0.309804
+      type "double"
+    }
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  length 100
+}
+StraightRoadSegment {
+  translation 105 0.02 68
+  name "road(12)"
+  width 16
+  numberOfLanes 4
+  lines [
+    RoadLine {
+      type "continuous"
+    }
+    RoadLine {
+      color 0.988235 0.913725 0.309804
+      type "double"
+    }
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  length 100
+}
+CurvedRoadSegment {
+  translation -4.5 0.02 168
+  rotation 0 1 0 4.71239
+  id "0"
+  startJunction "25"
+  endJunction "17"
+  width 16
+  numberOfLanes 4
+  numberOfForwardLanes 2
+  lines [
+    RoadLine {
+      type "continuous"
+    }
+    RoadLine {
+      color 0.988235 0.913725 0.309804
+      type "double"
+    }
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  curvatureRadius 40.5
+}
+StraightRoadSegment {
+  translation -4.5 0.02 -72.5
+  rotation 0 1 0 1.5708
+  name "road(1)"
+  id "1"
+  startJunction "25"
+  endJunction "24"
+  width 16
+  numberOfLanes 4
+  numberOfForwardLanes 2
+  lines [
+    RoadLine {
+      type "continuous"
+    }
+    RoadLine {
+      color 0.988235 0.913725 0.309804
+      type "double"
+    }
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  length 69
+}
+StraightRoadSegment {
+  translation -4.5 0.02 208.5
+  rotation 0 1 0 1.5708
+  name "road(11)"
+  id "1"
+  startJunction "25"
+  endJunction "24"
+  width 16
+  numberOfLanes 4
+  numberOfForwardLanes 2
+  lines [
+    RoadLine {
+      type "continuous"
+    }
+    RoadLine {
+      color 0.988235 0.913725 0.309804
+      type "double"
+    }
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  length 69
+}
+CurvedRoadSegment {
+  translation 64.5 0.02 168
+  name "road(2)"
+  id "2"
+  startJunction "23"
+  endJunction "24"
+  width 16
+  numberOfLanes 4
+  numberOfForwardLanes 2
+  lines [
+    RoadLine {
+      type "continuous"
+    }
+    RoadLine {
+      color 0.988235 0.913725 0.309804
+      type "double"
+    }
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  curvatureRadius 40.5
+}
+CurvedRoadSegment {
+  translation 64.5 0.02 -32
+  rotation 0 1 0 1.5708
+  name "road(4)"
+  id "4"
+  startJunction "16"
+  endJunction "22"
+  width 16
+  numberOfLanes 4
+  numberOfForwardLanes 2
+  lines [
+    RoadLine {
+      type "continuous"
+    }
+    RoadLine {
+      color 0.988235 0.913725 0.309804
+      type "double"
+    }
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  curvatureRadius 40.5
+}
+CurvedRoadSegment {
+  translation -4.5 0.02 -32
+  rotation 0 1 0 3.1416
+  name "road(6)"
+  id "6"
+  startJunction "29"
+  endJunction "28"
+  width 16
+  numberOfLanes 4
+  numberOfForwardLanes 2
+  lines [
+    RoadLine {
+      type "continuous"
+    }
+    RoadLine {
+      color 0.988235 0.913725 0.309804
+      type "double"
+    }
+    RoadLine {
+      type "continuous"
+    }
+  ]
+  curvatureRadius 40.5
+}
+BmwX5 {
+  translation -47.042599746384674 0.30839335333983214 34.47953709979668
+  rotation -0.9778099856566466 0.20949309884276415 0.0005229602321686472 0.0051059143809957415
+  controller "ros_car_controller"
+  sensorsSlotFront [
+    SickLms291 {
+      resolution 360
+    }
+  ]
+  sensorsSlotTop [
+    Lidar {
+      translation 0 0.22 0
+      rotation 0 -1 0 5.92017e-06
+      horizontalResolution 12858
+      fieldOfView 6.28
+      verticalFieldOfView 0.3
+      numberOfLayers 32
+      maxRange 75
+    }
+    Camera {
+      translation 0 -0.05 -0.72
+      children [
+        Transform {
+          translation 0 0 0.05
+          rotation 1 0 0 1.5708
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.8 0.8 0.8
+                roughness 1
+                metalness 0
+              }
+              geometry Cylinder {
+                height 0.1
+                radius 0.04
+              }
+            }
+          ]
+        }
+      ]
+      fieldOfView 1
+      width 640
+      height 480
+    }
+  ]
+  sensorsSlotCenter [
+    GPS {
+    }
+    Gyro {
+    }
+    Display {
+      width 200
+      height 150
+    }
+  ]
+}
+DEF CAR-4 LincolnMKZSimple {
+  translation 111.19 0.311 61.94
+  rotation 0 1 0 3.14159
+  name "vehicle(3)"
+}
+DEF CAR-2 CitroenCZeroSimple {
+  translation -42.59 0.311 96.63
+  rotation 0 1 0 -5.307179586466759e-06
+  name "vehicle(2)"
+}
+Robot {
+  name "supervisor"
+  controller "supervisor_controller"
+  supervisor TRUE
+}
+DEF CAR-3 RangeRoverSportSVRSimple {
+  translation 98.97 0.311 169.08
+  rotation 0 1 0 3.14159
+  name "vehicle(1)"
+}
+DEF CAR-1 ToyotaPriusSimple {
+  translation -38.72 0.311 -16.47
+  name "vehicle(0)"
+}
