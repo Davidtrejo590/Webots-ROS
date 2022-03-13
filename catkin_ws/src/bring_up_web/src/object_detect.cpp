@@ -17,36 +17,6 @@ std::vector<std::vector<double>> initial_centroids = {
     { -6.015,  0.0,  0.903 }
 };
 
-// TEST
-// { -3.64229929,  -0.55005622,  -6.23897093 },
-// {  3.79652465,  -0.35820951,  -0.04962473 },
-// {  3.32333617,  -0.58985401, -14.47182993 },
-// { -3.03360501,  -0.47881233,  22.09920644 },
-// {  4.61459438,  -0.60176526, -28.79273614 },
-// { -3.74919798,  -0.60729853, -19.39469276 },
-// { -3.68494749,  -0.58626728, -35.58342223 },
-// { -4.00155359,  -0.52482279,  -5.27777102 }
-
-// INICIALES
-// { -6.543,  0.0, 14.637 },
-// {  2.605,  0.0, 11.867 },
-// { -0.537,  0.0, 11.077 },
-// {  0.285,  0.0, 4.541  },
-// { 10.772,  0.0, 6.781  },
-// { -1.693,  0.0, 4.295  },
-// { -6.117,  0.0, 10.157 },
-// { -1.236,  0.0, 1.803  }
-
-
-// FINALES
-// {  3.263,  0.0, 12.978 }, 
-// { -2.741,  0.0, 10.540 }, 
-// {  9.354,  0.0,  0.814 }, 
-// { -3.217,  0.0, 10.458 },
-// { -6.015,  0.0,  0.903 }
-
-// std::vector<std::vector<double>> initial_centroids;
-
 //MESSAGE 
 ros::Publisher pub_poses;
 
@@ -204,19 +174,7 @@ std::vector<std::vector<double>> kmeans(std::vector<std::vector<double>> point_c
         attemps += 1;
     }
 
-    // CHECK DISTANCE BETWEEN CENTROIDS
-    // new_centroids = centroid_distance(new_centroids);
-
-    // PASS TO POSE ARRAY
-    // actual_centroids.poses.resize(new_centroids.size());
-
-    // for(int i = 0; i < new_centroids.size(); i++){
-    //     actual_centroids.poses[i].position.x = new_centroids[i][0];
-    //     actual_centroids.poses[i].position.y = new_centroids[i][1];
-    //     actual_centroids.poses[i].position.z = new_centroids[i][2];
-    // }
-
-    return new_centroids;                                                            // RETURN THE CURRENT CENTROIDS
+    return new_centroids;                                                               // RETURN THE CURRENT CENTROIDS
     
 }
 
@@ -247,18 +205,19 @@ void objectDetectCallback(const sensor_msgs::PointCloud2::ConstPtr& msg){
     }
 
     // CLUSTERING
-    geometry_msgs::PoseArray centroids;                                                 // ACTUAL CENTROIDS
-    initial_centroids = kmeans(point_cloud);                                            // APPLY KMEANS
+    geometry_msgs::PoseArray centroids;                                             // ACTUAL CENTROIDS
+    std::vector<std::vector<double>> new_centroids;
+    new_centroids = kmeans(point_cloud);                                            // APPLY KMEANS
 
     // ARRAY TO POSE ARRAY
-    centroids.poses.resize(initial_centroids.size());
-    for(int i = 0; i < initial_centroids.size(); i++){
-        centroids.poses[i].position.x = initial_centroids[i][0];
-        centroids.poses[i].position.y = initial_centroids[i][1];
-        centroids.poses[i].position.z = initial_centroids[i][2];
+    centroids.poses.resize(new_centroids.size());
+    for(int i = 0; i < new_centroids.size(); i++){
+        centroids.poses[i].position.x = new_centroids[i][0];
+        centroids.poses[i].position.y = new_centroids[i][1];
+        centroids.poses[i].position.z = new_centroids[i][2];
     }
     centroids.header.frame_id = "lidar_link";
-    pub_poses.publish(centroids);                                                       // PUBLISH CENTROIDS
+    pub_poses.publish(centroids);                                                   // PUBLISH CENTROIDS
 }
 
 /*   

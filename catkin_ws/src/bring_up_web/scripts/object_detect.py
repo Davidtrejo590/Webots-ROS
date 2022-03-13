@@ -140,7 +140,7 @@ def main():
         pub_poses.publish(pose_array)                                                           # PUBLISH CURRENT CENTROID (X, Z)
         pose_array.poses.clear()                                                                # CLEAR POSE ARRAY
         rate.sleep()
-        pass
+
 
 if __name__ == "__main__":
     try:
