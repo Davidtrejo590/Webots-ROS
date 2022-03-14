@@ -23,12 +23,6 @@ free_SW = 1
 pass_finished = False
 safe_distance = 0.0
 
-# DEFINE BOUNDING BOXES
-boundingBoxC = [ round(i, 1) for i in np.linspace(  -0.5,   1.50 ) ]          # CENTER
-boundingBoxW = [ round(i, 1) for i in np.linspace(  -4.0,   -2.5 ) ]          # WEST
-boundingBoxN = [ round(i, 1) for i in np.linspace( -20.0,  -10.0 ) ]          # NORTH
-boundingBoxS = [ round(i, 1) for i in np.linspace(  10.0,   20.0 ) ]          # SOUTH
-
 # CAR POSE CALLBACK
 def callback_car_pose(msg):
 
@@ -36,31 +30,24 @@ def callback_car_pose(msg):
 
     cars = []
     for car in msg.poses:
-        # print([ round(car.position.x, 1), round(car.position.z, 1) ])
         cars.append( [ round(car.position.x, 1), round(car.position.z, 1) ] )
 
     # CARS DETECTED
     if cars:
         for c in cars:
-            # DEFINE BUSY & FREE REGIONS
-            # free_N  = free_N   and not ( ( c[0] > -0.5 and c[0] <  1.5 ) and ( c[1] > -20.0 and c[1] < -10.0 ) ) 
-            # free_NW = free_NW  and not ( ( c[0] > -4.0 and c[0] < -2.5 ) and ( c[1] > -20.0 and c[1] < -10.0 ) )
-            # free_W  = free_W   and not ( ( c[0] > -4.0 and c[0] < -2.5 ) and ( c[1] >  -0.5 and c[1] <   1.5 ) )
-            # free_SW = free_SW  and not ( ( c[0] > -4.0 and c[0] < -2.5 ) and ( c[1] >  10.0 and c[1] <  20.0 ) )
-
-            free_N  = free_N   and not ( c[0] in boundingBoxC and c[1] in boundingBoxN ) 
-            free_W  = free_W   and not ( c[0] in boundingBoxW and c[1] in boundingBoxC )
-            free_NW = free_NW  and not ( c[0] in boundingBoxW and c[1] in boundingBoxN )
-            free_SW = free_SW  and not ( c[0] in boundingBoxW and c[1] in boundingBoxS )
+            # DEFINE BUSY & FREE REGIONS (BOUNDING BOXES)
+            free_N  = free_N   and not ( ( c[0] > -0.5 and c[0] <  1.5 ) and ( c[1] > -20.0 and c[1] < -10.0 ) ) #CN 
+            free_NW = free_NW  and not ( ( c[0] > -4.0 and c[0] < -2.5 ) and ( c[1] > -20.0 and c[1] < -10.0 ) ) #NW
+            free_W  = free_W   and not ( ( c[0] > -4.0 and c[0] < -2.5 ) and ( c[1] >  -0.5 and c[1] <   1.5 ) ) #CW
+            free_SW = free_SW  and not ( ( c[0] > -4.0 and c[0] < -2.5 ) and ( c[1] >  10.0 and c[1] <  20.0 ) ) #SW
 
             # GET CAR IN FRONT
-            # if not free_N:
-            #     # CAR POSITION [Z]
-            #     safe_distance = c[1]
-            #     print('CAR IN FRONT', c)
-                
-            # else:
-            #     safe_distance = 0.0
+            if not free_N and ( not free_W or not free_NW):
+                # CAR POSITION [Z]
+                safe_distance = c[1]
+                print('CAR IN FRONT', c)
+            else:
+                safe_distance = 0.0
 
         # print('[free_W, free_SW, free_NW, free_N]' , [free_W, free_SW, free_NW, free_N])
 
