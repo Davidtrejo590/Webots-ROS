@@ -19,9 +19,7 @@ def callback_enable_PS(msg):
 def main():
     
     global enable_PS, pass_finished
-
-    pass_speed = 15.0
-
+    
     print('Pass Node')
     rospy.init_node('pass_node')
     rate = rospy.Rate(10)
@@ -41,25 +39,25 @@ def main():
 
             # pub_speed.publish(pass_speed)                         # DISMINUIR VELOCIDAD
 
-            steering_angle = -( 0.0174533 * 7 )                     # GIRAR A LA IZQUIERDA
+            steering_angle = -( 0.0174533 * 6 )                     # GIRAR A LA IZQUIERDA
             pub_angle.publish(steering_angle)
-            time.sleep(3)
+            time.sleep(5)
 
-            steering_angle = ( 0.0174533 * 7 )                      # GIRAR A LA DERECHA
+            steering_angle = ( 0.0174533 * 6 )                      # GIRAR A LA DERECHA
             pub_angle.publish(steering_angle)
-            time.sleep(1)
+            time.sleep(2.5)
 
             steering_angle = 0.0                                    # MANTENERSE
             pub_angle.publish(steering_angle)
-            time.sleep(4)
-
-            steering_angle = ( 0.0174533 * 14 )                     # GIRAR A LA DERECHA
-            pub_angle.publish(steering_angle)
             time.sleep(3)
 
-            steering_angle = -( 0.0174533 * 14 )                    # GIRAR A LA IZQUIERDA PARA ALINEAR
+            steering_angle = ( 0.0174533 * 12 )                     # GIRAR A LA DERECHA
             pub_angle.publish(steering_angle)
-            time.sleep(1)
+            time.sleep(5)
+
+            steering_angle = -( 0.0174533 * 12 )                    # GIRAR A LA IZQUIERDA PARA ALINEAR
+            pub_angle.publish(steering_angle)
+            time.sleep(2.5)
 
             pass_finished.data = True                               # REBASE TERMINADO 
             print('PASS FINISHED')
