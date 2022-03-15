@@ -145,6 +145,7 @@ def main():
 
     msg_image.data = camera.getImage()                                                  # GET IMAGE DATA FROM CAMERA
     msg_point_cloud.data = lidar.getPointCloud(data_type='buffer')                      # GET POINT CLOUD FROM LIDAR
+    msg_point_cloud.header.stamp = rospy.Time.now()
     # msg_gyro.angular_velocity.x = gyro.getValues()[0]                                   # GET X COMPONENT FROM GYRO
     # msg_gyro.angular_velocity.y = gyro.getValues()[1]                                   # GET Y COMPONENT FROM GYRO
     # msg_gyro.angular_velocity.z = gyro.getValues()[2]                                   # GET Z COMPONENT FROM GYRO
