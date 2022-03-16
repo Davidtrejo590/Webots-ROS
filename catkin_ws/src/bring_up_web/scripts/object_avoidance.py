@@ -97,11 +97,11 @@ def main():
             enable_LT.data = False
             enable_KD.data = False
             enable_PS.data = True
+            free_N = 1
+            free_W = 1
+            free_NW = 1
+            free_SW = 1
             if pass_finished:
-                free_N = 1
-                free_W = 1
-                free_NW = 1
-                free_SW = 1
                 pass_finished = False           # FROM PASS NODE
                 state = SM_CRUISE
         # KEEP DISTANCE STATE

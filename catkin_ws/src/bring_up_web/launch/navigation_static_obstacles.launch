@@ -17,8 +17,8 @@
   <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find bring_up_web)/rviz/basic_car.rviz"/>
   
   <node name="object_detect" pkg="bring_up_web" type="object_detect" output="screen"/>
-  <node name="object_tracking" pkg="bring_up_web" type="test_tracking.py" output="screen"/>
-  <node name="object_avoidance" pkg="bring_up_web" type="object_avoidance.py" output="screen"/>
+  <node name="object_tracking" pkg="bring_up_web" type="object_tracking.py" output="screen"/>
+  <node name="lane_tracking" pkg="bring_up_web" type="lane_tracking.py" output="screen"/>
   <node name="keep_distance" pkg="bring_up_web" type="keep_distance.py" output="screen"/>
   <node name="overtake" pkg="bring_up_web" type="overtake.py" output="screen"/>
   <node name="lane_detect" pkg="bring_up_web" type="lane_detect.py" output="screen"/>
