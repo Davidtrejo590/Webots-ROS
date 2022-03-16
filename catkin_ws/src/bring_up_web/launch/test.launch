@@ -16,9 +16,11 @@
   <node pkg="tf" type="static_transform_publisher" name="car_to_gps" args="0 -0.1 0 0 3.1415926 0 car_link gps_link 10"/>
   <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find bring_up_web)/rviz/basic_car.rviz"/>
   
-  <!-- <node name="lane_detect" pkg="bring_up_web" type="lane_detect.py" output="screen"/>
-  <node name="control_action" pkg="bring_up_web" type="control_action.py" output="screen"/>
   <node name="object_detect" pkg="bring_up_web" type="object_detect" output="screen"/>
-  <node name="kalman_filter" pkg="bring_up_web" type="kalman_filter.py" output="screen"/> -->
+  <node name="object_tracking" pkg="bring_up_web" type="object_tracking.py" output="screen"/>
+  <node name="object_avoidance" pkg="bring_up_web" type="object_avoidance.py" output="screen"/>
+  <node name="keep_distance" pkg="bring_up_web" type="keep_distance.py" output="screen"/>
+  <node name="overtake" pkg="bring_up_web" type="overtake.py" output="screen"/>
+  <node name="lane_detect" pkg="bring_up_web" type="lane_detect.py" output="screen"/>
 
 </launch>

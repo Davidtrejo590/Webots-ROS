@@ -3,17 +3,14 @@
 """ ros_car_controller """
 
 # LIBRARIES
-import math
-from vehicle import Driver
-from controller import Camera, Keyboard, Lidar, Gyro, GPS
 import rospy
+from vehicle import Driver
+from controller import Camera, Keyboard, Lidar
 from std_msgs.msg import Float64
-from sensor_msgs.msg import Image, PointCloud2, PointField, NavSatFix, NavSatStatus, Imu
+from sensor_msgs.msg import Image, PointCloud2, PointField
 
 # CONSTANTS
 TIME_STEP = 50
-TRACK_FRONT = 1.7
-WHEEL_BASE = 4.0
 
 # GLOBAL VARIABLES
 right_angle = 0.0
@@ -29,18 +26,10 @@ camera = Camera('camera')                                     # GET CAMERA FROM 
 camera.enable(TIME_STEP)    
 
 # INIT LIDAR
-# lidar = Lidar('Sick LMS 291')
-lidar = Lidar('lidar')
+lidar = Lidar('Sick LMS 291')
+# lidar = Lidar('lidar')
 lidar.enable(TIME_STEP)
 lidar.enablePointCloud()
-
-# INIT GPS
-# gps = GPS('gps')
-# gps.enable(TIME_STEP)
-
-# INIT GYRO
-# gyro = Gyro('gyro')
-# gyro.enable(TIME_STEP)
 
 # INIT KEYBOARD
 keyboard = Keyboard()
@@ -48,21 +37,29 @@ keyboard.enable(TIME_STEP)
 
 # CHECK KEYBORARD
 def check_keyboard():
+
   global left_angle
   global right_angle
+
   key = keyboard.getKey()
+
   # CALCULATE LEFT STEERING ANGLE
   if(key == keyboard.LEFT):
     left_angle = driver.getSteeringAngle() - (0.0174533*5)
     driver.setSteeringAngle(left_angle)
     print('Left Angle', driver.getSteeringAngle())
+
   # CALCULATE RIGHT STEERING ANGLE
   elif (key == keyboard.RIGHT):
     right_angle = driver.getSteeringAngle() + (0.0174533*5)
     driver.setSteeringAngle(right_angle)
     print('Right Angle', driver.getSteeringAngle())
+
+  # SET CRUISE SPEED
   elif (key == keyboard.UP):
     driver.setCruisingSpeed(10.0)
+
+  # SET CRUISE SPEED
   elif (key == keyboard.DOWN):
     driver.setCruisingSpeed(0.0)
 
@@ -77,7 +74,7 @@ def callback_cruise_speed( msg ):
   driver.setCruisingSpeed(msg.data)
 
 # STEERING ANGLE CALLBACK
-def callback_steering_angle(msg):
+def callback_steering_angle( msg ):
   driver.setSteeringAngle(msg.data)
 
 # MAIN FUNCTION
@@ -114,26 +111,11 @@ def main():
     PointField(name = 'z', offset = 8, datatype = PointField.FLOAT32, count = 1),
   ]
   msg_point_cloud.is_bigendian = False
-
-  # GPS MESSAGE
-  # msg_gps = NavSatFix()
-  # msg_gps.header.stamp = rospy.Time.now()
-  # msg_gps.header.frame_id = 'gps_link'
-  # # msg_gps.position_covariance = NavSatFix.COVARIANCE_TYPE_KNOWN
-  # # msg_gps.status.service = NavSatStatus.SERVICE_GPS
-  
-
-  # GYRO MESSAGE
-  # msg_gyro = Imu()
-  # msg_gyro.header.stamp = rospy.Time.now()
-  # msg_gyro.header.frame_id = 'gyro_link'
   
 
   # PUBLISHERS
   pub_camera_data  = rospy.Publisher('/camera/rgb/raw', Image, queue_size=10)
   pub_point_cloud  = rospy.Publisher('/point_cloud'   , PointCloud2, queue_size=10)
-  pub_nav_gps   = rospy.Publisher('/gps', NavSatFix, queue_size=10)
-  pub_imu_gyro     = rospy.Publisher('/gyro', Imu, queue_size=10)
 
   # SUBSCRIBERS
   rospy.Subscriber('/goal_cruise_speed'  , Float64, callback_cruise_speed  )
@@ -141,23 +123,16 @@ def main():
 
   # MAIN LOOP
   while driver.step() != -1 and not rospy.is_shutdown():
-    check_keyboard()                                                                    # CHECK KEYBOARD
+    
+    check_keyboard()                                                      # CHECK KEYBOARD
 
-    msg_image.data = camera.getImage()                                                  # GET IMAGE DATA FROM CAMERA
-    msg_point_cloud.data = lidar.getPointCloud(data_type='buffer')                      # GET POINT CLOUD FROM LIDAR
-    msg_point_cloud.header.stamp = rospy.Time.now()
-    # msg_gyro.angular_velocity.x = gyro.getValues()[0]                                   # GET X COMPONENT FROM GYRO
-    # msg_gyro.angular_velocity.y = gyro.getValues()[1]                                   # GET Y COMPONENT FROM GYRO
-    # msg_gyro.angular_velocity.z = gyro.getValues()[2]                                   # GET Z COMPONENT FROM GYRO
-    # msg_gps.latitude = gps.getValues()[0]                                               # GET X COMPONENT FROM GPS  
-    # msg_gps.longitude = gps.getValues()[1]                                              # GET Y COMPONENT FROM GPS  
-    # msg_gps.altitude = gps.getValues()[2]                                               # GET Z COMPONENT FROM GPS 
+    msg_image.data = camera.getImage()                                    # GET IMAGE DATA FROM CAMERA
+    msg_point_cloud.data = lidar.getPointCloud(data_type='buffer')        # GET POINT CLOUD FROM LIDAR
+    msg_point_cloud.header.stamp = rospy.Time.now()                       # REFRESH STAMP FOR POINT CLOUD
     
     
-    pub_camera_data.publish(msg_image)                                                  # PUBLISHING IMAGE MESSAGE
-    pub_point_cloud.publish(msg_point_cloud)                                            # PUBLISHING POINTCLOUD2 MESSAGE
-    # pub_imu_gyro.publish(msg_gyro)                                                      # PUBLISHING IMU MESSAGE
-    # pub_nav_gps.publish(msg_gps)                                                        # PUBLISHING NAVSATFIX MESSAGE
+    pub_camera_data.publish(msg_image)                                    # PUBLISHING IMAGE MESSAGE
+    pub_point_cloud.publish(msg_point_cloud)                              # PUBLISHING POINTCLOUD2 MESSAGE
     
     rate.sleep()
 

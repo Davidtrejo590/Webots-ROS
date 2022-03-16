@@ -91,23 +91,19 @@ def main():
                 state = SM_PASS
             elif not free_N and ( not free_W or not free_NW):
                 state = SM_KEEP
-            else:
-                state = SM_CRUISE
         # PASS STATE
         elif state == SM_PASS:
             print('PASS STATE')
             enable_LT.data = False
             enable_KD.data = False
             enable_PS.data = True
-            free_N = 1
-            free_W = 1
-            free_NW = 1
-            free_SW = 1
             if pass_finished:
+                free_N = 1
+                free_W = 1
+                free_NW = 1
+                free_SW = 1
                 pass_finished = False           # FROM PASS NODE
                 state = SM_CRUISE
-            else:
-                state = SM_PASS
         # KEEP DISTANCE STATE
         elif state == SM_KEEP:
             print('KEEP DISTANCE STATE')

@@ -12,16 +12,16 @@ import copy
 
 # GLOBAL VARIABLES
 pose_array = PoseArray()
-initial_centroids = [
-    [ -3.64229929,  -0.55005622,  -6.23897093],
-    [  3.79652465,  -0.35820951,  -0.04962473],
-    [  3.32333617,  -0.58985401, -14.47182993],
-    [ -3.03360501,  -0.47881233,  22.09920644],
-    [  4.61459438,  -0.60176526, -28.79273614],
-    [ -3.74919798,  -0.60729853, -19.39469276],
-    [ -3.68494749,  -0.58626728, -35.58342223],
-    [ -4.00155359,  -0.52482279,  -5.27777102]
-]
+# initial_centroids = [
+#     [ -3.64229929,  -0.55005622,  -6.23897093],
+#     [  3.79652465,  -0.35820951,  -0.04962473],
+#     [  3.32333617,  -0.58985401, -14.47182993],
+#     [ -3.03360501,  -0.47881233,  22.09920644],
+#     [  4.61459438,  -0.60176526, -28.79273614],
+#     [ -3.74919798,  -0.60729853, -19.39469276],
+#     [ -3.68494749,  -0.58626728, -35.58342223],
+#     [ -4.00155359,  -0.52482279,  -5.27777102]
+# ]
 
 
 # OBEJCT DETECT CALLBACK
@@ -100,11 +100,11 @@ def compare_centroids(new_c, old_c):
 
 def kmeans(dataset):
     global initial_centroids
-    k = 8                                                                                       # INIT NUMBER OF CLUSTERS (GROUPS)
+    k = 3                                                                                       # INIT NUMBER OF CLUSTERS (GROUPS)
     tol = 0.1                                                                                   # MINIMUN TOLERANCE FOR DISTANCE
     attempts = 0
     max_attempts = 100
-    # initial_centroids = generate_centroids(dataset, k)                                          # GENERATE K-CENTROIDS
+    initial_centroids = generate_centroids(dataset, k)                                          # GENERATE K-CENTROIDS
     new_centroids = calculate_centroids(dataset, initial_centroids)                             # CALCULATE NEW CENTROIDS
     total_distance = compare_centroids(new_centroids, initial_centroids)                        # COMPUTE TOTAL DISTANCE BETWEEN INITAL & NEW CENTROIDS
 
