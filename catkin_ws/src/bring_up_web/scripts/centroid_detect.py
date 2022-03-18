@@ -5,6 +5,7 @@ from sensor_msgs.msg import PointCloud2
 from geometry_msgs.msg import PoseArray, Pose
 import sensor_msgs.point_cloud2
 import numpy as np
+from sklearn.cluster import KMeans, kmeans_plusplus
 from scipy.cluster.vq import kmeans
 
 centroids = []
@@ -20,8 +21,12 @@ def callback_object_detect(msg):
                 if( point[1] > -1.5 ):
                     dataset.append(list(point))                                             # DATASET TO CLUSTERING
 
+        # APPLY KMEANS BY SKLEARN
+        # kmeans = KMeans(n_clusters=3, init='k-means++', n_init=10, max_iter=100, tol=0.01)     
+        # kmeans.fit_predict(dataset)
+        # centroids = kmeans.cluster_centers_                                                                         # GET CENTROIDS
         # APPLY KMEANS BY SCIPY
-        centroids, dist = kmeans(dataset, 4)
+        centroids, dist = kmeans(dataset, 3)
         
 def main():
 

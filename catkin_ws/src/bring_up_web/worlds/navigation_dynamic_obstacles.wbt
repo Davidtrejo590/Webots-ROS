@@ -470,7 +470,7 @@ DEF CAR-1 CitroenCZeroSimple {
   name "vehicle(1)"
 }
 DEF CAR-2 LincolnMKZSimple {
-  translation 15.5803 0.4 75.57
+  translation -8.6497 0.4 71.28
   rotation 0 1 0 1.5708
   name "vehicle(2)"
 }

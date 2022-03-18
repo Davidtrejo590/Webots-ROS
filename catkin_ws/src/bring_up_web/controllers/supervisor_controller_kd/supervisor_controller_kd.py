@@ -22,33 +22,26 @@ tf_2 = car_2.getField('translation')
 
 # Z VELOCITY 
 vel = [0.0, 0.0, 3.0, 0.0, 0.0, 0.0]
-vel_1 = [5.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
 
 def main():
-    print('Starting Controller Supervisor...')
+    print('Starting Controller Supervisor Keep Distance...')
 
     i = 0
-    j = 0
     while robot.step(TIME_STEP) != -1:
         if i == 0:                                                                  # SET INITIAL VELOCITY
             car_1.setVelocity(vel)
+            car_2.setVelocity(vel)
         elif i == 350:                                                              # RETURN TO INITIAL POSITION
             tf_1.setSFVec3f(sp_1)
-            i = 0
-
-        if j == 0:
-            car_2.setVelocity(vel_1)
-            pass
-        elif j == 150:
             tf_2.setSFVec3f(sp_2)
-            j = 0
+            i = 0
     
         i+=1
-        j+=1
+
 
 if __name__ == "__main__":
     try:
         main()
     except:
         pass
-
