@@ -116,6 +116,7 @@ def main():
   # PUBLISHERS
   pub_camera_data  = rospy.Publisher('/camera/rgb/raw', Image, queue_size=10)
   pub_point_cloud  = rospy.Publisher('/point_cloud'   , PointCloud2, queue_size=10)
+  pub_steering_angle = rospy.Publisher('/current_steering', Float64, queue_size=10)
 
   # SUBSCRIBERS
   rospy.Subscriber('/goal_cruise_speed'  , Float64, callback_cruise_speed  )
@@ -126,6 +127,7 @@ def main():
     
     check_keyboard()                                                      # CHECK KEYBOARD
 
+    pub_steering_angle.publish(driver.getSteeringAngle()) 
     msg_image.data = camera.getImage()                                    # GET IMAGE DATA FROM CAMERA
     msg_point_cloud.data = lidar.getPointCloud(data_type='buffer')        # GET POINT CLOUD FROM LIDAR
     msg_point_cloud.header.stamp = rospy.Time.now()                       # REFRESH STAMP FOR POINT CLOUD

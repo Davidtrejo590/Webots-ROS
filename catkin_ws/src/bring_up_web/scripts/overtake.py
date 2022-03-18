@@ -41,23 +41,23 @@ def main():
 
             steering_angle = -( 0.0174533 * 6 )                     # GIRAR A LA IZQUIERDA
             pub_angle.publish(steering_angle)
-            time.sleep(5)
+            time.sleep(2)
 
             steering_angle = ( 0.0174533 * 6 )                      # GIRAR A LA DERECHA
             pub_angle.publish(steering_angle)
-            time.sleep(2.5)
+            time.sleep(1)
 
             steering_angle = 0.0                                    # MANTENERSE
             pub_angle.publish(steering_angle)
-            time.sleep(2)
+            time.sleep(2.5)
 
             steering_angle = ( 0.0174533 * 12 )                     # GIRAR A LA DERECHA
             pub_angle.publish(steering_angle)
-            time.sleep(5)
+            time.sleep(2)
 
             steering_angle = -( 0.0174533 * 12 )                    # GIRAR A LA IZQUIERDA PARA ALINEAR
             pub_angle.publish(steering_angle)
-            time.sleep(2.5)
+            time.sleep(1)
 
             pass_finished.data = True                               # REBASE TERMINADO 
             print('PASS FINISHED')

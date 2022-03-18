@@ -71,8 +71,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 1 0 0 4.71238898038469
-  position 0 265.76959299632233 -1.310345260695617e-29
+  orientation 0.5978011195884526 -0.5329614385771488 -0.59882044588388 4.119514547902926
+  position -26.089985598505216 266.03315855457305 7.622734262728423
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -105,10 +105,20 @@ DEF GROUND Solid {
   boundingObject USE GROUND_PLANE
   locked TRUE
 }
+Robot {
+  controller "supervisor_controller"
+  supervisor TRUE
+}
 CitroenCZeroSimple {
   translation 50.93 0.4 -45.94
   color 0.12549 0.290196 0.529412
   name "vehicle(6)"
+}
+CitroenCZeroSimple {
+  translation 6.92 0.4 10.1
+  rotation 0 1 0 -1.5707953071795862
+  color 0.12549 0.290196 0.529412
+  name "vehicle(8)"
 }
 LincolnMKZSimple {
   translation 16 0.4 -72.61
@@ -402,7 +412,7 @@ CurvedRoadSegment {
   curvatureRadius 30.5
 }
 BmwX5 {
-  translation -36.8535 0.230908 -23.4303
+  translation -36.863 0.186033 -32.5203
   rotation -0.9774185753737384 0.21131175178731865 0.0005216042045738904 0.005050866818787648
   controller "ros_car_controller"
   sensorsSlotFront [
@@ -455,16 +465,12 @@ BmwX5 {
     }
   ]
 }
-CitroenCZeroSimple {
-  translation -36.89 0.4 3.18
+DEF CAR-1 CitroenCZeroSimple {
+  translation -36.89 0.4 -21.59
   name "vehicle(1)"
 }
-LincolnMKZSimple {
-  translation 9.3403 0.4 75.57
+DEF CAR-2 LincolnMKZSimple {
+  translation 15.5803 0.4 75.57
   rotation 0 1 0 1.5708
   name "vehicle(2)"
-}
-MercedesBenzSprinterSimple {
-  translation 10.31 0.4 10.6
-  rotation 0 1 0 -1.5707953071795862
 }

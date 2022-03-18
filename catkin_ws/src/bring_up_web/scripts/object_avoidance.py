@@ -36,18 +36,18 @@ def callback_car_pose(msg):
     if cars:
         for c in cars:
             # DEFINE BUSY & FREE REGIONS (BOUNDING BOXES)
-            free_N  = free_N   and not ( ( c[0] > -0.5 and c[0] <  1.5 ) and ( c[1] > -20.0 and c[1] < -10.0 ) ) #CN 
-            free_NW = free_NW  and not ( ( c[0] > -4.0 and c[0] < -2.5 ) and ( c[1] > -20.0 and c[1] < -10.0 ) ) #NW
+            free_N  = free_N   and not ( ( c[0] > -0.5 and c[0] <  1.5 ) and ( c[1] > -15.0 and c[1] < 0.0 ) ) #CN 
+            free_NW = free_NW  and not ( ( c[0] > -4.0 and c[0] < -2.5 ) and ( c[1] > -15.0 and c[1] < -0.0 ) ) #NW
             free_W  = free_W   and not ( ( c[0] > -4.0 and c[0] < -2.5 ) and ( c[1] >  -0.5 and c[1] <   1.5 ) ) #CW
-            free_SW = free_SW  and not ( ( c[0] > -4.0 and c[0] < -2.5 ) and ( c[1] >  10.0 and c[1] <  20.0 ) ) #SW
+            free_SW = free_SW  and not ( ( c[0] > -4.0 and c[0] < -2.5 ) and ( c[1] >  15.0 and c[1] <  10.0 ) ) #SW
 
             # GET CAR IN FRONT
-            # if not free_N and ( not free_W or not free_NW):
-            #     # CAR POSITION [Z]
-            #     safe_distance = c[1]
-            #     print('CAR IN FRONT', c)
-            # else:
-            #     safe_distance = 0.0
+            if not free_N and ( not free_W or not free_NW):
+                # CAR POSITION [Z]
+                safe_distance = c[1]
+                # print('CAR IN FRONT', c)
+            else:
+                safe_distance = 0.0
 
         # print('[free_W, free_SW, free_NW, free_N]' , [free_W, free_SW, free_NW, free_N])
 
@@ -107,10 +107,10 @@ def main():
         # KEEP DISTANCE STATE
         elif state == SM_KEEP:
             print('KEEP DISTANCE STATE')
+            pub_front_car.publish(safe_distance)    # PUBLISH FRONT CAR
             enable_LT.data = False
             enable_KD.data = True
             enable_PS.data = False
-            # pub_front_car.publish(safe_distance)    # PUBLISH FRONT CAR
             if free_N:
                 state = SM_CRUISE
             elif free_NW and free_W:

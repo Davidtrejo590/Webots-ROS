@@ -59,7 +59,7 @@ def main():
 
     while not rospy.is_shutdown():
         if enable_KD:                                                       # STATE KEEP DISTANCE
-            control_KD.control_law(left_lane, right_lane, 1.0)    # COMPUTE CONTROL LAWS
+            control_KD.control_law(left_lane, right_lane, safe_distance)    # COMPUTE CONTROL LAWS
             pub_speed.publish(control_KD.cruise_speed)                      # PUBLISH CRUISE SPEED
             pub_angle.publish(control_KD.steering_angle)                    # PUBLISH STEERING ANGLE
 
