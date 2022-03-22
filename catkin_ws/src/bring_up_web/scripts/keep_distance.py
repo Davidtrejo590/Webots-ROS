@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 
-""" COMPUTE CONTROL LAWS (CRUISE SPEED & STEERING ANGLE) FOR KEEP DISTANCE STATE """
+""" 
+    NODE TO ENABLE CONTROL LAWS (CRUISE SPEED & STEERING ANGLE) 
+    FOR THE BEHAVIOR KEEP DISTANCE 
+"""
 
+# LIBRARIES
 import rospy
 from std_msgs.msg import Bool, Float64, Float64MultiArray
 from control_laws import Control
@@ -16,12 +20,12 @@ safe_distance = 0.0
 # LEFT LANE CALLBACK
 def callback_left_lane(msg):
     global left_lane
-    left_lane = list(msg.data)                                  # TUPLE TO LIST
+    left_lane = list(msg.data)                      # TUPLE TO LIST
 
 # RIGHT LANE CALLBACK
 def callback_right_lane(msg):
     global right_lane
-    right_lane = list(msg.data)                                 # TUPLE TO LIST
+    right_lane = list(msg.data)                     # TUPLE TO LIST
 
 # ENABLE KEEP DISTANCE CALLBACK
 def callback_enable_KD(msg):
@@ -32,6 +36,7 @@ def callback_enable_KD(msg):
 def callback_safe_distance(msg):
     global safe_distance
     safe_distance = msg.data
+    
 
 # MAIN FUNCTION
 def main():
@@ -42,15 +47,16 @@ def main():
     control_KD = Control()
 
     # INIT NODE
-    print('Keep Distance Node')
+    print('Keep Distance Node...')
     rospy.init_node('keep_distance')
     rate = rospy.Rate(10)
 
     # SUBCRIBERS
+    rospy.Subscriber('/safe_distance', Float64, callback_safe_distance)
     rospy.Subscriber('/left_lane', Float64MultiArray, callback_left_lane)
     rospy.Subscriber('/right_lane', Float64MultiArray, callback_right_lane)
     rospy.Subscriber('/enable_KD', Bool, callback_enable_KD)
-    rospy.Subscriber('/safe_distance', Float64, callback_safe_distance)
+    
     
     # PUBLISHERS
     pub_speed = rospy.Publisher('/goal_cruise_speed', Float64, queue_size=10)

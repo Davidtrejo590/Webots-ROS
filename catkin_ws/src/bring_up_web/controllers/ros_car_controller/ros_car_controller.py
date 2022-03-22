@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 
-""" ros_car_controller """
+""" 
+    MAIN CONTROLLER TO 
+    GET INFORMATION OF THE SENSORS (LIDAR, CAMERA)
+    SET CRUISE SPEED & STEERING ANGLE
+
+"""
 
 # LIBRARIES
 import rospy
@@ -12,10 +17,6 @@ from sensor_msgs.msg import Image, PointCloud2, PointField
 # CONSTANTS
 TIME_STEP = 50
 
-# GLOBAL VARIABLES
-right_angle = 0.0
-left_angle = 0.0
-
 # INIT DRIVER
 driver = Driver()
 driver.setCruisingSpeed(0.0)                                  # SPEED CONTROL km/h - INITIAL SPEED
@@ -26,8 +27,7 @@ camera = Camera('camera')                                     # GET CAMERA FROM 
 camera.enable(TIME_STEP)    
 
 # INIT LIDAR
-# lidar = Lidar('Sick LMS 291')
-lidar = Lidar('lidar')
+lidar = Lidar('lidar')                                        # GET LIDAR FROM DEVICES
 lidar.enable(TIME_STEP)
 lidar.enablePointCloud()
 
@@ -35,35 +35,30 @@ lidar.enablePointCloud()
 keyboard = Keyboard()
 keyboard.enable(TIME_STEP)
 
-# CHECK KEYBORARD
+# CHECK KEYBORARD TO SET STEERING ANGLE & SPEED FROM KEYBORAD
 def check_keyboard():
 
-  global left_angle
-  global right_angle
+  left_angle = 0.0 
+  right_angle = 0.0
 
+  # CHECK KEYBOARD
   key = keyboard.getKey()
 
-  # CALCULATE LEFT STEERING ANGLE
-  if(key == keyboard.LEFT):
-    left_angle = driver.getSteeringAngle() - (0.0174533*5)
+  if key == keyboard.LEFT:                                        # COMPUTE & SET LEFT STEERING ANGLE
+    left_angle = driver.getSteeringAngle() - ( 0.0174533 * 5 )
     driver.setSteeringAngle(left_angle)
-    print('Left Angle', driver.getSteeringAngle())
 
-  # CALCULATE RIGHT STEERING ANGLE
-  elif (key == keyboard.RIGHT):
+  elif key == keyboard.RIGHT:                                     # COMPUTE & SET RIGHT STEERING ANGLE
     right_angle = driver.getSteeringAngle() + (0.0174533*5)
     driver.setSteeringAngle(right_angle)
-    print('Right Angle', driver.getSteeringAngle())
 
-  # SET CRUISE SPEED
-  elif (key == keyboard.UP):
+  elif (key == keyboard.UP):                                      # SET CRUISE SPEED
     driver.setCruisingSpeed(10.0)
 
-  # SET CRUISE SPEED
-  elif (key == keyboard.DOWN):
+  elif (key == keyboard.DOWN):                                    # SET CRUISE SPEED
     driver.setCruisingSpeed(0.0)
 
-# HELP
+# FUNCTION TO GIVE HELP
 def help():
   print('TO MOVE CAR SELECT THE 3D WINDOW AND USE THE KEYS TO: \n')
   print('[LEFT]/[RIGHT] - STEERING ANGLE')

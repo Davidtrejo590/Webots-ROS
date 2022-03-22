@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 
+""" 
+    NODE TO GET THE POINT CLOUD FROM LIDAR
+    AND IMPLEMENT THE KMEANS ALGORITHM WITH THE PURPOSE
+    TO IDENTIFY OBSTACLES (CARS)
+"""
+
+# LIBRARIES
 import rospy
 from sensor_msgs.msg import PointCloud2
 from geometry_msgs.msg import PoseArray, Pose
@@ -12,17 +19,6 @@ import copy
 
 # GLOBAL VARIABLES
 pose_array = PoseArray()
-# initial_centroids = [
-#     [ -3.64229929,  -0.55005622,  -6.23897093],
-#     [  3.79652465,  -0.35820951,  -0.04962473],
-#     [  3.32333617,  -0.58985401, -14.47182993],
-#     [ -3.03360501,  -0.47881233,  22.09920644],
-#     [  4.61459438,  -0.60176526, -28.79273614],
-#     [ -3.74919798,  -0.60729853, -19.39469276],
-#     [ -3.68494749,  -0.58626728, -35.58342223],
-#     [ -4.00155359,  -0.52482279,  -5.27777102]
-# ]
-
 
 # OBEJCT DETECT CALLBACK
 def callback_object_detect(msg):
@@ -30,32 +26,31 @@ def callback_object_detect(msg):
     global pose_array
 
     if msg:
-        points = sensor_msgs.point_cloud2.read_points(msg, skip_nans=True)                      # GET EACH POINT IN THE POINT CLOUD
+        points = sensor_msgs.point_cloud2.read_points(msg, skip_nans=True)          # GET EACH POINT IN THE POINT CLOUD
         current_centroids = []
         dataset = []
         
         for point in points:
             if not point.__contains__(np.inf) and not point.__contains__(-np.inf):
                 if( (point[1] > -1.5) ):
-                    dataset.append(list(point))                                                           # DATASET TO APPLY KMEANS - (X, Y,  Z)
+                    dataset.append(list(point))                                     # DATASET TO APPLY KMEANS - (X, Y,  Z)
 
-
-        
-        current_centroids = kmeans(dataset)                                                     # CUURENT CENTROIDS
+        # APPLY KMEANS
+        current_centroids = kmeans(dataset)                                         # CUURENT CENTROIDS
 
         if current_centroids:
-            for point in current_centroids:                                                     # GET THE POSITION OF EACH CENTROID
+            for point in current_centroids:                                         # GET THE POSITION OF EACH CENTROID
                 pose = Pose()
-                pose.position.x = point[0]                                                      # X COMPONENT 
-                pose.position.y = point[1]                                                      # Y COMPONENT
-                pose.position.z = point[2]                                                      # Z COMPONENT
+                pose.position.x = point[0]                                          # X COMPONENT 
+                pose.position.y = point[1]                                          # Y COMPONENT
+                pose.position.z = point[2]                                          # Z COMPONENT
             
-                pose_array.poses.append(pose)                                                   # POSE ARRAY <-- POSE FOR EACH CENTROID
+                pose_array.poses.append(pose)                                       # POSE ARRAY <-- POSE FOR EACH CENTROID
 
 
 def generate_centroids(dataset, k):
-    min_x, min_y, min_z = np.amin(dataset, axis=0)                                              # GET MIN VALUE FOR X-AXIS AND Y-AXIS
-    max_x, max_y, max_z = np.amax(dataset, axis=0)                                              # GET MAX VALUE FOR X-AXIS AND Y-AXIS
+    min_x, min_y, min_z = np.amin(dataset, axis=0)                                  # GET MIN VALUE FOR X-AXIS AND Y-AXIS
+    max_x, max_y, max_z = np.amax(dataset, axis=0)                                  # GET MAX VALUE FOR X-AXIS AND Y-AXIS
     centroids = [ 
         np.array([ 
             round(uniform(min_x, max_x), 3),
@@ -64,28 +59,28 @@ def generate_centroids(dataset, k):
             ]) for i in range(k)]
 
     
-    return centroids                                                                            # RETURN K-CENTROIDS
+    return centroids                                                                # RETURN K-CENTROIDS
 
 def calculate_centroids(point_cloud, centroids):
-    new_centroids = []                                                                          # CENTROITS RECALCULATED          
-    clusters = [[] for c in centroids]                                                          # CLUSTERS (GROUPS)
+    new_centroids = []                                                              # CENTROITS RECALCULATED          
+    clusters = [[] for c in centroids]                                              # CLUSTERS (GROUPS)
 
     # ASSIGN EACH POINT IN ITS CORRESPOND CLUSTER
     for p in point_cloud:
         distances = [ 
-            math.sqrt((c[0] - p[0])**2 + (c[1] - p[1])**2 + (c[2] - p[2])**2 )                  # EUCLEDIAN DISTANCE BETWEEN EACH POINT WITH EACH CENTROID
+            math.sqrt((c[0] - p[0])**2 + (c[1] - p[1])**2 + (c[2] - p[2])**2 )      # EUCLEDIAN DISTANCE BETWEEN EACH POINT WITH EACH CENTROID
             for c in centroids ]       
-        k_index = distances.index(min(distances))                                               # GET THE MINIMUM DISTANCES FOR EACH POINT
-        clusters[k_index].append(p)                                                             # STORE IN THE CORRESPOND CLUSTER (GROUP)
+        k_index = distances.index(min(distances))                                   # GET THE MINIMUM DISTANCES FOR EACH POINT
+        clusters[k_index].append(p)                                                 # STORE IN THE CORRESPOND CLUSTER (GROUP)
     
 
     # RECOMPUTE CENTROIDS WITH THE MEAN OF EACH CLUSTER
     for cluster in clusters:
-        if cluster:                                                                             # THE CURRENT CLUSTER HAS AT LEAST ONE POINT
-            mean_k = np.mean(cluster, axis=0)                                                   # COMPUTE THE MEAN OF EACH CLUSTER
-            new_centroids.append(mean_k)                                                        # ADD THE NEW CENTROID
+        if cluster:                                                                 # THE CURRENT CLUSTER HAS AT LEAST ONE POINT
+            mean_k = np.mean(cluster, axis=0)                                       # COMPUTE THE MEAN OF EACH CLUSTER
+            new_centroids.append(mean_k)                                            # ADD THE NEW CENTROID
         
-    return new_centroids                                                                        # RETURN A LIST WITH THE NEW CENTROIDS
+    return new_centroids                                                            # RETURN A LIST WITH THE NEW CENTROIDS
 
 
 # CALCUALTE THE DISTANCE BETWEEN EACH CENTROID D(OLD_CENTROID, NEW_CENTROID)
@@ -117,11 +112,12 @@ def kmeans(dataset):
     
     return new_centroids                                                                        # RETURN THE CURRENT CENTROIDS
 
+# MAIN FUNCTION
 def main():
     global pose_array
     global initial_centroids
 
-    print('Object detect node...')
+    print('Object Detect Node...')
     rospy.init_node('object_detect')
     rate = rospy.Rate(10)
 
@@ -137,8 +133,8 @@ def main():
     
     # MAIN LOOP
     while not rospy.is_shutdown():
-        pub_poses.publish(pose_array)                                                           # PUBLISH CURRENT CENTROID (X, Z)
-        pose_array.poses.clear()                                                                # CLEAR POSE ARRAY
+        pub_poses.publish(pose_array)                                 # PUBLISH CURRENT CENTROID (X, Z)
+        pose_array.poses.clear()                                      # CLEAR POSE ARRAY
         rate.sleep()
 
 

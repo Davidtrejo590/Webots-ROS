@@ -1,16 +1,19 @@
 #!/usr/bin/env python2
+
+""" 
+    NODE TO GET THE RGB IMAGE FROM CAMERA 
+    AND PROCESS IT TO GET LEFT & RIGHT LINES OF LANE  
+"""
+
+# LIBRARIES
 from __future__ import division
 from collections import Iterable
-
-""" PROCESS RGB IMAGE FROM ROS TO GET LEFT LINE OF LANE  """
-
 import rospy
 from sensor_msgs.msg import Image
 from std_msgs.msg import Float64MultiArray
 import cv2
 from cv_bridge import CvBridge
 import numpy as np
-import matplotlib.pyplot as plt
 import math
 
 
@@ -118,7 +121,7 @@ def calculate_distance_angle(line, width, height, side):
     return [distance, angle]                                                    # RETURN A LIST WITH CURRENT DISTANCE & ANGLE
 
 
-
+# CALLBACK LANE DETECT
 def callback_lane_detect(msg):
 
     global polar_left_line
@@ -160,7 +163,7 @@ def main():
     global polar_left_line
     global polar_right_line
 
-    print('Lane Detect node...')
+    print('Lane Detect Node...')
     rospy.init_node('lane_detect')
     rate = rospy.Rate(10)
 

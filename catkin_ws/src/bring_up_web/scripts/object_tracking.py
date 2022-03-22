@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+""" 
+    NODE TO OBTAIN THE CENTROIDS CALCULATED USING THE K MEANS ALGORITHM, 
+    APPLY A TIE ALGORITHM TO THE CENTROIDS FOR OBJECT TRACKING WITH THE EKF CLASS
+"""
+
+# LIBRARIES
 import math
 import rospy
 import numpy as np
@@ -22,10 +28,10 @@ def add_labels( filters ):
 
     id = 0
     for c, kalman_filter in filters:
-        if c[0] == 0.0 or c[2] == 0.0:      # CHECK CENTROIDS IN 0.0
+        if c[0] == 0.0 or c[2] == 0.0:                  # CHECK CENTROIDS IN 0.0
             continue
         else:
-            marker = Marker()                                       # CREATE A NEW MARKER FOR EACH OBJECT
+            marker = Marker()                           # CREATE A NEW MARKER FOR EACH OBJECT
             marker.header.frame_id = 'lidar_link'
             marker.ns = 'marker'
             marker.id = id
@@ -43,12 +49,12 @@ def add_labels( filters ):
             id +=1
 
             object_pose = Pose()                                    # CREATE A NEW POSE FOR EACH ESTIMATE
-            object_pose.position.x = kalman_filter.x[0]                      # X - POSITION
+            object_pose.position.x = kalman_filter.x[0]             # X - POSITION
             object_pose.position.y = 0.0                            # Y - POSITION
-            object_pose.position.z = kalman_filter.x[1]                      # Z - POSITION
-            object_pose.orientation.x = kalman_filter.x[2]                   # X - VELOCITY
+            object_pose.position.z = kalman_filter.x[1]             # Z - POSITION
+            object_pose.orientation.x = kalman_filter.x[2]          # X - VELOCITY
             object_pose.orientation.y = 0.0                         # Y - VELOCITY
-            object_pose.orientation.z = kalman_filter.x[3]                   # Z - VELOCITY
+            object_pose.orientation.z = kalman_filter.x[3]          # Z - VELOCITY
             object_poses.poses.append(object_pose)
 
     return [object_markers, object_poses]                           # RETURN LABELS AND POSES ESTIMATES INTO AN ARRAY
@@ -59,7 +65,7 @@ def callback_object_pose(msg):
 
     global marker_array, pose_array, centroids, filters, first_time
 
-    last_centroids = centroids.copy()                   # LAST CENTROIDS ( LAST <-- NEW )
+    last_centroids = centroids.copy()                                               # LAST CENTROIDS ( LAST <-- NEW )
     centroids.clear() 
 
     # GET NEW CENTROIDS
@@ -119,8 +125,8 @@ def main():
     
 
     while not rospy.is_shutdown():
-        pub_marker.publish(marker_array)                                      # PUBLISH MARKERS
-        pub_poses.publish(pose_array)                                         # PUCBLISH ESTIMATES
+        pub_marker.publish(marker_array)                         # PUBLISH MARKERS
+        pub_poses.publish(pose_array)                            # PUCBLISH ESTIMATES
         pose_array.poses.clear()
         marker_array.markers.clear()
         rate.sleep()

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-""" COMPUTE CONTROL LAWS (CRUISE SPEED & STEERING ANGLE) FOR LANE TRACKING STATE """
+""" 
+    NODE TO ENABLE CONTROL LAWS (CRUISE SPEED & STEERING ANGLE) FOR LANE TRACKING BEHAVIOR
+"""
 
 # LIBRARIES
 import rospy
@@ -16,12 +18,12 @@ enable_LT   = None
 # LEFT LANE CALLBACK
 def callback_left_lane(msg):
     global left_lane
-    left_lane = list(msg.data)                                  # TUPLE TO LIST
+    left_lane = list(msg.data)          # TUPLE TO LIST
 
 # RIGHT LANE CALLBACK
 def callback_right_lane(msg):
     global right_lane
-    right_lane = list(msg.data)                                 # TUPLE TO LIST
+    right_lane = list(msg.data)        # TUPLE TO LIST
 
 # ENABLE LANE TRACKIG CALLBACK
 def callback_enable_LT(msg):
@@ -37,9 +39,9 @@ def main():
     control_LT = Control()
 
     # INIT NODE
-    print('Lane Tracking Node ...')
+    print('Lane Tracking Node...')
     rospy.init_node('lane_tracking')
-    rate = rospy.Rate(10)  # 10Hz
+    rate = rospy.Rate(10)
 
     # SUBSCRIBERS
     rospy.Subscriber('/left_lane', Float64MultiArray, callback_left_lane)
