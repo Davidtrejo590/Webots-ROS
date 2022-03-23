@@ -50,7 +50,7 @@ vel_1  = [0.0, 0.0,  v1, 0.0, 0.0, 0.0]            # Z VELOCITY FOR CAR 1
 vel_2  = [0.0, 0.0,  v2, 0.0, 0.0, 0.0]            # X VELOCITY DOR CAR 2
 vel_3  = [0.0, 0.0,  v3, 0.0, 0.0, 0.0]            # Z VELOCITY FOR CAR 3 
 vel_4  = [0.0, 0.0,  v3, 0.0, 0.0, 0.0]            # X VELOCITY DOR CAR 4
-
+print("CAR 1 VELOCITY: " + str(v1))
 
 # MAIN FUNCTION
 def main():
