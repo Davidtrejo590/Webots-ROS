@@ -6,7 +6,7 @@
   <include file="$(find webots_ros)/launch/webots.launch">
     <arg name="mode" value="realtime"/>
     <arg name="no_gui" value="$(arg no_gui)"/>
-    <arg name="world" value="$(find bring_up_web)/worlds/case_experiments_state_0.wbt"/>
+    <arg name="world" value="$(find bring_up_web)/worlds/case_experiments_state_15.wbt"/>
   </include>
 
   <node pkg="tf" type="static_transform_publisher" name="map_to_car"    args="0 0 0 0 0 0 map car_link 10"/>
