@@ -1,28 +1,29 @@
 """ 
     0 0     KEEP DISTANCE (KD)
     0 1     CRUISE (C)
-    1 0     CHANGE LANE (CL)
+    1 0     PASS (PS)
     1 1
 
-    ENTRADAS        SALIDAS     COMPORTAMIENTO
+    ENTRADAS          COMPORTAMIENTO
     
-    FW FSW FNW FN       
-     0   0   0  0       0 0             KD
-     0   0   0  1       0 1              C
-     0   0   1  0       0 0             KD 
-     0   0   1  1       0 1              C
-     0   1   0  0       0 0             KD
-     0   1   0  1       0 1              C
-     0   1   1  0       0 0             KD
-     0   1   1  1       0 1              C
-     1   0   0  0       0 0             KD 
-     1   0   0  1       0 1              C
-     1   0   1  0       1 0             CL
-     1   0   1  1       0 1              C
-     1   1   0  0       0 0             KD
-     1   1   0  1       0 1              C
-     1   1   1  0       1 0             CL
-     1   1   1  1       0 1              C
+    FW FSW FNW FN     COMPORTAMIENTO
+      
+     0   0   0  0     KEEP DISTANCE
+     0   0   0  1     CRUISE
+     0   0   1  0     KEEP DISTANCE
+     0   0   1  1     CRUISE
+     0   1   0  0     KEEP DISTANCE
+     0   1   0  1     CRUISE
+     0   1   1  0     KEEP DISTANCE
+     0   1   1  1     CRUISE
+     1   0   0  0     KEEP DISTANCE
+     1   0   0  1     CRUISE
+     1   0   1  0     PASS
+     1   0   1  1     CRUISE
+     1   1   0  0     KEEP DISTANCE
+     1   1   0  1     CRUISE
+     1   1   1  0     PASS
+     1   1   1  1     CRUISE
 
 
 """

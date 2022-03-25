@@ -68,7 +68,7 @@ def main():
             car_W.setVelocity(vel_W)
             car_NW.setVelocity(vel_NW)
             car_SW.setVelocity(vel_SW)
-        elif i == 350:                          # RETURN TO INITIAL POSITION CAR 1
+        elif i == 350:                          # RETURN TO INITIAL 
             tf_N.setSFVec3f(sp_N)
             tf_W.setSFVec3f(sp_W)
             tf_NW.setSFVec3f(sp_NW)

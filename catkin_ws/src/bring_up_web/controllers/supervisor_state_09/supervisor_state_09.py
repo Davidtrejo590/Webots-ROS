@@ -31,7 +31,7 @@ tf_W    = car_W.getField('translation')
 tf_NW   = car_NW.getField('translation')
 tf_SW   = car_SW.getField('translation')
 
-# FOR STATE 00:
+# FOR STATE 09:
 initial_N   = [0,0,1000]
 initial_W   = [0,0,1000]
 initial_NW  = [0,0,1000]
@@ -47,10 +47,10 @@ v_W     = numpy.random.uniform(0.0, 0.0)
 v_NW    = numpy.random.uniform(3.0, 4.0)
 v_SW    = numpy.random.uniform(3.0, 4.0)
 
-vel_N  = [0.0, 0.0,  v_N, 0.0, 0.0, 0.0]            # Z VELOCITY FOR CAR N 
-vel_W  = [0.0, 0.0,  v_W, 0.0, 0.0, 0.0]            # X VELOCITY DOR CAR W
+vel_N  = [0.0, 0.0,  v_N,  0.0, 0.0, 0.0]           # Z VELOCITY FOR CAR N 
+vel_W  = [0.0, 0.0,  v_W,  0.0, 0.0, 0.0]           # Z VELOCITY DOR CAR W
 vel_NW = [0.0, 0.0,  v_NW, 0.0, 0.0, 0.0]           # Z VELOCITY FOR CAR NW 
-vel_SW = [0.0, 0.0,  v_SW, 0.0, 0.0, 0.0]           # X VELOCITY DOR CAR SW
+vel_SW = [0.0, 0.0,  v_SW, 0.0, 0.0, 0.0]           # Z VELOCITY DOR CAR SW
 
 print("CAR NW VELOCITY: " + str(v_NW))
 print("CAR SW VELOCITY: " + str(v_SW))
@@ -66,9 +66,7 @@ def main():
             car_W.setVelocity(vel_W)
             car_NW.setVelocity(vel_NW)
             car_SW.setVelocity(vel_SW)
-        elif i == 350:                          # RETURN TO INITIAL POSITION CAR 1
-            tf_N.setSFVec3f(sp_N)
-            tf_W.setSFVec3f(sp_W)
+        elif i == 350:                          # RETURN TO INITIAL 
             tf_NW.setSFVec3f(sp_NW)
             tf_SW.setSFVec3f(sp_SW)
             i = 0
