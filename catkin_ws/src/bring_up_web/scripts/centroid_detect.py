@@ -30,7 +30,7 @@ def callback_point_cloud(msg):
                     dataset.append(list(point))                                     # DATASET TO CLUSTERING
 
         # APPLY KMEANS BY SCIPY
-        centroids, dist = kmeans(dataset, 3)
+        centroids, dist = kmeans(dataset, 4)
         
 # MAIN FUNCTION
 def main():

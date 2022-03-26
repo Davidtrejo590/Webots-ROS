@@ -47,7 +47,7 @@ def main():
 
             steering_angle = 0.0                           # STAY STRAIGHT
             pub_angle.publish(steering_angle)
-            time.sleep(2.5)
+            time.sleep(1.5)
 
             steering_angle = ( 0.0174533 * 12 )            # TURN RIGHT
             pub_angle.publish(steering_angle)

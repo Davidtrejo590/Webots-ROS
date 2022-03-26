@@ -26,15 +26,15 @@ class Control:
             self.steering_angle = 0.0
         # BOTH LINES DETECTED
         elif (left_line[0] != 0.0 and left_line[1] != 0.0) and (right_line[0] != 0.0 and right_line[1] != 0.0):
-            self.cruise_speed = 30.0 if distance == 0.0 else 12.5
+            self.cruise_speed = 30.0 if distance == 0.0 else abs(distance/0.5)
             self.steering_angle = self.compute_steering_angle_avg(left_line, right_line)
         # LEFT LINES DETECTED
         elif (left_line[0] != 0.0 and left_line[1] != 0.0) and (right_line[0] == 0 or right_line[1] == 0.0):
-            self.cruise_speed = 20.0 if distance == 0.0 else 12.5
+            self.cruise_speed = 20.0 if distance == 0.0 else abs(distance/0.5)
             self.steering_angle = self.compute_steering_angle(left_line, right_line, True)
         # RIGHT LINES DETECTED
         elif (left_line[0] == 0.0 or left_line[1] == 0.0) and (right_line[0] != 0 and right_line[1] != 0.0):
-            self.cruise_speed = 20.0 if distance == 0.0 else 12.5
+            self.cruise_speed = 20.0 if distance == 0.0 else abs(distance/0.5)
             self.steering_angle = self.compute_steering_angle(left_line, right_line, False)
 
     # CONPUTE STEERING ANGLE BY SIDE

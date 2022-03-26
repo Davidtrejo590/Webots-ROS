@@ -42,9 +42,9 @@ def callback_car_pose(msg):
         for c in cars:
             # DEFINE BUSY & FREE REGIONS (BOUNDING BOXES)
             free_N  = free_N   and not ( ( c[0] > -0.5 and c[0] <  1.5 ) and ( c[1] > -15.0 and c[1] <  0.0 ) ) # CN 
-            free_NW = free_NW  and not ( ( c[0] > -4.0 and c[0] < -2.5 ) and ( c[1] > -15.0 and c[1] < -0.0 ) ) # NW
+            free_NW = free_NW  and not ( ( c[0] > -4.0 and c[0] < -2.5 ) and ( c[1] > -15.0 and c[1] <  0.0 ) ) # NW
             free_W  = free_W   and not ( ( c[0] > -4.0 and c[0] < -2.5 ) and ( c[1] >  -0.5 and c[1] <  1.5 ) ) # CW
-            free_SW = free_SW  and not ( ( c[0] > -4.0 and c[0] < -2.5 ) and ( c[1] >  15.0 and c[1] < 10.0 ) ) # SW
+            free_SW = free_SW  and not ( ( c[0] > -4.0 and c[0] < -2.5 ) and ( c[1] >  10.0 and c[1] < 15.0 ) ) # SW
 
             # GET CAR IN FRONT
             if not free_N and ( not free_W or not free_NW):
@@ -84,6 +84,7 @@ def main():
     while not rospy.is_shutdown():
         
         if state == SM_CRUISE:                      # CRUISE STATE
+            print('CRUISE')
             enable_LT.data = True
             enable_KD.data = False
             enable_PS.data = False
@@ -93,6 +94,7 @@ def main():
                 state = SM_KEEP
         
         elif state == SM_PASS:                      # PASS STATE
+            print('PASS')
             enable_PS.data = True
             enable_LT.data = False
             enable_KD.data = False
@@ -105,6 +107,7 @@ def main():
                 state = SM_CRUISE
 
         elif state == SM_KEEP:                      # KEEP DISTANCE STATE
+            print('KEEP DISTANCE')
             pub_front_car.publish(safe_distance)    # PUBLISH FRONT CAR
             enable_KD.data = True
             enable_LT.data = False

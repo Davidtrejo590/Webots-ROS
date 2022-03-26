@@ -11,11 +11,14 @@
 import rospy
 from vehicle import Driver
 from controller import Camera, Keyboard, Lidar
-from std_msgs.msg import Float64
+from std_msgs.msg import Float64, Bool
 from sensor_msgs.msg import Image, PointCloud2, PointField
 
 # CONSTANTS
 TIME_STEP = 50
+
+# GLOBAL VARIABLES 
+start = False
 
 # INIT DRIVER
 driver = Driver()
@@ -38,6 +41,8 @@ keyboard.enable(TIME_STEP)
 # CHECK KEYBORARD TO SET STEERING ANGLE & SPEED FROM KEYBORAD
 def check_keyboard():
 
+  global start
+
   left_angle = 0.0 
   right_angle = 0.0
 
@@ -54,9 +59,13 @@ def check_keyboard():
 
   elif (key == keyboard.UP):                                      # SET CRUISE SPEED
     driver.setCruisingSpeed(10.0)
+    print('UP')
 
   elif (key == keyboard.DOWN):                                    # SET CRUISE SPEED
     driver.setCruisingSpeed(0.0)
+  
+  elif (key == ord('S')):
+    start = True
 
 # FUNCTION TO GIVE HELP
 def help():
@@ -75,6 +84,8 @@ def callback_steering_angle( msg ):
 # MAIN FUNCTION
 def main():
 
+  global start
+
   # INIT ROS
   print('RUNNING ROS CAR CONTROLLER NODE ...')
   rospy.init_node('ros_car_controller')
@@ -82,6 +93,9 @@ def main():
 
   # PRINT HELP FOR USER
   help()                        
+
+  # BOOL MESSAGE
+  msg_bool = Bool()
 
   # IMAGE MESSAGE
   msg_image = Image()
@@ -112,6 +126,7 @@ def main():
   pub_camera_data  = rospy.Publisher('/camera/rgb/raw', Image, queue_size=10)
   pub_point_cloud  = rospy.Publisher('/point_cloud'   , PointCloud2, queue_size=10)
   pub_steering_angle = rospy.Publisher('/current_steering', Float64, queue_size=10)
+  pub_enable_start = rospy.Publisher('/enable_start', Bool, queue_size=10)
 
   # SUBSCRIBERS
   rospy.Subscriber('/goal_cruise_speed'  , Float64, callback_cruise_speed  )
@@ -126,8 +141,9 @@ def main():
     msg_image.data = camera.getImage()                                    # GET IMAGE DATA FROM CAMERA
     msg_point_cloud.data = lidar.getPointCloud(data_type='buffer')        # GET POINT CLOUD FROM LIDAR
     msg_point_cloud.header.stamp = rospy.Time.now()                       # REFRESH STAMP FOR POINT CLOUD
+    msg_bool.data = start                                                 # GET ENABLE START FROM KEYBOARD
     
-    
+    pub_enable_start.publish(msg_bool)                                    # PUBLISHING START FLAG
     pub_camera_data.publish(msg_image)                                    # PUBLISHING IMAGE MESSAGE
     pub_point_cloud.publish(msg_point_cloud)                              # PUBLISHING POINTCLOUD2 MESSAGE
     
