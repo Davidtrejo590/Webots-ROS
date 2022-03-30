@@ -74,15 +74,11 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.9966008487878135 -0.0758238670508573 -0.032210081975426706 0.23621085024296778
-  position -46.27652095661306 15.919013894535574 195.28850198075332
+  orientation -0.0017915786465955725 0.9937722205632601 0.11141617424198465 3.1096355418475716
+  position -47.29169222637918 7.064378920687487 -33.36850930937031
   near 1
   follow "vehicle"
   followSmoothness 0
-}
-TeslaModel3Simple {
-  translation -46.91 0.311 94.79
-  name "vehicle(6)"
 }
 TexturedBackground {
 }
@@ -315,7 +311,7 @@ CurvedRoadSegment {
   curvatureRadius 40.5
 }
 BmwX5 {
-  translation -46.5526 0.311 34.4792
+  translation -47.1263 0.101778 -6.73006
   rotation -0.9785174180294364 0.2061634999938847 0.0005233385869732009 0.005188375975700859
   controller "ros_car_controller"
   sensorsSlotTop [
@@ -365,27 +361,17 @@ BmwX5 {
     }
   ]
 }
-DEF CAR-4 LincolnMKZSimple {
-  translation 111.19 0.311 61.94
-  rotation 0 1 0 3.14159
-  name "vehicle(3)"
-}
 DEF CAR-2 CitroenCZeroSimple {
-  translation -50.81 0.311 58.07
+  translation -51.49 0.311 -14.8
   rotation 0 1 0 -5.307179586466759e-06
   name "vehicle(2)"
 }
 Robot {
   name "supervisor"
-  controller "supervisor_controller"
+  controller "supervisor_controller_test"
   supervisor TRUE
 }
-DEF CAR-3 RangeRoverSportSVRSimple {
-  translation 98.97 0.311 169.08
-  rotation 0 1 0 3.14159
-  name "vehicle(1)"
-}
 DEF CAR-1 ToyotaPriusSimple {
-  translation -38.72 0.311 -16.47
+  translation -43.02 0.311 -16.47
   name "vehicle(0)"
 }

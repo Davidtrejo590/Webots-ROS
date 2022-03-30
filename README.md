@@ -6,7 +6,7 @@ Desarrollo de  algoritmos para navegación de autos autónomos usando el simulad
 
 * Ubuntu 18.04
 * ROS-Melodic
-* Webots
+* Webots R2021b
 
 ## INSTALACIÓN 
 
@@ -21,7 +21,18 @@ Desarrollo de  algoritmos para navegación de autos autónomos usando el simulad
 * $ export WEBOTS_HOME=/usr/local/webots
 * $ cd
 * $ source Webots-ROS/catkin_ws/devel/setup.bash
-* $ roslaunch bring_up_web basic_car.launch
+* $ roslaunch bring_up_web test.launch
+
+* Si todo se instaló y compiló correctamente se debe de visualizar un Webots como el siguiente:
+<img src="https://github.com/mnegretev/Mobile-Robots-2021-1/blob/master/Media/webots.png" alt="Star Gazer App" width="700"/>
+<br><br>
+
+* Además de un RViz como el siguiente:
+<img src="https://github.com/mnegretev/Mobile-Robots-2021-1/blob/master/Media/rviz.png" alt="Star Gazer App" width="700"/>
+
+## CONTACTO
+Luis David Torres Trejo<br>
+luisdavidtorrestrejo@gmail.com<br>
 
 
 
