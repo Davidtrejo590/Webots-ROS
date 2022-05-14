@@ -11,51 +11,45 @@
 import rospy
 from vehicle import Driver
 from controller import Camera, Keyboard, Lidar
-from std_msgs.msg import Float64, Bool
+from std_msgs.msg import Float64
 from sensor_msgs.msg import Image, PointCloud2, PointField
 
-# CONSTANTS
-TIME_STEP = 50
-
-# GLOBAL VARIABLES 
-start = False
 
 # INIT DRIVER
 driver = Driver()
 driver.setCruisingSpeed(0.0)                                  # SPEED CONTROL km/h - INITIAL SPEED
 driver.setSteeringAngle(0.0)                                  # STEERING ANGLE - INITIAL ANGLE
+timestep = int(driver.getBasicTimeStep())                     # BASIS TIME STEP FROM CRURRENT WORLD
 
 # INIT CAMERA
 camera = Camera('camera')                                     # GET CAMERA FROM DEVICES
-camera.enable(TIME_STEP)    
+camera.enable(timestep)                                       # ENABLE CAMERA
 
 # INIT LIDAR
 lidar = Lidar('lidar')                                        # GET LIDAR FROM DEVICES
-lidar.enable(TIME_STEP)
+lidar.enable(timestep)                                        # ENABLE LIDAR
 lidar.enablePointCloud()
 
 # INIT KEYBOARD
-keyboard = Keyboard()
-keyboard.enable(TIME_STEP)
+keyboard = Keyboard()                                         # ENABLE KEYBORAR
+keyboard.enable(timestep)                                     # ENABLE KEYBORAD
 
 # CHECK KEYBORARD TO SET STEERING ANGLE & SPEED FROM KEYBORAD
 def check_keyboard():
 
-  global start
-
-  left_angle = 0.0 
-  right_angle = 0.0
+  left_steering   = 0.0 
+  right_steering  = 0.0
 
   # CHECK KEYBOARD
   key = keyboard.getKey()
 
   if key == keyboard.LEFT:                                        # COMPUTE & SET LEFT STEERING ANGLE
-    left_angle = driver.getSteeringAngle() - ( 0.0174533 * 5 )
-    driver.setSteeringAngle(left_angle)
+    left_steering = driver.getSteeringAngle() - ( 0.0174533 * 5 )
+    driver.setSteeringAngle(left_steering)
 
   elif key == keyboard.RIGHT:                                     # COMPUTE & SET RIGHT STEERING ANGLE
-    right_angle = driver.getSteeringAngle() + (0.0174533*5)
-    driver.setSteeringAngle(right_angle)
+    right_steering = driver.getSteeringAngle() + (0.0174533*5)
+    driver.setSteeringAngle(right_steering)
 
   elif (key == keyboard.UP):                                      # SET CRUISE SPEED
     driver.setCruisingSpeed(10.0)
@@ -63,9 +57,7 @@ def check_keyboard():
 
   elif (key == keyboard.DOWN):                                    # SET CRUISE SPEED
     driver.setCruisingSpeed(0.0)
-  
-  elif (key == ord('S')):
-    start = True
+
 
 # FUNCTION TO GIVE HELP
 def help():
@@ -74,28 +66,23 @@ def help():
   print('[UP]/[DOWN] - SET CONSTANT SPEED / SLOW DOWN')
 
 # CRUISE SPEED CALLBACK
-def callback_cruise_speed( msg ):
+def callback_speed( msg ):
   driver.setCruisingSpeed(msg.data)
 
 # STEERING ANGLE CALLBACK
-def callback_steering_angle( msg ):
+def callback_steering( msg ):
   driver.setSteeringAngle(msg.data)
 
 # MAIN FUNCTION
 def main():
 
-  global start
-
   # INIT ROS
   print('RUNNING ROS CAR CONTROLLER NODE ...')
   rospy.init_node('ros_car_controller')
-  rate = rospy.Rate(20)
+  rate = rospy.Rate(10)
 
   # PRINT HELP FOR USER
   help()                        
-
-  # BOOL MESSAGE
-  msg_bool = Bool()
 
   # IMAGE MESSAGE
   msg_image = Image()
@@ -123,29 +110,26 @@ def main():
   
 
   # PUBLISHERS
-  pub_camera_data  = rospy.Publisher('/camera/rgb/raw', Image, queue_size=10)
-  pub_point_cloud  = rospy.Publisher('/point_cloud'   , PointCloud2, queue_size=10)
-  pub_steering_angle = rospy.Publisher('/current_steering', Float64, queue_size=10)
-  pub_enable_start = rospy.Publisher('/enable_start', Bool, queue_size=10)
-
+  pub_steering_angle  = rospy.Publisher('/current_steering', Float64, queue_size=10)
+  pub_camera_data     = rospy.Publisher('/camera/rgb/raw', Image, queue_size=10)
+  pub_point_cloud     = rospy.Publisher('/point_cloud'   , PointCloud2, queue_size=10)
+  
   # SUBSCRIBERS
-  rospy.Subscriber('/goal_cruise_speed'  , Float64, callback_cruise_speed  )
-  rospy.Subscriber('/goal_steering_angle', Float64, callback_steering_angle)
+  rospy.Subscriber('/goal_speed', Float64, callback_speed)
+  rospy.Subscriber('/goal_steering', Float64, callback_steering)
 
   # MAIN LOOP
   while driver.step() != -1 and not rospy.is_shutdown():
     
     check_keyboard()                                                      # CHECK KEYBOARD
 
-    pub_steering_angle.publish(driver.getSteeringAngle()) 
     msg_image.data = camera.getImage()                                    # GET IMAGE DATA FROM CAMERA
     msg_point_cloud.data = lidar.getPointCloud(data_type='buffer')        # GET POINT CLOUD FROM LIDAR
     msg_point_cloud.header.stamp = rospy.Time.now()                       # REFRESH STAMP FOR POINT CLOUD
-    msg_bool.data = start                                                 # GET ENABLE START FROM KEYBOARD
     
-    pub_enable_start.publish(msg_bool)                                    # PUBLISHING START FLAG
-    pub_camera_data.publish(msg_image)                                    # PUBLISHING IMAGE MESSAGE
+    pub_steering_angle.publish(driver.getSteeringAngle())                 # PUBLISH CURRENT STEERING ANGLE
     pub_point_cloud.publish(msg_point_cloud)                              # PUBLISHING POINTCLOUD2 MESSAGE
+    pub_camera_data.publish(msg_image)                                    # PUBLISHING IMAGE MESSAGE
     
     rate.sleep()
 

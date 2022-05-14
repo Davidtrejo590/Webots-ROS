@@ -5,7 +5,7 @@ WorldInfo {
   ]
   title "TMR-2022-AutoModelCar"
   ERP 0.6
-  basicTimeStep 50
+  basicTimeStep 120
   coordinateSystem "NUE"
   lineScale 1
   contactProperties [
@@ -71,8 +71,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.5906638468736732 -0.5502614367835499 -0.5901936726069649 4.148353305734334
-  position -28.976336340295205 304.3922496230069 -1.1192191337466144
+  orientation 0.5942129858735277 -0.5425714293079218 -0.5937399864570565 4.136504415830953
+  position -35.05668909008239 303.71819507089526 -1.1240610825871877
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -111,28 +111,23 @@ CitroenCZeroSimple {
   name "vehicle(6)"
 }
 LincolnMKZSimple {
-  translation 16 0.4 -72.61
+  translation 11.94 0.4 -72.61
   rotation 0 1 0 -1.5707953071795862
   color 0.333333 0.341176 0.32549
   name "vehicle(7)"
-}
-ToyotaPriusSimple {
-  translation 17.1038 0.4 -39.9661
-  rotation 0 1 0 -2.6179953071795863
-  name "vehicle(5)"
 }
 HighwayPole {
   translation -41.75 0 -27.02
   rotation 0 1 0 1.5708
 }
 TeslaModel3Simple {
-  translation 19.43 0.4 5.15589e-05
+  translation 19.43 0.4 -0.969948
   rotation 0 1 0 3.14159
   name "vehicle(4)"
 }
 RangeRoverSportSVRSimple {
-  translation -20.5549 0.4 47.1554
-  rotation 0 1 0 0.785398
+  translation 9.19133 0.4 10.0493
+  rotation 0 1 0 -1.5707953071795862
   name "vehicle(3)"
 }
 StraightRoadSegment {
@@ -463,8 +458,4 @@ LincolnMKZSimple {
   translation 9.3403 0.4 75.57
   rotation 0 1 0 1.5708
   name "vehicle(2)"
-}
-MercedesBenzSprinterSimple {
-  translation 10.31 0.4 10.6
-  rotation 0 1 0 -1.5707953071795862
 }
