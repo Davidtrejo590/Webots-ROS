@@ -14,6 +14,7 @@ from control_laws import Control
 left_lane   = [0.0, 0.0]
 right_lane  = [0.0, 0.0]
 enable_LT   = None
+speed       = None
 
 # LEFT LANE CALLBACK
 def callback_left_lane(msg):
@@ -33,7 +34,7 @@ def callback_enable_LT(msg):
 # MAIN FUNCTION
 def main():
 
-    global left_lane, right_lane, enable_LT
+    global left_lane, right_lane, enable_LT, speed
 
     # CLASS FOR CONTROL LAWS
     control_LT = Control()
@@ -43,19 +44,23 @@ def main():
     rospy.init_node('lane_tracking')
     rate = rospy.Rate(10)
 
+    # PARAMS
+    if rospy.has_param('/speed'):
+        speed = rospy.get_param('/speed')
+
     # SUBSCRIBERS
     rospy.Subscriber('/left_lane', Float64MultiArray, callback_left_lane)
     rospy.Subscriber('/right_lane', Float64MultiArray, callback_right_lane)
     rospy.Subscriber('/enable_LT', Bool, callback_enable_LT)
 
     # PUBLISHERS
-    pub_speed = rospy.Publisher('/goal_cruise_speed', Float64, queue_size=10)
-    pub_angle = rospy.Publisher('/goal_steering_angle', Float64, queue_size=10)
+    pub_speed = rospy.Publisher('/goal_speed', Float64, queue_size=10)
+    pub_angle = rospy.Publisher('/goal_steering', Float64, queue_size=10)
 
 
     while not rospy.is_shutdown():
         if enable_LT:                                               # LANE TRACKING STATE
-            control_LT.control_law(left_lane, right_lane)           # COMPUTE CONTROL LAWS
+            control_LT.control_law(left_lane, right_lane, speed)           # COMPUTE CONTROL LAWS
             pub_speed.publish(control_LT.cruise_speed)              # PUBLISH CRUISE SPEED
             pub_angle.publish(control_LT.steering_angle)            # PUBLISH STEERING ANGLE
         

@@ -149,13 +149,13 @@ def callback_lane_detect(msg):
         polar_right_line = calculate_distance_angle(right_line, width, height, False)       # GET DISTANCE AND ANGLE FOR RIGHT LINE
         line_img = display_lines(lane_img, avg_lines)                                       # DISPLAY LINES IN A IMAGE
         combo_img = cv2.addWeighted(lane_img, 0.8, line_img, 1, 1)                          # LANE_IMG + LINES
-        cv2.imshow('Result', combo_img)                                                     # DISPLAY IMAGE 
-        cv2.waitKey(33)
+        # cv2.imshow('Result', combo_img)                                                     # DISPLAY IMAGE 
+        # cv2.waitKey(33)
     else:                                                                                   # IF THERE AREN'T LINES
         polar_left_line = [0.0,0.0]                                                         # DISTANCE AND ANGLE NOT CALCULATED FOR LEFT LINE
         polar_right_line = [0.0,0.0]                                                        # DISTANCE AND ANGLE NOT CALCULATED FOR RIGHT LINE
-        cv2.imshow('Result', lane_img)                                                      # DISPLAY ORIGINAL IMAGE 
-        cv2.waitKey(33)
+        # cv2.imshow('Result', lane_img)                                                      # DISPLAY ORIGINAL IMAGE 
+        # cv2.waitKey(33)
 
 # MAIN FUNCTION
 def main():

@@ -11,14 +11,13 @@ from geometry_msgs.msg import PoseArray
 from std_msgs.msg import Bool, Float64
 
 # STATES
-SM_CRUISE   = 'CRUISE'
-SM_PASS     = 'PASS'
-SM_KEEP     = 'KEEP DISTANCE'
-
-# ENABLES
-enable_LT = Bool()              # ENABLE LANE TRACKING
-enable_KD = Bool()              # ENABLE KEEP DISTANCE
-enable_PS = Bool()              # ENABLE PASSING
+SM_LANE_TRACKING    = 'SM_LANE_CRUISE'
+SM_WAIT_PASS        = 'SM_WAIT_PASS'
+SM_FINISH           = 'SM_FINISH'
+SM_CRUISE           = 'CRUISE'
+SM_PASS             = 'PASS'
+SM_KEEP             = 'KEEP DISTANCE'
+SM_INIT             = 'SM_INIT'
 
 # GLOBAL VARIABLES
 free_N  = 1
@@ -52,8 +51,6 @@ def callback_car_pose(msg):
             else:
                 safe_distance = 0.0
 
-
-
 # PASS FINISHED CALLBACK
 def callback_pass_finished(msg):
     global pass_finished
@@ -61,7 +58,7 @@ def callback_pass_finished(msg):
 
 # MAIN FUNCTION
 def main():
-    global free_N, free_W, free_NW, free_SW, enable_LT, enable_KD, enable_PS, pass_finished, safe_distance
+    global free_N, free_W, free_NW, free_SW, pass_finished, safe_distance
 
     # INIT NODE
     print('Object Avoidance Node...')
@@ -79,50 +76,56 @@ def main():
     pub_front_car = rospy.Publisher('/safe_distance', Float64, queue_size=10)
 
     # STATE MACHINE
-    state = SM_CRUISE
+    state = SM_INIT
 
     while not rospy.is_shutdown():
-        
-        if state == SM_CRUISE:                      # CRUISE STATE
+
+        if state == SM_INIT:                                # STATE INIT 
+            print('INIT STATE MACHINE AVOIDANCE')
+            state = SM_CRUISE
+
+        elif state == SM_CRUISE:                            # STATE LANE TRACKING
             print('CRUISE')
-            enable_LT.data = True
-            enable_KD.data = False
-            enable_PS.data = False
             if not free_N and free_W and free_NW:
                 state = SM_PASS
             elif not free_N and ( not free_W or not free_NW):
                 state = SM_KEEP
+            else:
+                pub_enable_LT.publish(True)                 # ENABLE LANE TRACKING
+                state = SM_CRUISE
+
+        elif state == SM_PASS:                              # STATE START OVERTAKE
+            pub_enable_PS.publish(True)                     # START OVERTAKE
+            pub_enable_LT.publish(False)                    # DISABLE LANE TRACKING
+            pub_enable_KD.publish(False)                    # DISABLE LANE TRACKING
+            state = SM_WAIT_PASS
+
         
-        elif state == SM_PASS:                      # PASS STATE
-            print('PASS')
-            enable_PS.data = True
-            enable_LT.data = False
-            enable_KD.data = False
-            free_N = 1
-            free_W = 1
+        elif state == SM_WAIT_PASS:                         # STATE WAIT OVERTAKE
+            pub_enable_PS.publish(False)                    # START OVERTAKE
+            free_N  = 1
+            free_W  = 1
             free_NW = 1
             free_SW = 1
             if pass_finished:
-                pass_finished = False               # FROM PASS NODE
-                state = SM_CRUISE
+                state = SM_FINISH
+            else:
+                state = SM_WAIT_PASS
 
-        elif state == SM_KEEP:                      # KEEP DISTANCE STATE
+        elif state == SM_FINISH:                            # STATE OVERTAKE FINISHED
+            pass_finished = False
+            state = SM_CRUISE
+
+        elif state == SM_KEEP:                              # KEEP DISTANCE STATE
             print('KEEP DISTANCE')
-            pub_front_car.publish(safe_distance)    # PUBLISH FRONT CAR
-            enable_KD.data = True
-            enable_LT.data = False
-            enable_PS.data = False
+            pub_front_car.publish(safe_distance)            # PUBLISH FRONT CAR
+            pub_enable_PS.publish(False)                    # START OVERTAKE
+            pub_enable_LT.publish(False)                    # DISABLE LANE TRACKING
+            pub_enable_KD.publish(True)                     # DISABLE LANE TRACKING
             if free_N:
                 state = SM_CRUISE
             elif free_NW and free_W:
                 state = SM_PASS
-        
-
-        # PUBLISH ENABLES
-        pub_enable_LT.publish(enable_LT)        # ENABLE LANE TRACKING
-        pub_enable_KD.publish(enable_KD)        # ENABLE KEEP DISTANCE
-        pub_enable_PS.publish(enable_PS)        # ENABLE PASS
-
         rate.sleep()
 
 
