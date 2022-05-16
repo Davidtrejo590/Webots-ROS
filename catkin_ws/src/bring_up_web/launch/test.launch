@@ -15,6 +15,6 @@
   <node pkg="tf" type="static_transform_publisher" name="car_to_gyro"   args="0 -0.1 0 0 3.1415926 0 car_link gyro_link 10"/>
   <node pkg="tf" type="static_transform_publisher" name="car_to_gps"    args="0 -0.1 0 0 3.1415926 0 car_link gps_link 10"/>
 
-  <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find bring_up_web)/rviz/car_sensors.rviz"/>
+  <!-- <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find bring_up_web)/rviz/car_sensors.rviz"/> -->
 
 </launch>
