@@ -59,8 +59,8 @@ def main():
     
     
     # PUBLISHERS
-    pub_speed = rospy.Publisher('/goal_cruise_speed', Float64, queue_size=10)
-    pub_angle = rospy.Publisher('/goal_steering_angle', Float64, queue_size=10)
+    pub_speed = rospy.Publisher('/goal_speed', Float64, queue_size=10)
+    pub_angle = rospy.Publisher('/goal_steering', Float64, queue_size=10)
 
 
     while not rospy.is_shutdown():

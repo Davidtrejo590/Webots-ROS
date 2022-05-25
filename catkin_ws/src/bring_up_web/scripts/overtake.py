@@ -130,7 +130,7 @@ def main():
         
         elif state == SM_WAIT_TURN_RIGHT:                     # STATE WAIT TURN RIGHT 2
             count += 1
-            if count > 16:
+            if count > 8:
                 state = SM_ALIGN_LEFT
             else:
                 state = SM_WAIT_TURN_RIGHT
@@ -166,8 +166,7 @@ def main():
 
         elif state == SM_FINISH_OVERTAKE:                       # STATE FINISH OVERTAKE
             pub_pass_finished.publish(True)
-            state = SM_WAIT_NEW_OVERTAKE
-        
+            state = SM_WAIT_NEW_OVERTAKE        
             
         rate.sleep()
 

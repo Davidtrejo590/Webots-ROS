@@ -147,8 +147,8 @@ def callback_lane_detect(msg):
         left_line, right_line = avg_lines.reshape(2,4)
         polar_left_line = calculate_distance_angle(left_line, width, height, True)          # GET DISTANCE AND ANGLE FOR LEFT LINE
         polar_right_line = calculate_distance_angle(right_line, width, height, False)       # GET DISTANCE AND ANGLE FOR RIGHT LINE
-        line_img = display_lines(lane_img, avg_lines)                                       # DISPLAY LINES IN A IMAGE
-        combo_img = cv2.addWeighted(lane_img, 0.8, line_img, 1, 1)                          # LANE_IMG + LINES
+        # line_img = display_lines(lane_img, avg_lines)                                       # DISPLAY LINES IN A IMAGE
+        # combo_img = cv2.addWeighted(lane_img, 0.8, line_img, 1, 1)                          # LANE_IMG + LINES
         # cv2.imshow('Result', combo_img)                                                     # DISPLAY IMAGE 
         # cv2.waitKey(33)
     else:                                                                                   # IF THERE AREN'T LINES

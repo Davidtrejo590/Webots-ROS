@@ -15,18 +15,18 @@ robot = Supervisor()
 
 # NODES
 car_1 = robot.getFromDef('CAR-1')
-car_2 = robot.getFromDef('CAR-2')
+# car_2 = robot.getFromDef('CAR-2')
 
 # GET INITIAL POSITION FOR EACH CAR
 sp_1 = car_1.getPosition()
-sp_2 = car_2.getPosition()
+# sp_2 = car_2.getPosition()
 
 # GET THE TRANSLATION FIELD FOR EACH CAR
 tf_1 = car_1.getField('translation')
-tf_2 = car_2.getField('translation')
+# tf_2 = car_2.getField('translation')
 
-vel     = [0.0, 0.0, 3.0, 0.0, 0.0, 0.0]            # Z VELOCITY FOR CAR 1 
-vel_1   = [5.0, 0.0, 0.0, 0.0, 0.0, 0.0]            # X VELOCITY DOR CAR 2
+vel     = [0.0, 0.0, 1.0, 0.0, 0.0, 0.0]            # Z VELOCITY FOR CAR 1 
+vel_1   = [1.0, 0.0, 0.0, 0.0, 0.0, 0.0]            # X VELOCITY DOR CAR 2
 
 
 # MAIN FUNCTION
@@ -43,10 +43,10 @@ def main():
             i = 0
 
         if j == 0:
-            car_2.setVelocity(vel_1)            # SET VELOCITY FOR CAR 2
+            # car_2.setVelocity(vel_1)            # SET VELOCITY FOR CAR 2
             pass
         elif j == 150:
-            tf_2.setSFVec3f(sp_2)               # RETURN TO INITIAL POSITION CAR 2
+            # tf_2.setSFVec3f(sp_2)               # RETURN TO INITIAL POSITION CAR 2
             j = 0
     
         i+=1

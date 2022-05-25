@@ -59,10 +59,11 @@ def main():
 
 
     while not rospy.is_shutdown():
-        if enable_LT:                                               # LANE TRACKING STATE
-            control_LT.control_law(left_lane, right_lane, speed)           # COMPUTE CONTROL LAWS
-            pub_speed.publish(control_LT.cruise_speed)              # PUBLISH CRUISE SPEED
-            pub_angle.publish(control_LT.steering_angle)            # PUBLISH STEERING ANGLE
+        if enable_LT:                                                   # LANE TRACKING STATE
+            if right_lane and left_lane:
+                control_LT.control_law(left_lane, right_lane, speed)    # COMPUTE CONTROL LAWS
+                pub_speed.publish(control_LT.cruise_speed)              # PUBLISH CRUISE SPEED
+                pub_angle.publish(control_LT.steering_angle)            # PUBLISH STEERING ANGLE
         
         rate.sleep()
     

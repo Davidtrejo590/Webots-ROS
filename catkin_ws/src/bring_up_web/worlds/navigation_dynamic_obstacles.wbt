@@ -5,7 +5,7 @@ WorldInfo {
   ]
   title "TMR-2022-AutoModelCar"
   ERP 0.6
-  basicTimeStep 120
+  basicTimeStep 100
   coordinateSystem "NUE"
   lineScale 1
   contactProperties [
@@ -412,7 +412,7 @@ CurvedRoadSegment {
   curvatureRadius 30.5
 }
 BmwX5 {
-  translation -36.863 0.186033 -32.5203
+  translation -36.8553 0.221478 -25.3403
   rotation -0.9774185753737384 0.21131175178731865 0.0005216042045738904 0.005050866818787648
   controller "ros_car_controller"
   sensorsSlotFront [
@@ -468,7 +468,7 @@ BmwX5 {
   ]
 }
 DEF CAR-1 CitroenCZeroSimple {
-  translation -36.89 0.4 -21.59
+  translation -36.89 0.4 -3.96
   name "vehicle(1)"
 }
 DEF CAR-2 LincolnMKZSimple {

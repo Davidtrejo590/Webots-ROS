@@ -5,7 +5,7 @@ WorldInfo {
   ]
   title "TMR-2022-AutoModelCar"
   ERP 0.6
-  basicTimeStep 120
+  basicTimeStep 100
   coordinateSystem "NUE"
   lineScale 1
   contactProperties [
@@ -453,9 +453,4 @@ BmwX5 {
 CitroenCZeroSimple {
   translation -36.89 0.4 3.18
   name "vehicle(1)"
-}
-LincolnMKZSimple {
-  translation 9.3403 0.4 75.57
-  rotation 0 1 0 1.5708
-  name "vehicle(2)"
 }
