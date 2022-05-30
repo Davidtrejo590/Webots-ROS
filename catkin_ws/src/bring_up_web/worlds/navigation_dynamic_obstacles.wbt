@@ -121,29 +121,19 @@ CitroenCZeroSimple {
   name "vehicle(8)"
 }
 LincolnMKZSimple {
-  translation 16 0.4 -72.61
-  rotation 0 1 0 -1.5707953071795862
+  translation 8.6803 0.4 75.52
+  rotation 0 1 0 1.5708
   color 0.333333 0.341176 0.32549
   name "vehicle(7)"
-}
-ToyotaPriusSimple {
-  translation 17.1038 0.4 -39.9661
-  rotation 0 1 0 -2.6179953071795863
-  name "vehicle(5)"
 }
 HighwayPole {
   translation -41.75 0 -27.02
   rotation 0 1 0 1.5708
 }
 TeslaModel3Simple {
-  translation 19.43 0.4 5.15589e-05
+  translation 19.43 0.4 -15.4099
   rotation 0 1 0 3.14159
   name "vehicle(4)"
-}
-RangeRoverSportSVRSimple {
-  translation -20.5549 0.4 47.1554
-  rotation 0 1 0 0.785398
-  name "vehicle(3)"
 }
 StraightRoadSegment {
   translation -35 0.02 -40
@@ -415,10 +405,6 @@ BmwX5 {
   translation -36.8553 0.221478 -25.3403
   rotation -0.9774185753737384 0.21131175178731865 0.0005216042045738904 0.005050866818787648
   controller "ros_car_controller"
-  sensorsSlotFront [
-    SickLms291 {
-    }
-  ]
   sensorsSlotTop [
     Lidar {
       translation 0 0.21 0
@@ -427,7 +413,16 @@ BmwX5 {
       verticalFieldOfView 0.3
       numberOfLayers 16
       maxRange 30
-      noise 0.1
+    }
+    SolidPipe {
+      name "lidar_pipe"
+      height 0.3
+      radius 0.15
+      thickness 0.14
+      appearance PBRAppearance {
+        roughness 0.5
+        metalness 0
+      }
     }
     Camera {
       translation 0 -0.05 -0.72
@@ -470,9 +465,4 @@ BmwX5 {
 DEF CAR-1 CitroenCZeroSimple {
   translation -36.89 0.4 -3.96
   name "vehicle(1)"
-}
-DEF CAR-2 LincolnMKZSimple {
-  translation -8.6497 0.4 71.28
-  rotation 0 1 0 1.5708
-  name "vehicle(2)"
 }

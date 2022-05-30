@@ -39,7 +39,7 @@ class Control:
 
     # CONPUTE STEERING ANGLE BY SIDE
     def compute_steering_angle(self, left_line, right_line, side):
-        kd = 0.0045                                                                 # CONSTANT FOR DISTANCE ERROR
+        kd = 0.004                                                                 # CONSTANT FOR DISTANCE ERROR
         ka = 0.01                                                                   # CONSTANT FOR ANGLE ERROR
     
         detected_distance, detected_angle = [0.0, 0.0]                              # INITIAL STATE FOR DETECTED MEASURES
@@ -48,11 +48,11 @@ class Control:
 
         if side:                                                                    # IF ONLY THERE ARE LEFT LINES
             detected_distance, detected_angle = left_line                           # DETECTED MEASURES FOR LEFT LINES
-            goal_distance, goal_angle = [185.3058282947409, 0.7243494240924209]     # GOAL MEASURES FOR LEFT LINES
+            goal_distance, goal_angle = [182.3211452355431, 0.735933594795857]      # GOAL MEASURES FOR LEFT LINES
 
         else:                                                                       # IF ONLY THERE ARE RIGHT LINES
             detected_distance, detected_angle = right_line                          # DETECTED MEASURES FOR RIGHT LINES
-            goal_distance, goal_angle = [206.65188119153427, 0.6472699351700862]    # GOAL MEASURES FOR RIGHT LINES
+            goal_distance, goal_angle = [203.5589595178753, 0.6647061561309215]     # GOAL MEASURES FOR RIGHT LINES
 
         ed = goal_distance - detected_distance                                      # CALCULATE DISTANCE ERROR
         ea = goal_angle - detected_angle                                            # CALCULATE ANGLE ERROR
@@ -78,8 +78,8 @@ class Control:
         avg_detec_angle = (detec_angle_left + detec_angle_right)/ 2                   # AVG OF DETECTED ANGLE 
 
         # CHECK IN FIRST FRAME
-        goal_dist_left, goal_angle_left = [185.3058282947409, 0.7243494240924209]    # GOAL MEASURES FOR LEFT LINES
-        goal_dist_right, goal_angle_right = [206.65188119153427, 0.6472699351700862] # GOAL MEASURES FOR RIGHT LINES
+        goal_dist_left, goal_angle_left = [182.3211452355431, 0.735933594795857]     # GOAL MEASURES FOR LEFT LINES
+        goal_dist_right, goal_angle_right = [203.5589595178753, 0.6647061561309215]  # GOAL MEASURES FOR RIGHT LINES
 
         avg_goal_dist = (goal_dist_left + goal_dist_right)/2.0                        # AVG OF GOAL DISTANCE
         avg_goal_angle = (goal_angle_left + goal_angle_right)/2.0                     # AVG OF GOAL ANGLE

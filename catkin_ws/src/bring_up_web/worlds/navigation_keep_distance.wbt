@@ -72,7 +72,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation 0.5995018400512431 -0.5291203923326531 -0.6005240662895311 4.113528018355625
-  position -27.611635936165804 266.313942618251 6.899643250599997
+  position -24.914587385327597 245.0647725646275 6.895048356805422
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -121,7 +121,7 @@ CitroenCZeroSimple {
   name "vehicle(8)"
 }
 DEF CAR-2 CitroenCZeroSimple {
-  translation -32.71 0.4 -23.76
+  translation -32.71 0.4 -11.22
   rotation 0 1 0 1.01503e-06
   color 0.12549 0.290196 0.529412
   name "vehicle(9)"
@@ -145,11 +145,6 @@ TeslaModel3Simple {
   translation 19.43 0.4 5.15589e-05
   rotation 0 1 0 3.14159
   name "vehicle(4)"
-}
-RangeRoverSportSVRSimple {
-  translation -20.5549 0.4 47.1554
-  rotation 0 1 0 0.785398
-  name "vehicle(3)"
 }
 StraightRoadSegment {
   translation -35 0.02 -40
@@ -418,21 +413,29 @@ CurvedRoadSegment {
   curvatureRadius 30.5
 }
 BmwX5 {
-  translation -36.863 0.186033 -32.5203
+  translation -36.855 0.223008 -25.0303
   rotation -0.9774185753737384 0.21131175178731865 0.0005216042045738904 0.005050866818787648
   controller "ros_car_controller"
-  sensorsSlotFront [
-    SickLms291 {
-    }
-  ]
   sensorsSlotTop [
     Lidar {
-      translation 0 0.21 0
-      horizontalResolution 1024
+      translation 0 0.32 0
+      rotation 0 -1 0 5.92017e-06
+      horizontalResolution 3600
       fieldOfView 6.28
-      verticalFieldOfView 0.3
-      numberOfLayers 16
-      maxRange 30
+      verticalFieldOfView 0.5
+      numberOfLayers 32
+      maxRange 75
+      noise 0.01
+    }
+    SolidPipe {
+      name "lidar_pipe"
+      height 0.4
+      radius 0.15
+      thickness 0.14
+      appearance PBRAppearance {
+        roughness 0.5
+        metalness 0
+      }
     }
     Camera {
       translation 0 -0.05 -0.72
@@ -472,7 +475,7 @@ BmwX5 {
   ]
 }
 DEF CAR-1 CitroenCZeroSimple {
-  translation -36.89 0.4 -21.59
+  translation -36.89 0.4 -8.01
   name "vehicle(1)"
 }
 LincolnMKZSimple {

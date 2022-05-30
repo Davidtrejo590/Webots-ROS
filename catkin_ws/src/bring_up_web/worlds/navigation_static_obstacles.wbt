@@ -71,8 +71,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.5942129858735277 -0.5425714293079218 -0.5937399864570565 4.136504415830953
-  position -35.05668909008239 303.71819507089526 -1.1240610825871877
+  orientation 0.597424370900495 -0.5346440393297434 -0.597695467828997 4.12316986689426
+  position -18.502875058159773 229.8288390895493 -9.292260546067459
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -121,7 +121,7 @@ HighwayPole {
   rotation 0 1 0 1.5708
 }
 TeslaModel3Simple {
-  translation 19.43 0.4 -0.969948
+  translation 19.43 0.4 -15.5399
   rotation 0 1 0 3.14159
   name "vehicle(4)"
 }
@@ -400,10 +400,6 @@ BmwX5 {
   translation -36.8535 0.230908 -23.4303
   rotation -0.9774185753737384 0.21131175178731865 0.0005216042045738904 0.005050866818787648
   controller "ros_car_controller"
-  sensorsSlotFront [
-    SickLms291 {
-    }
-  ]
   sensorsSlotTop [
     Lidar {
       translation 0 0.21 0
@@ -412,6 +408,16 @@ BmwX5 {
       verticalFieldOfView 0.3
       numberOfLayers 16
       maxRange 30
+    }
+    SolidPipe {
+      name "lidar_pipe"
+      height 0.3
+      radius 0.15
+      thickness 0.14
+      appearance PBRAppearance {
+        roughness 0.5
+        metalness 0
+      }
     }
     Camera {
       translation 0 -0.05 -0.72

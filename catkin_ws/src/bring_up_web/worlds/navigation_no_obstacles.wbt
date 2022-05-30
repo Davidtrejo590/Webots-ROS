@@ -71,8 +71,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.5906638468736732 -0.5502614367835499 -0.5901936726069649 4.148353305734334
-  position -28.976336340295205 304.3922496230069 -1.1192191337466144
+  orientation 0.5925865781968224 -0.5492992581581553 -0.5891616690925179 4.151102209382489
+  position -8.748672786904166 245.19655871433335 2.765257048960418
   near 1
   follow "vehicle"
   followSmoothness 0
@@ -379,10 +379,6 @@ BmwX5 {
   translation -36.8535 0.230908 -23.4303
   rotation -0.9774185753737384 0.21131175178731865 0.0005216042045738904 0.005050866818787648
   controller "ros_car_controller"
-  sensorsSlotFront [
-    SickLms291 {
-    }
-  ]
   sensorsSlotTop [
     Lidar {
       translation 0 0.21 0
@@ -391,6 +387,16 @@ BmwX5 {
       verticalFieldOfView 0.3
       numberOfLayers 16
       maxRange 30
+    }
+    SolidPipe {
+      name "lidar_pipe"
+      height 0.3
+      radius 0.15
+      thickness 0.14
+      appearance PBRAppearance {
+        roughness 0.5
+        metalness 0
+      }
     }
     Camera {
       translation 0 -0.05 -0.72

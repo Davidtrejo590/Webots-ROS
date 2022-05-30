@@ -23,8 +23,8 @@
   <node name="keep_distance"    pkg="bring_up_web" type="keep_distance.py"    output="screen" respawn="true"/>
   <node name="overtake"         pkg="bring_up_web" type="overtake.py"         output="screen" respawn="true"/>
   
-  <param name="/speed"    type="double" value="30.0"/>
+  <param name="/speed"    type="double" value="20.0"/>
 
-  <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find bring_up_web)/rviz/car_sensors.rviz"/>
+  <!-- <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find bring_up_web)/rviz/car_sensors.rviz"/> -->
 
 </launch>
