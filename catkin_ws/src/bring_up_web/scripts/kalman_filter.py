@@ -22,7 +22,7 @@ class Kalman_Filter:
     def __init__( self ):
 
         self.id = Kalman_Filter.new_id()
-        self.delta_t = 1.0/20.0                         # SAMPLING TIME
+        self.delta_t = 1.0/10.0                         # SAMPLING TIME
         self.x = np.zeros((4, 1))                       # INITIAL SYSTEM
         self.P_k = np.identity(4)                       # SYSTEM UNCERTAINTY
         self.I_k = np.identity(4)                       # IDENTITY MATRIX 6x6   

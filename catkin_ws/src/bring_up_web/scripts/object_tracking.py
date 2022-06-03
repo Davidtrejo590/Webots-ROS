@@ -44,7 +44,7 @@ def add_labels( filters ):
             marker.scale.z = 1.5
             marker.color.r, marker.color.g, marker.color.b = [1.0, 1.0, 1.0]
             marker.color.a = 1.0
-            marker.lifetime = rospy.Duration(0.5)
+            marker.lifetime = rospy.Duration(1.0) 
             object_markers.markers.append(marker)
             id +=1
 

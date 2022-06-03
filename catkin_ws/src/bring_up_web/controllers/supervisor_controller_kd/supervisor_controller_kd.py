@@ -8,7 +8,7 @@
 from controller import Supervisor
 
 # TIME_STEP
-TIME_STEP = 50
+TIME_STEP = 100
 
 # SUPERVISOR
 robot = Supervisor()
@@ -25,8 +25,11 @@ sp_2 = car_2.getPosition()
 tf_1 = car_1.getField('translation')
 tf_2 = car_2.getField('translation')
 
-# Z VELOCITY FOR CAR 1 & 2
+# Z VELOCITY FOR CAR-1
 vel = [0.0, 0.0, 3.0, 0.0, 0.0, 0.0]
+
+# Z VELOCITY FOR CAR-2
+vel_1 = [0.0, 0.0, 1.0, 0.0, 0.0, 0.0]
 
 # MAIN FUNCTION
 def main():
@@ -37,7 +40,7 @@ def main():
         if i == 0:                                                                  
             car_1.setVelocity(vel)              # SET INITIAL VELOCITY
             car_2.setVelocity(vel)
-        elif i == 350:                          # RETURN TO INITIAL POSITION                                    
+        elif i == 190:                          # RETURN TO INITIAL POSITION                                    
             tf_1.setSFVec3f(sp_1)
             tf_2.setSFVec3f(sp_2)
             i = 0

@@ -448,7 +448,7 @@ BmwX5 {
       fieldOfView 1
       width 640
       height 480
-      noise 0.05
+      noise 0
     }
   ]
   sensorsSlotCenter [

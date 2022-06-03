@@ -26,6 +26,6 @@
   <param name="/dynamic"  type="bool"   value="false"/>
   <param name="/speed"    type="double" value="30.0"/>
 
-  <!-- <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find bring_up_web)/rviz/car_sensors.rviz"/> -->
+  <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find bring_up_web)/rviz/car_sensors.rviz"/>
 
 </launch>
