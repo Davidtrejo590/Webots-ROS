@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-    NODE TO CREATE A STATES MACHINE AND CHOOSE THE CORRECT BEHAVIOR
+    NODE TO CHOOSE THE CORRECT BEHAVIOR (REFEREE SYSTEM)
     (PASS, CRUISE, KEEP DISTANCE), ENABLE THE CORRESPOND STATE
 """
 
@@ -53,11 +53,13 @@ def callback_car_pose(msg):
 
 # PASS FINISHED CALLBACK
 def callback_pass_finished(msg):
+
     global pass_finished
     pass_finished = msg.data
 
 # MAIN FUNCTION
 def main():
+
     global free_N, free_W, free_NW, free_SW, pass_finished, safe_distance
 
     # INIT NODE
@@ -81,11 +83,9 @@ def main():
     while not rospy.is_shutdown():
 
         if state == SM_INIT:                                # STATE INIT 
-            print('INIT STATE MACHINE AVOIDANCE')
             state = SM_CRUISE
 
         elif state == SM_CRUISE:                            # STATE LANE TRACKING
-            print('CRUISE')
             if not free_N and free_W and free_NW:
                 state = SM_PASS
             elif not free_N and ( not free_W or not free_NW):
@@ -94,13 +94,12 @@ def main():
                 pub_enable_LT.publish(True)                 # ENABLE LANE TRACKING
                 state = SM_CRUISE
 
-        elif state == SM_PASS:                              # STATE START OVERTAKE
+        elif state == SM_PASS:                              # STATE OVERTAKE
             pub_enable_PS.publish(True)                     # START OVERTAKE
             pub_enable_LT.publish(False)                    # DISABLE LANE TRACKING
             pub_enable_KD.publish(False)                    # DISABLE LANE TRACKING
             state = SM_WAIT_PASS
 
-        
         elif state == SM_WAIT_PASS:                         # STATE WAIT OVERTAKE
             pub_enable_PS.publish(False)                    # START OVERTAKE
             free_N  = 1
@@ -112,12 +111,7 @@ def main():
             else:
                 state = SM_WAIT_PASS
 
-        elif state == SM_FINISH:                            # STATE OVERTAKE FINISHED
-            pass_finished = False
-            state = SM_CRUISE
-
         elif state == SM_KEEP:                              # KEEP DISTANCE STATE
-            print('KEEP DISTANCE')
             pub_front_car.publish(safe_distance)            # PUBLISH FRONT CAR
             pub_enable_PS.publish(False)                    # START OVERTAKE
             pub_enable_LT.publish(False)                    # DISABLE LANE TRACKING
@@ -126,6 +120,11 @@ def main():
                 state = SM_CRUISE
             elif free_NW and free_W:
                 state = SM_PASS
+
+        elif state == SM_FINISH:                            # STATE FINISH
+            pass_finished = False
+            state = SM_CRUISE
+            
         rate.sleep()
 
 
@@ -134,3 +133,4 @@ if __name__ == '__main__':
         main()
     except:
         rospy.ROSInterruptException
+        pass

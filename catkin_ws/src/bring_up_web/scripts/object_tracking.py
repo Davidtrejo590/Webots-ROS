@@ -14,15 +14,16 @@ from visualization_msgs.msg import Marker, MarkerArray
 from kalman_filter import Kalman_Filter
 
 # GLOBAL VARIABLES 
-marker_array = MarkerArray()                            # FILTER MARKERS
-pose_array = PoseArray()                                # FILTER POSES
-centroids = []                                          # ACTUAL CENTROIDS
-filters = None                                          # TO STORE OBJECTS OF KALMAN FILTER                    
-first_time = True                                       # FLAG TO CHECK THE FIRST TIME
+marker_array    = MarkerArray()                            # FILTER MARKERS
+pose_array      = PoseArray()                              # FILTER POSES
+centroids       = []                                       # ACTUAL CENTROIDS
+filters         = None                                     # TO STORE OBJECTS OF KALMAN FILTER                    
+first_time      = True                                     # FLAG TO CHECK THE FIRST TIME
 
 
 # ADD LABELS TO OBJECTS ESTIMATES
 def add_labels( filters ):
+    
     object_markers = MarkerArray()                      # LABELS FOR ESTIMATES
     object_poses = PoseArray()                          # POSITION & VELOCITIES ESTIMATED
 
@@ -60,7 +61,7 @@ def add_labels( filters ):
     return [object_markers, object_poses]                           # RETURN LABELS AND POSES ESTIMATES INTO AN ARRAY
 
 
-
+# OBJECT POSE CALLBACK
 def callback_object_pose(msg):
 
     global marker_array, pose_array, centroids, filters, first_time
@@ -74,7 +75,7 @@ def callback_object_pose(msg):
             [centroid.position.x, centroid.position.y, centroid.position.z]         # POSE ARRAY TO LIST
         )  
     
-    
+    # MATCHING ALGORITHM
     if not first_time:                                                              # AFTER FIRST TIME
         for nc in centroids:
             distances = [                                                           # COMPUTE DISTANCES
@@ -137,3 +138,4 @@ if __name__ == '__main__':
         main()
     except:
         rospy.ROSInterruptException
+        pass

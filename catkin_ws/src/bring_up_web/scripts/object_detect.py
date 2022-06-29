@@ -47,8 +47,9 @@ def callback_object_detect(msg):
             
                 pose_array.poses.append(pose)                                       # POSE ARRAY <-- POSE FOR EACH CENTROID
 
-
+# GENERATE INITIAL CENTROIDS
 def generate_centroids(dataset, k):
+
     min_x, min_y, min_z = np.amin(dataset, axis=0)                                  # GET MIN VALUE FOR X-AXIS AND Y-AXIS
     max_x, max_y, max_z = np.amax(dataset, axis=0)                                  # GET MAX VALUE FOR X-AXIS AND Y-AXIS
     centroids = [ 
@@ -58,10 +59,11 @@ def generate_centroids(dataset, k):
             round(uniform(min_z, max_z), 3)  
             ]) for i in range(k)]
 
-    
     return centroids                                                                # RETURN K-CENTROIDS
 
+# CALCULATE CENTROIDS 
 def calculate_centroids(point_cloud, centroids):
+
     new_centroids = []                                                              # CENTROITS RECALCULATED          
     clusters = [[] for c in centroids]                                              # CLUSTERS (GROUPS)
 
@@ -85,6 +87,7 @@ def calculate_centroids(point_cloud, centroids):
 
 # CALCUALTE THE DISTANCE BETWEEN EACH CENTROID D(OLD_CENTROID, NEW_CENTROID)
 def compare_centroids(new_c, old_c):
+
     total_distance = 0.0
 
     for (oc, nc) in zip(old_c, new_c):                          
@@ -93,8 +96,11 @@ def compare_centroids(new_c, old_c):
     
     return total_distance                                                                       # RETURN THE SUM OF THE DISTANCES
 
+# K-MEANS
 def kmeans(dataset):
+
     global initial_centroids
+
     k = 3                                                                                       # INIT NUMBER OF CLUSTERS (GROUPS)
     tol = 0.1                                                                                   # MINIMUN TOLERANCE FOR DISTANCE
     attempts = 0
@@ -108,14 +114,13 @@ def kmeans(dataset):
         new_centroids = calculate_centroids(dataset, centroids)                                 # RECOMPUTE CENTROIDS
         total_distance = compare_centroids(new_centroids, centroids)                            # RECOMPUTE TOTAL DISTANCE
         attempts = attempts + 1
-    # print(attempts)
     
     return new_centroids                                                                        # RETURN THE CURRENT CENTROIDS
 
 # MAIN FUNCTION
 def main():
-    global pose_array
-    global initial_centroids
+
+    global pose_array, initial_centroids
 
     print('Object Detect Node...')
     rospy.init_node('object_detect')

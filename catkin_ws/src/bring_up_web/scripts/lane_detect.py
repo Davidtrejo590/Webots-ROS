@@ -18,20 +18,22 @@ import math
 
 
 # GLOBAL VARIABLES
-polar_left_line = []
-polar_right_line = []
+polar_left_line     = []
+polar_right_line    = []
 
 
 # GET EDGES OF AN IMAGE
 def canny(image):
+    
     gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)                              # CONVERT TO GRAY SCALE
     blur = cv2.GaussianBlur(gray, (5, 5), 0)                                    # APPLY BLUR FILTER TO REDUCE NOISE
     canny = cv2.Canny(blur, 50, 150)                                            # DETECT EDGES WITH CANNY
 
     return canny
 
-# CALCULATE INTEREST REGION
+# CALCULATE REGION OF INTEREST
 def region_of_interest(image):
+
     height = image.shape[0]
     triangle = np.array([[
         (0, 450),                                                               # FIRST POINT, LEFT-BOTTOM
@@ -46,18 +48,21 @@ def region_of_interest(image):
 
 # DISPLAY LINES AS AN IMAGE
 def display_lines(image, lines):
+
     line_img = np.zeros_like(image)
     if lines is not None:
         for line in lines:
             x1, y1, x2, y2 = line.reshape(4)                                    # GET 2 POINTS OF EACH LINE
             cv2.line(line_img, (x1, y1), (x2, y2), [255, 0, 0], 10)             # DRAW A LINE 
+            
     return line_img                                                             # RETURN AN IMAGE WITH LINES
 
 
 # GET THE EQUATION OF THE LINE
 def avg_slope_intercept(image, lines):
-    left_fit = []                                                               # LEFT LINES
-    right_fit = []                                                              # RIGHT LINES
+
+    left_fit    = []                                                            # LEFT LINES
+    right_fit   = []                                                            # RIGHT LINES
     
     for line in lines:
         x1, y1, x2, y2 = line.reshape(4)                                        # GET 2 POINTS OF EACH LINE
@@ -84,6 +89,7 @@ def avg_slope_intercept(image, lines):
 
 # MAKE COORDINATES OF THE LINES
 def make_coordinates(image, line_parameters):
+
     if isinstance(line_parameters, Iterable):
         slope, intercept = line_parameters                                      # SLOPE = m, INTERCEPT = b
         y1 = image.shape[0]                                                     # IMG HEIGHT (480)
@@ -96,6 +102,7 @@ def make_coordinates(image, line_parameters):
 
 # CALCULATE DISTANCE AND ANGLE FROM CAMERA CENTER
 def calculate_distance_angle(line, width, height, side):
+
     x1, y1, x2, y2 = line.reshape(4)                                            # GET POINTS OF LANE LINE 
     xp = (x1 + x2)/2                                                            # 'XP' IS THE AVG OF 'X1' AND 'X2'
     yp = (y1 + y2)/2                                                            # 'YP' IS THE AVG OF 'Y1' AND 'Y2'        
@@ -146,18 +153,16 @@ def callback_lane_detect(msg):
         avg_lines = avg_slope_intercept(lane_img, lines)                                    # LEFT AND RIGHT LINES AS COORDINATES
         left_line, right_line = avg_lines.reshape(2,4)
         polar_left_line = calculate_distance_angle(left_line, width, height, True)          # GET DISTANCE AND ANGLE FOR LEFT LINE
-        # print('LEFT', polar_left_line)
         polar_right_line = calculate_distance_angle(right_line, width, height, False)       # GET DISTANCE AND ANGLE FOR RIGHT LINE
-        # print('RIGHT', polar_right_line)
-        # line_img = display_lines(lane_img, avg_lines)                                       # DISPLAY LINES IN A IMAGE
-        # combo_img = cv2.addWeighted(lane_img, 0.8, line_img, 1, 1)                          # LANE_IMG + LINES
-        # cv2.imshow('Result', combo_img)                                                     # DISPLAY IMAGE 
-        # cv2.waitKey(33)
+        line_img = display_lines(lane_img, avg_lines)                                       # DISPLAY LINES IN A IMAGE
+        combo_img = cv2.addWeighted(lane_img, 0.8, line_img, 1, 1)                          # LANE_IMG + LINES
+        cv2.imshow('Result', combo_img)                                                     # DISPLAY IMAGE 
+        cv2.waitKey(33)
     else:                                                                                   # IF THERE AREN'T LINES
         polar_left_line = [0.0,0.0]                                                         # DISTANCE AND ANGLE NOT CALCULATED FOR LEFT LINE
         polar_right_line = [0.0,0.0]                                                        # DISTANCE AND ANGLE NOT CALCULATED FOR RIGHT LINE
-        # cv2.imshow('Result', lane_img)                                                      # DISPLAY ORIGINAL IMAGE 
-        # cv2.waitKey(33)
+        cv2.imshow('Result', lane_img)                                                      # DISPLAY ORIGINAL IMAGE 
+        cv2.waitKey(33)
 
 # MAIN FUNCTION
 def main():
@@ -191,7 +196,6 @@ def main():
         pub_right_lane.publish(msg_right_line)
         
         rate.sleep()
-
 
 
 if __name__ == "__main__":

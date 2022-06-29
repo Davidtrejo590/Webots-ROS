@@ -11,10 +11,10 @@ from std_msgs.msg import Bool, Float64, Float64MultiArray
 from control_laws import Control
 
 # GLOBAL VARIABLES
-left_lane   = [0.0, 0.0]
-right_lane  = [0.0, 0.0]
-enable_KD = None
-safe_distance = 0.0
+safe_distance   = 0.0
+left_lane       = [0.0, 0.0]
+right_lane      = [0.0, 0.0]
+enable_KD       = None
 
 
 # LEFT LANE CALLBACK
@@ -64,13 +64,12 @@ def main():
 
 
     while not rospy.is_shutdown():
-        if enable_KD:                                                       # STATE KEEP DISTANCE
-            control_KD.control_law_kd(left_lane, right_lane, safe_distance) # COMPUTE CONTROL LAWS
-            pub_speed.publish(control_KD.cruise_speed)                      # PUBLISH CRUISE SPEED
-            pub_angle.publish(control_KD.steering_angle)                    # PUBLISH STEERING ANGLE
+        if enable_KD:                                                        # STATE KEEP DISTANCE
+            control_KD.control_law_kd(left_lane, right_lane, safe_distance)  # COMPUTE CONTROL LAWS
+            pub_speed.publish(control_KD.cruise_speed)                       # PUBLISH CRUISE SPEED
+            pub_angle.publish(control_KD.steering_angle)                     # PUBLISH STEERING ANGLE
 
         rate.sleep()
-
 
 
 if __name__ == '__main__':
@@ -78,5 +77,6 @@ if __name__ == '__main__':
         main()
     except:
         rospy.ROSInterruptException
+        pass
 
 

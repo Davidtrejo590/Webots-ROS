@@ -53,7 +53,6 @@ def check_keyboard():
 
   elif (key == keyboard.UP):                                      # SET CRUISE SPEED
     driver.setCruisingSpeed(10.0)
-    print('UP')
 
   elif (key == keyboard.DOWN):                                    # SET CRUISE SPEED
     driver.setCruisingSpeed(0.0)
@@ -133,7 +132,6 @@ def main():
     
     rate.sleep()
 
- 
 
 if __name__ == "__main__":
   try:
