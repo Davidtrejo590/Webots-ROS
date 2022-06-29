@@ -59,8 +59,10 @@ def main():
     
     
     # PUBLISHERS
+    pub_enable_lights = rospy.Publisher('/enable_lights', Bool, queue_size=10)
     pub_speed = rospy.Publisher('/goal_speed', Float64, queue_size=10)
     pub_angle = rospy.Publisher('/goal_steering', Float64, queue_size=10)
+    
 
 
     while not rospy.is_shutdown():
@@ -68,6 +70,7 @@ def main():
             control_KD.control_law_kd(left_lane, right_lane, safe_distance)  # COMPUTE CONTROL LAWS
             pub_speed.publish(control_KD.cruise_speed)                       # PUBLISH CRUISE SPEED
             pub_angle.publish(control_KD.steering_angle)                     # PUBLISH STEERING ANGLE
+            pub_enable_lights.publish(True)                                  # PUBLISH BLINKING LIGHTS
 
         rate.sleep()
 

@@ -56,9 +56,12 @@ def main():
     rospy.Subscriber('/current_steering', Float64, callback_current_steering)
 
     # PUBLISHERS
+    pub_enable_right_light = rospy.Publisher('/enable_right_light', Bool, queue_size=10)
+    pub_enable_left_light  = rospy.Publisher('/enable_left_light', Bool, queue_size=10)
     pub_pass_finished   = rospy.Publisher('/pass_finished', Bool, queue_size=10)
     pub_steering        = rospy.Publisher('/goal_steering', Float64, queue_size=10)
     pub_speed           = rospy.Publisher('/goal_speed', Float64, queue_size=10)
+    
     
     # STATE MACHINE TO OVERTAKE
     state   = SM_START
@@ -85,6 +88,8 @@ def main():
 
         elif state == SM_WAIT_TURN_LEFT:                        # STATE WAIT TURN LEFT
             count += 1
+            pub_enable_left_light.publish(True)
+            pub_enable_right_light.publish(False)
             if count > 10:
                 state = SM_ALIGN_RIGHT
             else:
@@ -97,6 +102,8 @@ def main():
 
         elif state == SM_WAIT_ALIGN_RIGHT:                      # STATE WAIT TURN RIGHT
             count += 1
+            pub_enable_left_light.publish(False)
+            pub_enable_right_light.publish(False)
 
             if i == 1 and dynamic:
                 if count > 0:
@@ -121,6 +128,9 @@ def main():
         
         elif state == SM_WAIT_TURN_RIGHT:                       # STATE WAIT TURN RIGHT 2
             count += 1
+            pub_enable_left_light.publish(False)
+            pub_enable_right_light.publish(True)
+
             if count > 8:
                 state = SM_ALIGN_LEFT
             else:
@@ -133,6 +143,9 @@ def main():
 
         elif state == SM_WAIT_ALIGN_LEFT:                       # STATE WAIT TURN LEFT 2
             count += 1
+            pub_enable_left_light.publish(False)
+            pub_enable_right_light.publish(False)
+
             if count > 5:
                 state = SM_GO_STRAIGHT
             else:

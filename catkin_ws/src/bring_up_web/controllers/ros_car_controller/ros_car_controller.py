@@ -8,10 +8,11 @@
 """
 
 # LIBRARIES
+from this import d
 import rospy
 from vehicle import Driver
 from controller import Camera, Keyboard, Lidar
-from std_msgs.msg import Float64
+from std_msgs.msg import Float64, Bool
 from sensor_msgs.msg import Image, PointCloud2, PointField
 
 
@@ -72,6 +73,29 @@ def callback_speed( msg ):
 def callback_steering( msg ):
   driver.setSteeringAngle(msg.data)
 
+# ENABLE RIGHT CALLBACK 
+def callback_enable_right_light( msg ):
+  if msg.data == True:
+    driver.setIndicator(driver.INDICATOR_RIGHT)
+  else:
+    driver.setIndicator(driver.INDICATOR_OFF)
+
+# ENABLE LEFT CALLBACK 
+def callback_enable_left_light( msg ):
+  if msg.data == True:
+    driver.setIndicator(driver.INDICATOR_LEFT)
+  else:
+    driver.setIndicator(driver.INDICATOR_OFF)
+
+# ENABLE LIGHTS CALLBACK
+def callback_enable_lights( msg ):
+  if msg.data == True:
+    driver.setHazardFlashers(True)
+  else:
+    driver.setHazardFlashers(False)
+
+
+
 # MAIN FUNCTION
 def main():
 
@@ -116,6 +140,9 @@ def main():
   # SUBSCRIBERS
   rospy.Subscriber('/goal_speed', Float64, callback_speed)
   rospy.Subscriber('/goal_steering', Float64, callback_steering)
+  rospy.Subscriber('/enable_right_light', Bool, callback_enable_right_light)
+  rospy.Subscriber('/enable_left_light', Bool, callback_enable_left_light)
+  rospy.Subscriber('/enable_lights', Bool, callback_enable_lights)
 
   # MAIN LOOP
   while driver.step() != -1 and not rospy.is_shutdown():
