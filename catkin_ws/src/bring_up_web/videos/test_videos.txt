@@ -1,0 +1,18 @@
+**********
+**********
+    The sample videos include the following navigation tests:
+
+       - Navigation no obstacles
+       - Navigation static obstacles
+       - Navigation dynamic obstacles
+       - Navigation keep distance
+**********
+**********
+
+********** Link to see sample videos **********
+
+***********************************************************************************************
+***********************************************************************************************
+**    https://drive.google.com/drive/folders/1CG3DagFJOK7rFqwRLYVwxdL7zLk71lyt?usp=sharing   **
+***********************************************************************************************
+***********************************************************************************************
