@@ -1,6 +1,6 @@
 # Navegación autónoma para un vehículo sin conductor usando el simulador Webots
 
-Desarrollo de  algoritmos para navegación de autos autónomos usando el simulador Webots y la plataforma ROS.
+Desarrollo de algoritmos para navegación de vehículos autónomos usando el simulador Webots y la plataforma ROS.
 
 ## REQUERIMIENTOS
 
