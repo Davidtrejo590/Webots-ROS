@@ -42,10 +42,10 @@ tf_W.setSFVec3f(initial_W)
 tf_NW.setSFVec3f(initial_NW)
 tf_SW.setSFVec3f(sp_SW)
 
-v_N     = numpy.random.uniform(3.0, 4.0)
+v_N     = numpy.random.uniform(5.0, 8.0)
 v_W     = numpy.random.uniform(0.0, 0.0)
 v_NW    = numpy.random.uniform(0.0, 0.0)
-v_SW    = numpy.random.uniform(3.0, 4.0)
+v_SW    = numpy.random.uniform(5.0, 8.0)
 
 vel_N  = [0.0, 0.0,  v_N,  0.0, 0.0, 0.0]           # Z VELOCITY FOR CAR N 
 vel_W  = [0.0, 0.0,  v_W,  0.0, 0.0, 0.0]           # Z VELOCITY DOR CAR W

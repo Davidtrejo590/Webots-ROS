@@ -5,7 +5,7 @@ WorldInfo {
   ]
   title "TMR-2022-AutoModelCar"
   ERP 0.6
-  basicTimeStep 50
+  basicTimeStep 100
   coordinateSystem "NUE"
   lineScale 1
   contactProperties [

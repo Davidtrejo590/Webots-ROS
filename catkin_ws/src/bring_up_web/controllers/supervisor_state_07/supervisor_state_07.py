@@ -43,7 +43,7 @@ tf_NW.setSFVec3f(initial_NW)
 tf_SW.setSFVec3f(initial_SW)
 
 v_N     = numpy.random.uniform(0.0, 0.0)
-v_W     = numpy.random.uniform(3.0, 4.0)
+v_W     = numpy.random.uniform(5.0, 10.0)
 v_NW    = numpy.random.uniform(0.0, 0.0)
 v_SW    = numpy.random.uniform(0.0, 0.0)
 

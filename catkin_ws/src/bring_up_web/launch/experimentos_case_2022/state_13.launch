@@ -21,7 +21,10 @@
   <node name="keep_distance"    pkg="bring_up_web" type="keep_distance.py"    output="screen"/>
   <node name="overtake"         pkg="bring_up_web" type="overtake.py"         output="screen"/>
   <node name="lane_detect"      pkg="bring_up_web" type="lane_detect.py"      output="screen"/>
+  <node name="object_avoidance" pkg="bring_up_web" type="object_avoidance.py" output="screen"/>
 
-  <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find bring_up_web)/rviz/car_sensors.rviz"/>
+  <param name="/speed"    type="double" value="30.0"/>
+  
+  <!-- <node name="rviz" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(find bring_up_web)/rviz/car_sensors.rviz"/> -->
 
 </launch>
